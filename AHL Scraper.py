@@ -25,14 +25,15 @@ driver.get(urlpage)
 # execute script to scroll down the page
 #driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
 # sleep for 10s
-time.sleep(10)
+time.sleep(5)
 
 game_data = []
 #results = driver.find_elements_by_xpath("//*[@class=' co-product-list__main-cntr']//*[@class=' co-item ']//*[@class='co-product']//*[@class='co-item__title-container']//*[@class='co-product__title']")
 game_data.append(["game_id", driver.find_element_by_xpath("//*[@class='ht-game-number']").text])
 game_data.append(["game_date", driver.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
 game_data.append(["game_status", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-game-status')]").text])
-# print(game_id.text)
+game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
+game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
 # print(game_date.text)
 #print(*game_data)
 
