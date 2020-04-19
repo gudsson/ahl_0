@@ -27,28 +27,15 @@ driver.get(urlpage)
 # sleep for 10s
 time.sleep(5)
 
-#Initialize Arrays
 game_data = []
-scoring_boxscore = []
 #results = driver.find_elements_by_xpath("//*[@class=' co-product-list__main-cntr']//*[@class=' co-item ']//*[@class='co-product']//*[@class='co-item__title-container']//*[@class='co-product__title']")
-
-#GAME STATUS BAND
 game_data.append(["game_id", driver.find_element_by_xpath("//*[@class='ht-game-number']").text])
 game_data.append(["game_date", driver.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
 game_data.append(["game_status", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-game-status')]").text])
 game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
-game_data.append(["away_score", driver.find_element_by_xpath("//*[contains(@ng-bind,'visitingTeam.stats.goals')]").text])
-game_data.append(["home_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
-game_data.append(["home_score", driver.find_element_by_xpath("//*[contains(@ng-bind,'homeTeam.stats.goals')]").text])
-#GAME STATUS BAND
-
-#STAT SUMMARY BAND
-#SCORING SUMMARY
-# - need to account for playoff overtime
-
-
-#SCORING SUMMARY
-#STAT SUMMARY BAND
+game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
+# print(game_date.text)
+#print(*game_data)
 
 for item in game_data:
     #print(str(item[0]) + " " + str(item[1]))
