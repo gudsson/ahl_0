@@ -64,19 +64,58 @@ game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/d
 
 
 ###SCORING SUMMARY###
+#Periods (last period is total)
 periods = []
-away_goals = []
-home_goals = []
-away_shots = []
-home_shots = []
-
 periods = game_tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
-away_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
-home_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
-away_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
-home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
-###SCORING SUMMARY###
 
+#Away Stats#
+away_goals = []
+away_shots = []
+away_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
+away_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+
+#Home Stats#
+home_goals = []
+home_shots = []
+home_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
+home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
+###/SCORING SUMMARY###
+
+###GAME DETAILS###
+#Away PP#
+away_pp = []
+away_penalties = []
+away_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
+away_pp_goals = away_pp[0]
+away_pp_opps = away_pp[1]
+away_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
+away_pims = away_penalties[0]
+away_infracs = away_penalties[1].split(" ",1)[0]
+
+#Home PP#
+home_pp = []
+home_penalties = []
+home_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
+home_pp_goals = home_pp[0]
+home_pp_opps = home_pp[1]
+home_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
+home_pims = home_penalties[0]
+home_infracs = home_penalties[1].split(" ",1)[0]
+###/GAME DETAILS###
+
+
+
+# away_pts = []
+# home_pp_goals = []
+# home_pp_opps = []
+# home_pims = []
+# home_infracs = []
+# home_pts = []
+
+###GAME DETAILS###
+
+print(home_pims)
+print(home_infracs)
 
 # periods_row = tbl_scoring_summary.find_elements_by_xpath("//tr/th")
 
@@ -86,116 +125,18 @@ home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'ho
 
 # for period in periods:
 #     print(period.text)
-print("home_shots:")
-for period in home_shots:
-    print(period.text)
+# print("home_shots:")
+# for period in home_shots:
+#     print(period.text)
 
-print("away_shots:")
-for period in away_shots:
-    print(period.text)
+# print("away_shots:")
+# for period in away_shots:
+#     print(period.text)
 
 # print(tbl_scoring_summary.find_elements_by_xpath("//td[contains(@ng-repeat, 'visitingScoreSummary')]")[0].text)
 # print(tbl_scoring_summary.find_elements_by_xpath("//td[contains(@ng-repeat, 'visitingScoreSummary')]")[1].text)
 
 # <div class="ht-gc-game-details">
-# 			<!-- Scoring -->
-# 			<div ng-class="gcDetailTable" class="ht-gc-game-detail">
-# 				<table class="ht-table ht-table-no-overflow">
-# 					<thead>
-# 						<tr>
-# 							<th class="ng-binding">Scoring</th>
-# 							<!-- ngRepeat: heading in scoreSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in scoreSummaryHeadings track by $index" class="ng-scope">
-# 								<span ng-bind="heading" class="ng-binding">1</span>
-# 							</th><!-- end ngRepeat: heading in scoreSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in scoreSummaryHeadings track by $index" class="ng-scope">
-# 								<span ng-bind="heading" class="ng-binding">2</span>
-# 							</th><!-- end ngRepeat: heading in scoreSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in scoreSummaryHeadings track by $index" class="ng-scope">
-# 								<span ng-bind="heading" class="ng-binding">3</span>
-# 							</th><!-- end ngRepeat: heading in scoreSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in scoreSummaryHeadings track by $index" class="ng-scope">
-# 								<span ng-bind="heading" class="ng-binding">T</span>
-# 							</th><!-- end ngRepeat: heading in scoreSummaryHeadings track by $index -->
-# 						</tr>
-# 					</thead>
-# 					<tbody>
-# 						<tr>
-# 							<td>
-# 								<a ng-href="/stats/roster/324/65" target="_self" ng-bind="gameSummary.visitingTeam.info.abbreviation" class="ng-binding" href="/stats/roster/324/65">SYR</a>
-# 							</td>
-# 							<!-- ngRepeat: stat in visitingScoreSummary track by $index --><td ng-repeat="stat in visitingScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">0</span>
-# 							</td><!-- end ngRepeat: stat in visitingScoreSummary track by $index --><td ng-repeat="stat in visitingScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">2</span>
-# 							</td><!-- end ngRepeat: stat in visitingScoreSummary track by $index --><td ng-repeat="stat in visitingScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">1</span>
-# 							</td><!-- end ngRepeat: stat in visitingScoreSummary track by $index --><td ng-repeat="stat in visitingScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">3</span>
-# 							</td><!-- end ngRepeat: stat in visitingScoreSummary track by $index -->
-# 						</tr>
-# 						<tr>
-# 							<td>
-# 								<a ng-href="/stats/roster/390/65" target="_self" ng-bind="gameSummary.homeTeam.info.abbreviation" class="ng-binding" href="/stats/roster/390/65">UTI</a>
-# 							</td>
-# 							<!-- ngRepeat: stat in homeScoreSummary track by $index --><td ng-repeat="stat in homeScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">1</span>
-# 							</td><!-- end ngRepeat: stat in homeScoreSummary track by $index --><td ng-repeat="stat in homeScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">0</span>
-# 							</td><!-- end ngRepeat: stat in homeScoreSummary track by $index --><td ng-repeat="stat in homeScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">0</span>
-# 							</td><!-- end ngRepeat: stat in homeScoreSummary track by $index --><td ng-repeat="stat in homeScoreSummary track by $index" class="ng-scope">
-# 								<span ng-bind="stat" class="ng-binding">1</span>
-# 							</td><!-- end ngRepeat: stat in homeScoreSummary track by $index -->
-# 						</tr>
-# 					</tbody>
-# 				</table>
-# 			</div>
-# 			<!-- Shots -->
-# 			<div ng-class="gcDetailTable" class="ht-gc-game-detail">
-# 				<table class="ht-table ht-table-no-overflow">
-# 					<thead>
-# 					<tr>
-# 						<th class="ng-binding">Shots on Goal</th>
-# 						<!-- ngRepeat: heading in shotSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in shotSummaryHeadings track by $index" class="ng-scope">
-# 							<span ng-bind="heading" class="ng-binding">1</span>
-# 						</th><!-- end ngRepeat: heading in shotSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in shotSummaryHeadings track by $index" class="ng-scope">
-# 							<span ng-bind="heading" class="ng-binding">2</span>
-# 						</th><!-- end ngRepeat: heading in shotSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in shotSummaryHeadings track by $index" class="ng-scope">
-# 							<span ng-bind="heading" class="ng-binding">3</span>
-# 						</th><!-- end ngRepeat: heading in shotSummaryHeadings track by $index --><th style="width: 34px" ng-repeat="heading in shotSummaryHeadings track by $index" class="ng-scope">
-# 							<span ng-bind="heading" class="ng-binding">T</span>
-# 						</th><!-- end ngRepeat: heading in shotSummaryHeadings track by $index -->
-# 					</tr>
-# 					</thead>
-# 					<tbody>
-# 					<tr>
-# 						<td>
-# 							<a ng-href="/stats/roster/324/65" target="_self" ng-bind="gameSummary.visitingTeam.info.abbreviation" class="ng-binding" href="/stats/roster/324/65">SYR</a>
-# 						</td>
-# 						<!-- ngRepeat: stat in visitingShotSummary track by $index --><td ng-repeat="stat in visitingShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">9</span>
-# 						</td><!-- end ngRepeat: stat in visitingShotSummary track by $index --><td ng-repeat="stat in visitingShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">11</span>
-# 						</td><!-- end ngRepeat: stat in visitingShotSummary track by $index --><td ng-repeat="stat in visitingShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">6</span>
-# 						</td><!-- end ngRepeat: stat in visitingShotSummary track by $index --><td ng-repeat="stat in visitingShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">26</span>
-# 						</td><!-- end ngRepeat: stat in visitingShotSummary track by $index -->
-# 					</tr>
-# 					<tr>
-# 						<td>
-# 							<a ng-href="/stats/roster/390/65" target="_self" ng-bind="gameSummary.homeTeam.info.abbreviation" class="ng-binding" href="/stats/roster/390/65">UTI</a>
-# 						</td>
-# 						<!-- ngRepeat: stat in homeShotSummary track by $index --><td ng-repeat="stat in homeShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">13</span>
-# 						</td><!-- end ngRepeat: stat in homeShotSummary track by $index --><td ng-repeat="stat in homeShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">8</span>
-# 						</td><!-- end ngRepeat: stat in homeShotSummary track by $index --><td ng-repeat="stat in homeShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">7</span>
-# 						</td><!-- end ngRepeat: stat in homeShotSummary track by $index --><td ng-repeat="stat in homeShotSummary track by $index" class="ng-scope">
-# 							<span ng-bind="stat" class="ng-binding">28</span>
-# 						</td><!-- end ngRepeat: stat in homeShotSummary track by $index -->
-# 					</tr>
-# 					</tbody>
-# 				</table>
-# 			</div>
 # 			<!-- Details -->
 # 			<div ng-class="gcDetailTable" class="ht-gc-game-detail">
 # 				<table class="ht-table ht-table-no-overflow">
