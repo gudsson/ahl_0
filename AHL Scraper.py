@@ -47,20 +47,55 @@ game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class
 
 # scoring_boxscore_WE = []
 # scoring_boxscore = []
-#game_details = []
+#game_tables = []
 
-game_details = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']")
+game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
 
-game_tables = []
+#tbl_count = len(game_tables)
 
-game_tables = game_details.find_elements_by_xpath("//table[@class='ht-table ht-table-no-overflow']")
+# print(f"Number of tables: {tbl_count}")
 
-tbl_scoring_summary = game_tables[0]
-tbl_shot_summary = game_tables[1]
-tbl_details_summary = game_tables[2]
 
-print(tbl_scoring_summary.find_elements_by_xpath("//td[contains(@ng-repeat, 'visitingScoreSummary')]")[0].text)
-print(tbl_scoring_summary.find_elements_by_xpath("//td[contains(@ng-repeat, 'visitingScoreSummary')]")[1].text)
+
+# print(len(game_tables))
+# tbl_scoring_summary = game_tables[0]
+# tbl_shot_summary = game_tables[1]
+# tbl_details_summary = game_tables[2]
+
+
+###SCORING SUMMARY###
+periods = []
+away_goals = []
+home_goals = []
+away_shots = []
+home_shots = []
+
+periods = game_tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+away_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
+home_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
+away_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
+###SCORING SUMMARY###
+
+
+# periods_row = tbl_scoring_summary.find_elements_by_xpath("//tr/th")
+
+# # # print(periods_row.text[1])
+
+# # # periods = periods_row.find_elements_by_xpath("/th")
+
+# for period in periods:
+#     print(period.text)
+print("home_shots:")
+for period in home_shots:
+    print(period.text)
+
+print("away_shots:")
+for period in away_shots:
+    print(period.text)
+
+# print(tbl_scoring_summary.find_elements_by_xpath("//td[contains(@ng-repeat, 'visitingScoreSummary')]")[0].text)
+# print(tbl_scoring_summary.find_elements_by_xpath("//td[contains(@ng-repeat, 'visitingScoreSummary')]")[1].text)
 
 # <div class="ht-gc-game-details">
 # 			<!-- Scoring -->
