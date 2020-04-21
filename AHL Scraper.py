@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020558
+gamenumber = 1020321
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -103,6 +103,69 @@ home_pims = home_penalties[0]
 home_infracs = home_penalties[1].split(" ",1)[0]
 ###/GAME DETAILS###
 
+###THREE STARS###
+# three_stars_WE = []
+three_stars = []
+three_stars_WE = []
+
+three_stars_WE = game_tables.find_element_by_xpath("//div[@class='ht-three-stars']")
+
+star_number = []
+star_team = []
+star_name = []
+
+star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-number']/*")
+star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/*")
+star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/*")
+
+# print(len(star_number))
+# print(len(star_team))
+# print(len(star_name))
+for i in range(0, len(star_number)-1):
+    three_stars.append([star_number[i].text, star_team[i].text, star_name[i].text.split(" (",1)[0]])
+
+print(*three_stars)
+
+# star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-number']/span")
+# star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/span")
+# star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/span")
+
+
+    # star_team = star.find_elements_by_xpath("//div[@class='ht-star-team']/span").text
+    # star_name = star.find_elements_by_xpath("//div[@class='ht-star-name']/span").text
+    # three_stars.append([star_number, star_team, star_name])
+    # print(star_number)
+    # print(star_team)
+    # print(star_name)
+
+# print(*three_stars)
+                #<div ng-class="gcThreeStar" ng-repeat="star in gameSummary.mostValuablePlayers track by $index" class="ng-scope ht-three-star">
+				# 	<div class="ht-star-image">
+				# 		<img ng-src="https://assets.leaguestat.com/ahl/240x240/5490.jpg" alt="Spencer Martin" title="Spencer Martin" src="https://assets.leaguestat.com/ahl/240x240/5490.jpg">
+				# 	</div>
+				# 	<div class="ht-star-container">
+				# 		<div class="ht-star-number">
+				# 			<!-- ngIf: $index == 0 -->
+				# 			<!-- ngIf: $index == 1 --><span ng-if="$index == 1" class="ng-binding ng-scope">2nd</span><!-- end ngIf: $index == 1 -->
+				# 			<!-- ngIf: $index == 2 -->
+				# 		</div>
+				# 		<div class="ht-star-name">
+				# 			<a ng-href="/stats/player/5490/65/spencer-martin" target="_self" ng-bind="star.player.info.firstName +&quot; &quot;+ star.player.info.lastName + &quot; (#&quot; + star.player.info.jerseyNumber + &quot;)&quot;" class="ng-binding" href="/stats/player/5490/65/spencer-martin">Spencer Martin (#30)</a>
+				# 		</div>
+				# 		<div class="ht-star-team">
+				# 			<span ng-bind="star.team.name" class="ng-binding">Syracuse Crunch</span>
+				# 		</div>
+				# 		<div class="ht-star-stats ng-hide" ng-hide="star.isGoalie">
+				# 			<span ng-bind="&quot;G: &quot; + star.player.stats.goals + &quot; |&quot;" class="ng-binding">G: 0 |</span>
+				# 			<span ng-bind="&quot;A: &quot; + star.player.stats.assists" class="ng-binding">A: 0</span>
+				# 		</div>
+				# 		<div class="ht-star-stats" ng-show="star.isGoalie">
+				# 			<span ng-bind="&quot;SA: &quot; + star.player.stats.shotsAgainst + &quot; |&quot;" class="ng-binding">SA: 28 |</span>
+				# 			<span ng-bind="&quot;SV: &quot; + star.player.stats.saves + &quot; |&quot;" class="ng-binding">SV: 27 |</span>
+				# 			<span ng-bind="&quot;TOI: &quot; + star.player.stats.timeOnIce" class="ng-binding">TOI: 59:50</span>
+				# 		</div>
+				# 	</div>
+				# </div>
 
 
 # away_pts = []
@@ -114,8 +177,8 @@ home_infracs = home_penalties[1].split(" ",1)[0]
 
 ###GAME DETAILS###
 
-print(home_pims)
-print(home_infracs)
+# print(home_pims)
+# print(home_infracs)
 
 # periods_row = tbl_scoring_summary.find_elements_by_xpath("//tr/th")
 
