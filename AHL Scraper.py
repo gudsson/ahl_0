@@ -104,7 +104,6 @@ home_infracs = home_penalties[1].split(" ",1)[0]
 ###/GAME DETAILS###
 
 ###THREE STARS###
-# three_stars_WE = []
 three_stars = []
 three_stars_WE = []
 
@@ -118,25 +117,47 @@ star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-numbe
 star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/*")
 star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/*")
 
-# print(len(star_number))
-# print(len(star_team))
-# print(len(star_name))
 for i in range(0, len(star_number)-1):
     three_stars.append([star_number[i].text, star_team[i].text, star_name[i].text.split(" (",1)[0]])
+###/THREE STARS###
 
-print(*three_stars)
+##AWAY STAT SUMMARY##
+away_line_stats = []
+away_line = []
+away_td = []
 
-# star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-number']/span")
-# star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/span")
-# star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/span")
+away_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']")
+
+away_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.skaters')]")
+
+for line in away_line:
+	away_td = line.find_elements_by_xpath("td")
+	awayplyr_number = away_td[0].text
+	awayplyr_letter = away_td[1].text
+	awayplyr_name = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
+	awayplyr_id = away_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+	awayplyr_pos = away_td[3].text
+	awayplyr_goals = away_td[4].text
+	awayplyr_assists = away_td[5].text
+	awayplyr_pim = away_td[6].text
+	awayplyr_shots = away_td[7].text
+	awayplyr_plusminus = away_td[8].text
+	away_line_stats.append([awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
+
+print(*away_line_stats)
+###/AWAY STAT SUMMARY
 
 
-    # star_team = star.find_elements_by_xpath("//div[@class='ht-star-team']/span").text
-    # star_name = star.find_elements_by_xpath("//div[@class='ht-star-name']/span").text
-    # three_stars.append([star_number, star_team, star_name])
-    # print(star_number)
-    # print(star_team)
-    # print(star_name)
+
+
+# print(len(away_line))
+
+# for cell in away_line:
+#     print(cell.text)
+
+# print(away_line_stats.text)
+# for line in away_line_stats:
+#     print(line.find_element_by_xpath("//td").text)
 
 # print(*three_stars)
                 #<div ng-class="gcThreeStar" ng-repeat="star in gameSummary.mostValuablePlayers track by $index" class="ng-scope ht-three-star">
