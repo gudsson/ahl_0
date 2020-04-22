@@ -144,10 +144,34 @@ for line in away_line:
 	awayplyr_plusminus = away_td[8].text
 	away_line_stats.append([awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
 
-print(*away_line_stats)
+#print(*away_line_stats)
 ###/AWAY STAT SUMMARY
 
+##HOME STAT SUMMARY##
+home_line_stats = []
+home_line = []
+home_td = []
 
+home_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']")
+
+home_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.skaters')]")
+
+for line in home_line:
+	home_td = line.find_elements_by_xpath("td")
+	homeplyr_number = home_td[0].text
+	homeplyr_letter = home_td[1].text
+	homeplyr_name = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
+	homeplyr_id = home_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+	homeplyr_pos = home_td[3].text
+	homeplyr_goals = home_td[4].text
+	homeplyr_assists = home_td[5].text
+	homeplyr_pim = home_td[6].text
+	homeplyr_shots = home_td[7].text
+	homeplyr_plusminus = home_td[8].text
+	home_line_stats.append([homeplyr_number, homeplyr_letter, homeplyr_name, homeplyr_id, homeplyr_pos, homeplyr_goals, homeplyr_assists, homeplyr_pim, homeplyr_shots, homeplyr_plusminus])
+
+print(*home_line_stats)
+###/HOME STAT SUMMARY
 
 
 # print(len(away_line))
