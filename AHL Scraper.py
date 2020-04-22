@@ -144,8 +144,24 @@ for line in away_line:
 	awayplyr_plusminus = away_td[8].text
 	away_line_stats.append([awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
 
-#print(*away_line_stats)
+print(*away_line_stats)
 ###/AWAY STAT SUMMARY
+
+###AWAY COACHES###
+# away_coach_rows = []
+# away_coaches = []
+
+# away_coach_rows = away_table.find_elements_by_id("/table")#//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
+
+# print(len(away_coach_rows))
+
+# for row in away_coach_rows:
+# 	print(row.text)
+###AWAY COACHES###
+
+
+
+
 
 ##HOME STAT SUMMARY##
 home_line_stats = []
@@ -170,7 +186,7 @@ for line in home_line:
 	homeplyr_plusminus = home_td[8].text
 	home_line_stats.append([homeplyr_number, homeplyr_letter, homeplyr_name, homeplyr_id, homeplyr_pos, homeplyr_goals, homeplyr_assists, homeplyr_pim, homeplyr_shots, homeplyr_plusminus])
 
-print(*home_line_stats)
+#print(*home_line_stats)
 ###/HOME STAT SUMMARY
 
 
