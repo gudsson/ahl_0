@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020321
+gamenumber = 1020231
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -125,10 +125,12 @@ for i in range(0, len(star_number)-1):
 away_line_stats = []
 away_line = []
 away_td = []
+away_coach_line = []
+away_coaches = []
 
 away_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']")
-
 away_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.skaters')]")
+away_coach_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
 
 for line in away_line:
 	away_td = line.find_elements_by_xpath("td")
@@ -144,16 +146,25 @@ for line in away_line:
 	awayplyr_plusminus = away_td[8].text
 	away_line_stats.append([awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
 
-print(*away_line_stats)
+
+for line in away_coach_line:
+	awaycoach_role = line.text.split(": ")[0]
+	awaycoach_name = line.text.split(": ")[1]
+	away_coaches.append([awaycoach_role, awaycoach_name])
+    
+print(*away_coaches)
 ###/AWAY STAT SUMMARY
 
 ###AWAY COACHES###
 # away_coach_rows = []
-# away_coaches = []
+# print(len(away_line))
+# print(len(away_coaches))
 
-# away_coach_rows = away_table.find_elements_by_id("/table")#//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
+
+# away_coach_rows = away_table.find_elements_by_id("/table")#"//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
 
 # print(len(away_coach_rows))
+# print(*away_coach_rows.text)
 
 # for row in away_coach_rows:
 # 	print(row.text)
@@ -167,10 +178,12 @@ print(*away_line_stats)
 home_line_stats = []
 home_line = []
 home_td = []
+home_coach_line = []
+home_coaches = []
 
 home_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']")
-
 home_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.skaters')]")
+home_coach_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.coaches')]")
 
 for line in home_line:
 	home_td = line.find_elements_by_xpath("td")
@@ -185,6 +198,14 @@ for line in home_line:
 	homeplyr_shots = home_td[7].text
 	homeplyr_plusminus = home_td[8].text
 	home_line_stats.append([homeplyr_number, homeplyr_letter, homeplyr_name, homeplyr_id, homeplyr_pos, homeplyr_goals, homeplyr_assists, homeplyr_pim, homeplyr_shots, homeplyr_plusminus])
+
+
+for line in home_coach_line:
+	homecoach_role = line.text.split(": ")[0]
+	homecoach_name = line.text.split(": ")[1]
+	home_coaches.append([homecoach_role, homecoach_name])
+
+print(*home_coaches)
 
 #print(*home_line_stats)
 ###/HOME STAT SUMMARY
