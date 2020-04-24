@@ -58,9 +58,44 @@ game_data.append(["attendance", game_tables.find_element_by_xpath("//td[contains
 game_data.append(["start_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
 game_data.append(["end_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
 game_data.append(["duration", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
-###ARENA DETAILS###
-# print(game_date.text)
-print(*game_data)
+###/ARENA DETAILS###
+
+###GAME OFFICIALS###
+game_officials = []
+referees = []
+
+referees = game_tables.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
+
+for line in referees:
+	referee_data = line.find_elements_by_xpath("td")
+	referee_role = referee_data[0].text
+	referee_name = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
+	referee_number = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
+	game_officials.append([referee_role, referee_name, referee_number])
+###/GAME OFFICIALS###
+
+	# for data in referee_data:
+	# 	print(data.text)
+# 	referee_type = line.find_element_by_xpath("//td[contains(@ng-bind,'referee.role')]").text
+# 	referee_name = line.find_element_by_xpath("//span[contains(@ng-show,'.hide_official_names')]").text
+# 	referee_number = line.find_element_by_xpath("//span[@ng-bind='referee.jerseyNumber']").text
+# 	game_officials.append([referee_type, referee_name, referee_number])
+
+
+# for line in linesmen:
+# 	linesman_type = line.find_element_by_xpath("//td[contains(@ng-bind,'linesman.role')]").text
+# 	linesman_name = line.find_element_by_xpath("//span[contains(@ng-show,'.hide_official_names')]").text
+# 	linesman_number = line.find_element_by_xpath("//span[@ng-bind='linesman.jerseyNumber']").text
+# 	game_officials.append([linesman_type, linesman_name, linesman_number])
+# 	print(line.text)
+
+# for line in game_officials_lines:
+# 	referee_type = line.find_element_by_xpath("//td[contains(@ng-bind,'.role')]").text
+# 	referee_name = line.find_element_by_xpath("//span[contains(@ng-show,'hide_official_names')]").text
+# 	referee_number = line.find_element_by_xpath("//span[contains(@ng-bind,'.jerseyNumber')][@class='ng-binding']").text
+# 	game_officials.append([referee_type, referee_name, referee_number])
+
+# print(*game_officials)
 
 #tbl_count = len(game_tables)
 
