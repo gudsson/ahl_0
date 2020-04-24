@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020231
+gamenumber = 1020400
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -31,11 +31,11 @@ game_data = []
 #results = driver.find_elements_by_xpath("//*[@class=' co-product-list__main-cntr']//*[@class=' co-item ']//*[@class='co-product']//*[@class='co-item__title-container']//*[@class='co-product__title']")
 game_data.append(["game_id", driver.find_element_by_xpath("//*[@class='ht-game-number']").text])
 game_data.append(["game_date", driver.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
-game_data.append(["game_status", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-game-status')]").text])
+game_data.append(["game_status", driver.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text])
 game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
-game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
-# print(game_date.text)
-#print(*game_data)
+game_data.append(["home_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
+
+
 
 
 # # Print Band One
@@ -50,6 +50,17 @@ game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class
 #game_tables = []
 
 game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
+
+
+###ARENA DETAILS###
+game_data.append(["venue", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
+game_data.append(["attendance", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
+game_data.append(["start_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
+game_data.append(["end_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
+game_data.append(["duration", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
+###ARENA DETAILS###
+# print(game_date.text)
+print(*game_data)
 
 #tbl_count = len(game_tables)
 
@@ -151,28 +162,7 @@ for line in away_coach_line:
 	awaycoach_role = line.text.split(": ")[0]
 	awaycoach_name = line.text.split(": ")[1]
 	away_coaches.append([awaycoach_role, awaycoach_name])
-    
-print(*away_coaches)
 ###/AWAY STAT SUMMARY
-
-###AWAY COACHES###
-# away_coach_rows = []
-# print(len(away_line))
-# print(len(away_coaches))
-
-
-# away_coach_rows = away_table.find_elements_by_id("/table")#"//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
-
-# print(len(away_coach_rows))
-# print(*away_coach_rows.text)
-
-# for row in away_coach_rows:
-# 	print(row.text)
-###AWAY COACHES###
-
-
-
-
 
 ##HOME STAT SUMMARY##
 home_line_stats = []
@@ -204,10 +194,6 @@ for line in home_coach_line:
 	homecoach_role = line.text.split(": ")[0]
 	homecoach_name = line.text.split(": ")[1]
 	home_coaches.append([homecoach_role, homecoach_name])
-
-print(*home_coaches)
-
-#print(*home_line_stats)
 ###/HOME STAT SUMMARY
 
 
