@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020400
+gamenumber = 1020117
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -29,11 +29,11 @@ time.sleep(5)
 
 game_data = []
 #results = driver.find_elements_by_xpath("//*[@class=' co-product-list__main-cntr']//*[@class=' co-item ']//*[@class='co-product']//*[@class='co-item__title-container']//*[@class='co-product__title']")
-game_data.append(["game_id", driver.find_element_by_xpath("//*[@class='ht-game-number']").text])
-game_data.append(["game_date", driver.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
-game_data.append(["game_status", driver.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text])
-game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
-game_data.append(["home_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
+# game_data.append(["game_id", driver.find_element_by_xpath("//*[@class='ht-game-number']").text])
+# game_data.append(["game_date", driver.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
+# game_data.append(["game_status", driver.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text])
+# game_data.append(["away_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
+# game_data.append(["home_team", driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
 
 
 
@@ -49,188 +49,203 @@ game_data.append(["home_team", driver.find_element_by_xpath("//*[contains(@class
 # scoring_boxscore = []
 #game_tables = []
 
-game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
+#pull highest-level web elements
+# game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
+rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
+
+# ###ARENA DETAILS###
+# # game_data.append(["venue", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
+# # game_data.append(["attendance", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
+# # game_data.append(["start_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
+# # game_data.append(["end_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
+# # game_data.append(["duration", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
+# ###/ARENA DETAILS###
+
+# ###GAME OFFICIALS###
+# game_officials = []
+# referees = []
+
+# referees = game_tables.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
+
+# for line in referees:
+# 	referee_data = line.find_elements_by_xpath("td")
+# 	referee_role = referee_data[0].text
+# 	referee_name = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
+# 	referee_number = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
+# 	game_officials.append([referee_role, referee_name, referee_number])
+# ###/GAME OFFICIALS###
+
+# ###SCORING SUMMARY###
+# #Periods (last period is total)
+# periods = []
+# periods = game_tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+
+# #Away Stats#
+# away_goals = []
+# away_shots = []
+# away_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
+# away_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+
+# #Home Stats#
+# home_goals = []
+# home_shots = []
+# home_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
+# home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
+# ###/SCORING SUMMARY###
+
+# ###GAME DETAILS###
+# #Away PP#
+# away_pp = []
+# away_penalties = []
+# away_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
+# away_pp_goals = away_pp[0]
+# away_pp_opps = away_pp[1]
+# away_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
+# away_pims = away_penalties[0]
+# away_infracs = away_penalties[1].split(" ",1)[0]
+
+# #Home PP#
+# home_pp = []
+# home_penalties = []
+# home_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
+# home_pp_goals = home_pp[0]
+# home_pp_opps = home_pp[1]
+# home_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
+# home_pims = home_penalties[0]
+# home_infracs = home_penalties[1].split(" ",1)[0]
+# ###/GAME DETAILS###
+
+# ###THREE STARS###
+# three_stars = []
+# three_stars_WE = []
+
+# three_stars_WE = game_tables.find_element_by_xpath("//div[@class='ht-three-stars']")
+
+# star_number = []
+# star_team = []
+# star_name = []
+
+# star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-number']/*")
+# star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/*")
+# star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/*")
+
+# for i in range(0, len(star_number)-1):
+#     three_stars.append([star_number[i].text, star_team[i].text, star_name[i].text.split(" (",1)[0]])
+# ###/THREE STARS###
+
+# ##AWAY STAT SUMMARY##
+# away_line_stats = []
+# away_line = []
+# away_td = []
+# away_coach_line = []
+# away_coaches = []
+
+# away_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']")
+# away_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.skaters')]")
+# away_coach_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
+
+# for line in away_line:
+# 	away_td = line.find_elements_by_xpath("td")
+# 	awayplyr_number = away_td[0].text
+# 	awayplyr_letter = away_td[1].text
+# 	awayplyr_name = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
+# 	awayplyr_id = away_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+# 	awayplyr_pos = away_td[3].text
+# 	awayplyr_goals = away_td[4].text
+# 	awayplyr_assists = away_td[5].text
+# 	awayplyr_pim = away_td[6].text
+# 	awayplyr_shots = away_td[7].text
+# 	awayplyr_plusminus = away_td[8].text
+# 	away_line_stats.append([awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
 
 
-###ARENA DETAILS###
-game_data.append(["venue", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
-game_data.append(["attendance", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
-game_data.append(["start_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
-game_data.append(["end_time", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
-game_data.append(["duration", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
-###/ARENA DETAILS###
+# for line in away_coach_line:
+# 	awaycoach_role = line.text.split(": ")[0]
+# 	awaycoach_name = line.text.split(": ")[1]
+# 	away_coaches.append([awaycoach_role, awaycoach_name])
+# ###/AWAY STAT SUMMARY
 
-###GAME OFFICIALS###
-game_officials = []
-referees = []
+# ##HOME STAT SUMMARY##
+# home_line_stats = []
+# home_line = []
+# home_td = []
+# home_coach_line = []
+# home_coaches = []
 
-referees = game_tables.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
+# home_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']")
+# home_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.skaters')]")
+# home_coach_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.coaches')]")
 
-for line in referees:
-	referee_data = line.find_elements_by_xpath("td")
-	referee_role = referee_data[0].text
-	referee_name = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
-	referee_number = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
-	game_officials.append([referee_role, referee_name, referee_number])
-###/GAME OFFICIALS###
-
-	# for data in referee_data:
-	# 	print(data.text)
-# 	referee_type = line.find_element_by_xpath("//td[contains(@ng-bind,'referee.role')]").text
-# 	referee_name = line.find_element_by_xpath("//span[contains(@ng-show,'.hide_official_names')]").text
-# 	referee_number = line.find_element_by_xpath("//span[@ng-bind='referee.jerseyNumber']").text
-# 	game_officials.append([referee_type, referee_name, referee_number])
-
-
-# for line in linesmen:
-# 	linesman_type = line.find_element_by_xpath("//td[contains(@ng-bind,'linesman.role')]").text
-# 	linesman_name = line.find_element_by_xpath("//span[contains(@ng-show,'.hide_official_names')]").text
-# 	linesman_number = line.find_element_by_xpath("//span[@ng-bind='linesman.jerseyNumber']").text
-# 	game_officials.append([linesman_type, linesman_name, linesman_number])
-# 	print(line.text)
-
-# for line in game_officials_lines:
-# 	referee_type = line.find_element_by_xpath("//td[contains(@ng-bind,'.role')]").text
-# 	referee_name = line.find_element_by_xpath("//span[contains(@ng-show,'hide_official_names')]").text
-# 	referee_number = line.find_element_by_xpath("//span[contains(@ng-bind,'.jerseyNumber')][@class='ng-binding']").text
-# 	game_officials.append([referee_type, referee_name, referee_number])
-
-# print(*game_officials)
-
-#tbl_count = len(game_tables)
-
-# print(f"Number of tables: {tbl_count}")
+# for line in home_line:
+# 	home_td = line.find_elements_by_xpath("td")
+# 	homeplyr_number = home_td[0].text
+# 	homeplyr_letter = home_td[1].text
+# 	homeplyr_name = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
+# 	homeplyr_id = home_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+# 	homeplyr_pos = home_td[3].text
+# 	homeplyr_goals = home_td[4].text
+# 	homeplyr_assists = home_td[5].text
+# 	homeplyr_pim = home_td[6].text
+# 	homeplyr_shots = home_td[7].text
+# 	homeplyr_plusminus = home_td[8].text
+# 	home_line_stats.append([homeplyr_number, homeplyr_letter, homeplyr_name, homeplyr_id, homeplyr_pos, homeplyr_goals, homeplyr_assists, homeplyr_pim, homeplyr_shots, homeplyr_plusminus])
 
 
+# for line in home_coach_line:
+# 	homecoach_role = line.text.split(": ")[0]
+# 	homecoach_name = line.text.split(": ")[1]
+# 	home_coaches.append([homecoach_role, homecoach_name])
+# ###/HOME STAT SUMMARY
 
-# print(len(game_tables))
-# tbl_scoring_summary = game_tables[0]
-# tbl_shot_summary = game_tables[1]
-# tbl_details_summary = game_tables[2]
+###RinkPxP###
 
+events = []
+event_info = []
+events = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
 
-###SCORING SUMMARY###
-#Periods (last period is total)
-periods = []
-periods = game_tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+print(len(events))
 
-#Away Stats#
-away_goals = []
-away_shots = []
-away_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
-away_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+for event in events:
+	event_id = event.get_attribute("id").split("ht_pin_")[1]
+	event_type = event.text
+	event_loc = event.get_attribute("style")
+	event_loc_top = event.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+	event_loc_left = event.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+	# event_top_loc = event.get_attribute("style")
+	# event_left_loc = event.get_attribute("style")
 
-#Home Stats#
-home_goals = []
-home_shots = []
-home_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
-home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
-###/SCORING SUMMARY###
+	# event_info.append(event_id)
+	# event_info.append(event_type)
+	# event_info.append(event_top_loc)
+	# event_info.append(event_left_loc)
+	print(str(event_id) + " | " + str(event_type) + " | " + str(event_loc_top) + " | " + str(event_loc_left))
 
-###GAME DETAILS###
-#Away PP#
-away_pp = []
-away_penalties = []
-away_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
-away_pp_goals = away_pp[0]
-away_pp_opps = away_pp[1]
-away_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
-away_pims = away_penalties[0]
-away_infracs = away_penalties[1].split(" ",1)[0]
-
-#Home PP#
-home_pp = []
-home_penalties = []
-home_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
-home_pp_goals = home_pp[0]
-home_pp_opps = home_pp[1]
-home_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
-home_pims = home_penalties[0]
-home_infracs = home_penalties[1].split(" ",1)[0]
-###/GAME DETAILS###
-
-###THREE STARS###
-three_stars = []
-three_stars_WE = []
-
-three_stars_WE = game_tables.find_element_by_xpath("//div[@class='ht-three-stars']")
-
-star_number = []
-star_team = []
-star_name = []
-
-star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-number']/*")
-star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/*")
-star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/*")
-
-for i in range(0, len(star_number)-1):
-    three_stars.append([star_number[i].text, star_team[i].text, star_name[i].text.split(" (",1)[0]])
-###/THREE STARS###
-
-##AWAY STAT SUMMARY##
-away_line_stats = []
-away_line = []
-away_td = []
-away_coach_line = []
-away_coaches = []
-
-away_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']")
-away_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.skaters')]")
-away_coach_line = away_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
-
-for line in away_line:
-	away_td = line.find_elements_by_xpath("td")
-	awayplyr_number = away_td[0].text
-	awayplyr_letter = away_td[1].text
-	awayplyr_name = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
-	awayplyr_id = away_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
-	awayplyr_pos = away_td[3].text
-	awayplyr_goals = away_td[4].text
-	awayplyr_assists = away_td[5].text
-	awayplyr_pim = away_td[6].text
-	awayplyr_shots = away_td[7].text
-	awayplyr_plusminus = away_td[8].text
-	away_line_stats.append([awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
+#<div id="ht-icerink" ng-class="rinkContainer" class="ht-gc-icerink-container ng-scope">
 
 
-for line in away_coach_line:
-	awaycoach_role = line.text.split(": ")[0]
-	awaycoach_name = line.text.split(": ")[1]
-	away_coaches.append([awaycoach_role, awaycoach_name])
-###/AWAY STAT SUMMARY
-
-##HOME STAT SUMMARY##
-home_line_stats = []
-home_line = []
-home_td = []
-home_coach_line = []
-home_coaches = []
-
-home_table = game_tables.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']")
-home_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.skaters')]")
-home_coach_line = home_table.find_elements_by_xpath("//tr[contains(@ng-repeat,'homeTeam.coaches')]")
-
-for line in home_line:
-	home_td = line.find_elements_by_xpath("td")
-	homeplyr_number = home_td[0].text
-	homeplyr_letter = home_td[1].text
-	homeplyr_name = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
-	homeplyr_id = home_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
-	homeplyr_pos = home_td[3].text
-	homeplyr_goals = home_td[4].text
-	homeplyr_assists = home_td[5].text
-	homeplyr_pim = home_td[6].text
-	homeplyr_shots = home_td[7].text
-	homeplyr_plusminus = home_td[8].text
-	home_line_stats.append([homeplyr_number, homeplyr_letter, homeplyr_name, homeplyr_id, homeplyr_pos, homeplyr_goals, homeplyr_assists, homeplyr_pim, homeplyr_shots, homeplyr_plusminus])
 
 
-for line in home_coach_line:
-	homecoach_role = line.text.split(": ")[0]
-	homecoach_name = line.text.split(": ")[1]
-	home_coaches.append([homecoach_role, homecoach_name])
-###/HOME STAT SUMMARY
 
+
+
+
+
+
+
+
+
+
+
+###/RinkPxP###
+
+###GamePxP###
+
+# Will need to account for:
+# - Penalty shots
+# - Shootout Attempts
+# - PP and SH shots
+
+###GamePxP###
 
 # print(len(away_line))
 
