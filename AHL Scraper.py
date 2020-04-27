@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020117
+gamenumber = 1020476
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -51,8 +51,11 @@ game_data = []
 
 #pull highest-level web elements
 # game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
-rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
 
+pbp = []
+
+rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
+pbp = driver.find_elements_by_xpath("//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
 # ###ARENA DETAILS###
 # # game_data.append(["venue", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
 # # game_data.append(["attendance", game_tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
@@ -203,7 +206,7 @@ events = []
 event_info = []
 events = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
 
-print(len(events))
+
 
 for event in events:
 	event_id = event.get_attribute("id").split("ht_pin_")[1]
@@ -218,14 +221,30 @@ for event in events:
 	# event_info.append(event_type)
 	# event_info.append(event_top_loc)
 	# event_info.append(event_left_loc)
-	print(str(event_id) + " | " + str(event_type) + " | " + str(event_loc_top) + " | " + str(event_loc_left))
+	# print(str(event_id) + " | " + str(event_type) + " | " + str(event_loc_top) + " | " + str(event_loc_left))
 
 #<div id="ht-icerink" ng-class="rinkContainer" class="ht-gc-icerink-container ng-scope">
 
+# pbp_events = []
+pbp_event_info = []
+shot_events = []
+other_events = []
+# pbp_events = pbp.find_elements_by_xpath("div[contains(@ng-show,'ht_')]")
 
+for event in pbp:
+	event_type = event.get_attribute("ng-show").split("ht_")[1]
+	if event_type == "shot" or event_type == "goal":
+		shot_events.append(event)
+	else:
+		other_events.append(event)
+	#print(event.text)
 
+for event in other_events:
+    	print(event.text)
 
-
+print("events: " + str(len(events)))
+print("shot events: " + str(len(shot_events)))
+print("non-shot events: " + str(len(other_events)))
 
 
 
@@ -244,6 +263,13 @@ for event in events:
 # - Penalty shots
 # - Shootout Attempts
 # - PP and SH shots
+
+
+
+
+
+
+
 
 ###GamePxP###
 
