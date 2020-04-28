@@ -206,14 +206,33 @@ events = []
 event_info = []
 events = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
 
+pbp_event_info = []
+shot_events = []
+other_events = []
 
 
-for event in events:
-	event_id = event.get_attribute("id").split("ht_pin_")[1]
-	event_type = event.text
-	event_loc = event.get_attribute("style")
-	event_loc_top = event.get_attribute("style").split("%; left: ")[0].split("top:")[1]
-	event_loc_left = event.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+for event, pbp_data in zip(events, pbp):
+	# event_id = event.get_attribute("id").split("ht_pin_")[1] #get index
+	# event_type = event.text
+	# event_loc = event.get_attribute("style")
+	# event_loc_top = event.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+	# event_loc_left = event.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+	event_type = event.find_element_by_xpath("span").text #'get_attribute("ng-show").split("ht_")[1]
+	#other_events.append(event_type)
+	#print(event_type)
+
+	# if event_type == "S" or event_type == "goal":
+		#shot_events.append(event)
+
+	team = pbp_data.find_element_by_xpath("//div[@class='ht-home-or-visit']/div").get_attribute("class").split("team ")[0].split("ht-")[1]
+	print(team)
+
+
+# print(len(other_events))	
+					# else:
+			# 	other_events.append(event)
 	# event_top_loc = event.get_attribute("style")
 	# event_left_loc = event.get_attribute("style")
 
@@ -226,25 +245,18 @@ for event in events:
 #<div id="ht-icerink" ng-class="rinkContainer" class="ht-gc-icerink-container ng-scope">
 
 # pbp_events = []
-pbp_event_info = []
-shot_events = []
-other_events = []
+
 # pbp_events = pbp.find_elements_by_xpath("div[contains(@ng-show,'ht_')]")
 
-for event in pbp:
-	event_type = event.get_attribute("ng-show").split("ht_")[1]
-	if event_type == "shot" or event_type == "goal":
-		shot_events.append(event)
-	else:
-		other_events.append(event)
+
 	#print(event.text)
+# 
+# for event in other_events:
+    	# print(event.text)
 
-for event in other_events:
-    	print(event.text)
-
-print("events: " + str(len(events)))
-print("shot events: " + str(len(shot_events)))
-print("non-shot events: " + str(len(other_events)))
+# print("events: " + str(len(events)))
+# print("shot events: " + str(len(shot_events)))
+# print("non-shot events: " + str(len(other_events)))
 
 
 
