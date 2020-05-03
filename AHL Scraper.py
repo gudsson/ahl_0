@@ -212,6 +212,16 @@ other_events = []
 
 
 
+# for pbp_data in pbp:
+# 	# print(pbp_data.get_attribute('innerHTML'))
+# 	# break#print(" ")
+# 	#print(pbp_data.get_attribute("ng-show").split("ht_")[1]) #ok
+# 	pbp_row = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]")
+# 	#pbp_team = pbp_row.find_element_by_xpath("div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
+# 	pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
+# 	print(pbp_team)
+	#print(pbp_data.find_element_by_xpath("//div[@class='ht-home-or-visit']/div").get_attribute('class'))#<div class="ht-home-or-visit">
+
 for event, pbp_data in zip(events, pbp):
 	# event_id = event.get_attribute("id").split("ht_pin_")[1] #get index
 	# event_type = event.text
@@ -220,14 +230,17 @@ for event, pbp_data in zip(events, pbp):
 	# event_loc_left = event.get_attribute("style").split("%; left: ")[1].split("%;")[0]
 
 	event_type = event.find_element_by_xpath("span").text #'get_attribute("ng-show").split("ht_")[1]
+	pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
 	#other_events.append(event_type)
-	#print(event_type)
+	print(event_type + " | " + pbp_team)
 
-	# if event_type == "S" or event_type == "goal":
-		#shot_events.append(event)
+# 	# if event_type == "S" or event_type == "goal":
+# 		#shot_events.append(event)
 
-	team = pbp_data.find_element_by_xpath("//div[@class='ht-home-or-visit']/div").get_attribute("class").split("team ")[0].split("ht-")[1]
-	print(team)
+
+# 	### gotta pull this out and iterate through like event and pbp_data
+# 	team = pbp_data.find_element_by_xpath("//div[@class='ht-home-or-visit']/div").get_attribute("class").split("team ")[0]
+# 	print(event_type + " | " + team)
 
 
 # print(len(other_events))	

@@ -1,0 +1,43 @@
+<!-- Goalie Change -->
+                                <!-- ngIf: pbp.event == "goalie_change" --><div class="ht-event-row ht-event-goalie ng-scope" ng-if="pbp.event == &quot;goalie_change&quot;">
+                                        <div class="ht-home-or-visit">
+                                                <!-- ngIf: gameSummary.visitingTeam.info.id == pbp.details.team_id -->
+                                                <!-- ngIf: gameSummary.homeTeam.info.id == pbp.details.team_id --><div ng-if="gameSummary.homeTeam.info.id == pbp.details.team_id" class="ht-hometeam ng-scope"></div><!-- end ngIf: gameSummary.homeTeam.info.id == pbp.details.team_id -->
+                                        </div>
+                                        <div class="ht-event-image">
+                                                <!-- ngIf: gameSummary.visitingTeam.info.id == pbp.details.team_id -->
+                                                <!-- ngIf: gameSummary.homeTeam.info.id == pbp.details.team_id --><img ng-if="gameSummary.homeTeam.info.id == pbp.details.team_id" ng-src="https://assets.leaguestat.com/ahl/logos/50x50/405_65.png" alt="San Jose Barracuda" title="San Jose Barracuda" class="ng-scope" src="https://assets.leaguestat.com/ahl/logos/50x50/405_65.png"><!-- end ngIf: gameSummary.homeTeam.info.id == pbp.details.team_id -->
+                                        </div>
+                                        <div class="ht-event-details">
+                                                <div class="ht-event-type ng-binding">GOALIE CHANGE</div>
+                                                <div>
+                                                        <!-- ngIf: pbp.details.goalieComingIn != null --><section ng-if="pbp.details.goalieComingIn != null" class="ng-scope">
+                                                                <span ng-bind="&quot;#&quot; + pbp.details.goalieComingIn.jerseyNumber" class="ng-binding">#32</span>
+                                                                <a ng-href="/stats/player/7215/65/josef-korenar" target="_self" href="/stats/player/7215/65/josef-korenar">
+                                                                        <span ng-bind="pbp.details.goalieComingIn.firstName +&quot; &quot;+ pbp.details.goalieComingIn.lastName" class="ng-binding">Josef Korenar</span>
+                                                                </a>
+                                                                <span class="ng-binding">On</span>
+                                                        </section><!-- end ngIf: pbp.details.goalieComingIn != null -->
+                                                        <!-- ngIf: pbp.details.goalieGoingOut != null -->
+                                                </div>
+                                        </div>
+                                        <div class="ht-event-time">
+                                                <div>
+                                                        <span ng-bind="pbp.details.time" class="ng-binding">0:00</span>
+                                                </div>
+                                        </div>
+                                </div><!-- end ngIf: pbp.event == "goalie_change" -->
+                                <!-- Faceoff -->
+                                <!-- ngIf: pbp.event == "faceoff" -->
+                                <!-- Shot -->
+                                <!-- ngIf: pbp.event == "shot" -->
+                                <!-- Penalty -->
+                                <!-- ngIf: pbp.event == "penalty" -->
+                                <!-- Goal -->
+                                <!-- ngIf: pbp.event == "goal" -->
+                                <!-- Hit -->
+                                <!-- ngIf: pbp.event == "hit" -->
+                                <!-- Shootout -->
+                                <!-- ngIf: pbp.event == "shootout" -->
+                                <!-- Penalty Shot -->
+                                <!-- ngIf: pbp.event == "penaltyshot" -->
