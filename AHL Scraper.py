@@ -361,18 +361,14 @@ for period in pbp_periods:
                 "div/span[contains(@ng-bind,'pbp.details.minutes')]").text
             pbp_pim = pbp_event_details.find_element_by_xpath(
                 "div/span[contains(@ng-bind,'pbp.details.minutes')]").text.split(" ")[0]
-				try:
-					pbp_pp_type = pbp_event_details.find_element_by_xpath(
-					    "div/span[@ng-if='pbp.details.isPowerPlay']").text
-				except:
-					pbp_pp_type = "ES"
-
-			# print(f"#{pbp_penalized_number} {pbp_penalized_player} | {pbp_penalty_name} | {pbp_penalty_length} ({pbp_pp_type}) at {pbp_event_time} of {period_name} period")
-		elif pbp_event_type == "GOALIE CHANGE":
-    		goalies_changing = []
-            goalies_changing = pbp_event_details.find_elements_by_xpath(
-                "div/section[contains(@ng-if,'pbp.details.goalie')]")
-
+            try:
+                pbp_pp_type = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isPowerPlay']").text
+            except:
+                pbp_pp_type = "ES"
+            #print(f"#{pbp_penalized_number} {pbp_penalized_player} | {pbp_penalty_name} | {pbp_penalty_length} ({pbp_pp_type}) at {pbp_event_time} of {period_name} period")
+        elif pbp_event_type == "GOALIE CHANGE":
+            goalies_changing = pbp_event_details.find_elements_by_xpath("div/section[contains(@ng-if,'pbp.details.goalie')]")
+            
             for goalie in goalies_changing:
                 changing_goalie_number = goalie.find_element_by_xpath(
                     "span[contains(@ng-bind,'jerseyNumber')]").text.replace("#", "").replace("- ", "")
@@ -380,8 +376,9 @@ for period in pbp_periods:
                     "a/span[contains(@ng-bind,'lastName')]").text
                 changing_goalie_action = goalie.find_element_by_xpath(
                     "span[@class='ng-binding' and not(contains(@ng-bind,'jerseyNumber'))]").text
+
                 # print(f"#{changing_goalie_number} {changing_goalie_name} {changing_goalie_action} at {pbp_event_time}, {period_name} period.")
-        elif pbp_event_type == "&nbsp":  # in shootout
+        elif pbp_event_type == " ":  # in shootout
             attempt_results = []
 
             so_shooter_number = pbp_event_details.find_element_by_xpath(
@@ -405,9 +402,10 @@ for period in pbp_periods:
                 for result in attempt_results:
                     attempt_result = attempt_result + "[" + result.text + "] "
 
-            print(f"{pbp_team_name} #{so_shooter_number} {so_shooter_name} shootout attempt on #{so_goalie_number} {so_goalie_name}:   {attempt_result}")
+            # print(f"{pbp_team_name} #{so_shooter_number} {so_shooter_name} shootout attempt on #{so_goalie_number} {so_goalie_name}:   {attempt_result}")
         else:
-                pass#print(pbp_event_type)
+                print(f"EVENT NOT ACCOUNTED FOR: {pbp_event_type}")
+			#print(pbp_event_type)
     # elif pbp_event_type == "PENALTY":
 
             # pbp_plus_players = pbp_event_row.find_elements_by_xpath("div[@ng-show='pmbutton.expanded']//tr[@ng-repeat='pmp in pbp.details.plus_players']")
