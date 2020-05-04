@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020476
+gamenumber = 1020356
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -222,18 +222,48 @@ other_events = []
 # 	print(pbp_team)
 	#print(pbp_data.find_element_by_xpath("//div[@class='ht-home-or-visit']/div").get_attribute('class'))#<div class="ht-home-or-visit">
 
-for event, pbp_data in zip(events, pbp):
-	# event_id = event.get_attribute("id").split("ht_pin_")[1] #get index
-	# event_type = event.text
-	# event_loc = event.get_attribute("style")
-	# event_loc_top = event.get_attribute("style").split("%; left: ")[0].split("top:")[1]
-	# event_loc_left = event.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+# for event, pbp_data in zip(events, pbp):
+# 	# event_id = event.get_attribute("id").split("ht_pin_")[1] #get index
+# 	# event_type = event.text
+# 	# event_loc = event.get_attribute("style")
+# 	# event_loc_top = event.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+# 	# event_loc_left = event.get_attribute("style").split("%; left: ")[1].split("%;")[0]
 
-	event_type = event.find_element_by_xpath("span").text #'get_attribute("ng-show").split("ht_")[1]
-	pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
-	#other_events.append(event_type)
-	print(event_type + " | " + pbp_team)
+# 	event_type = event.find_element_by_xpath("span").text #'get_attribute("ng-show").split("ht_")[1]
+# 	pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
+# 	#other_events.append(event_type)
+# 	print(event_type + " | " + pbp_team)
+for pbp_data in pbp:
+	pbp_event_row = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]")
+	pbp_team = pbp_event_row.find_element_by_xpath("div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
+	pbp_team_name = pbp_event_row.find_element_by_xpath("div[@class='ht-event-image']/img").get_attribute('title')
+	pbp_event_time = pbp_event_row.find_element_by_xpath("div[@class='ht-event-time']").text
+	#Pull Event Details
+	pbp_event_details = pbp_event_row.find_element_by_xpath("div[@class='ht-event-details']")
+	pbp_event_type = pbp_event_details.find_element_by_xpath("div[contains(@class,'ht-event-type')]").text
 
+	if pbp_event_type == "SHOT":
+			pbp_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#","")
+			pbp_shooter = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'shooter.lastName')]").text
+			pbp_goalie_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#","")
+			pbp_goalie = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'goalie.lastName')]").text
+			
+			try:
+				pbp_shot_success = "[" + pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isGoal']").text +"]"
+			except:
+				pbp_shot_success = ""
+			print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
+	elif pbp_event_type == "GOAL":
+			pbp_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'scoredBy.jerseyNumber')]").text.replace("#","")
+			pbp_shooter = pbp_event_details.find_element_by_xpath("div/a[contains(@ng-bind,'scoredBy.lastName')]").text
+			print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} at {pbp_event_time}")
+	else:
+			continue
+
+	
+
+
+# pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
 # 	# if event_type == "S" or event_type == "goal":
 # 		#shot_events.append(event)
 
