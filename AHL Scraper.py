@@ -233,6 +233,9 @@ other_events = []
 # 	pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
 # 	#other_events.append(event_type)
 # 	print(event_type + " | " + pbp_team)
+pbp_assists = []
+pbp_assist_line = []
+
 for pbp_data in pbp:
 	pbp_event_row = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]")
 	pbp_team = pbp_event_row.find_element_by_xpath("div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
@@ -252,11 +255,43 @@ for pbp_data in pbp:
 				pbp_shot_success = "[" + pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isGoal']").text +"]"
 			except:
 				pbp_shot_success = ""
-			print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
+			#print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
+
 	elif pbp_event_type == "GOAL":
+
+			#Goal Info
 			pbp_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'scoredBy.jerseyNumber')]").text.replace("#","")
 			pbp_shooter = pbp_event_details.find_element_by_xpath("div/a[contains(@ng-bind,'scoredBy.lastName')]").text
-			print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} at {pbp_event_time}")
+			pbp_goal_count = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.scorerGoalNumber')]").text.replace("(","").replace(")","")
+
+			pbp_goal_str = f"\n {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time}"
+			
+			#Assist1 info
+			pbp_assists = pbp_event_details.find_elements_by_xpath("div/span[@ng-show='pbp.details.assists.length']/span[contains(@ng-repeat,'assist in pbp.details.assists')]")
+		
+			pbp_assists_given = len(pbp_assists)
+
+			if pbp_assists_given == 0:
+    				pbp_goal_str = pbp_goal_str + ", unassisted"
+			else:
+					pbp_goal_str = pbp_goal_str + ", assisted by:"
+					for assist in pbp_assists:
+						pbp_assistor_number = assist.find_element_by_xpath("span[contains(@ng-bind,'assist.jerseyNumber')]").text.replace("#","")
+						pbp_assistor = assist.find_element_by_xpath("a[contains(@ng-bind,'assist.lastName')]").text
+						pbp_assist_count = assist.text.split("(")[1].split(")")[0]
+						pbp_goal_str = pbp_goal_str + f"\n     #{pbp_assistor_number} {pbp_assistor} ({pbp_assist_count})"
+						print(pbp_goal_str)
+
+			# if len(pbp_assists) == 1:
+    		# 		pbp_goal_str
+
+			# print(len(pbp_assists))
+
+			# for assist in pbp_assists:
+			# 		pbp_assist_number = pbp_event_details.find_elements_by_xpath("span[contains(@ng-bind,'assist.jerseyNumber')]").text.replace("#","")
+			# 		print(f"#{pbp_assist_number}")
+
+			#print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
 	else:
 			continue
 
