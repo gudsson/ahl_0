@@ -271,8 +271,7 @@ for period in pbp_periods:
 					pbp_shot_success = "[" + pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isGoal']").text +"]"
 				except:
 					pbp_shot_success = ""
-				print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
-
+				# print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
 		#Pull Goal Info
 		elif pbp_event_type == "GOAL":
 
@@ -286,7 +285,7 @@ for period in pbp_periods:
 				except:
 					pbp_goal_type = ""
 
-				pbp_goal_str = f"\n {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) {pbp_goal_type}at {pbp_event_time}"
+				pbp_goal_str = f"\n {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) {pbp_goal_type}at {pbp_event_time} of the {period_name} period"
 				
 				#Assist1 Info
 				pbp_assists = pbp_event_details.find_elements_by_xpath("div/span[@ng-show='pbp.details.assists.length']/span[contains(@ng-repeat,'assist in pbp.details.assists')]")
@@ -303,7 +302,7 @@ for period in pbp_periods:
 							pbp_assist_count = assist.text.split("(")[1].split(")")[0]
 							pbp_goal_str = pbp_goal_str + f"\n     #{pbp_assistor_number} {pbp_assistor} ({pbp_assist_count})"
 				
-				print(pbp_goal_str + "\n")
+				# print(pbp_goal_str + "\n")
 
 				###Plus-Minus
 				plus_minus_button = pbp_event_row.find_elements_by_xpath("div[@class='ht-event-time']/div/span[@ng-show='!pmbutton.expanded']")[0]
@@ -320,8 +319,22 @@ for period in pbp_periods:
 						plus_minus_number = row.find_element_by_xpath("td/span[contains(@ng-bind,'.jerseyNumber')]").text.replace("#","")
 						plus_minus_player = row.find_element_by_xpath("td/a[contains(@ng-bind,'.lastName')]").text
 					
-						print(f"{plus_or_minus} | #{plus_minus_number} {plus_minus_player}")
+						# print(f"{plus_or_minus} | #{plus_minus_number} {plus_minus_player}")
 			###/Plus-Minus
+		elif pbp_event_type == "PENALTY":
+			pbp_penalized_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'takenBy.jerseyNumber')]").text.replace("#","")
+			pbp_penalized_player = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'takenBy.lastName')]").text
+			pbp_penalty_name = pbp_event_details.find_element_by_xpath("div/span[@ng-bind='pbp.details.description']").text
+			pbp_penalty_length = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text
+			pbp_pim = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text.split(" ")[0]
+			
+			try:
+				pbp_pp_type = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isPowerPlay']").text
+			except:
+				pbp_pp_type = "ES"
+			print(f"#{pbp_penalized_number} {pbp_penalized_player} | {pbp_penalty_name} | {pbp_penalty_length} ({pbp_pp_type})")
+
+
 	#elif pbp_event_type == "PENALTY":
 
 			# pbp_plus_players = pbp_event_row.find_elements_by_xpath("div[@ng-show='pmbutton.expanded']//tr[@ng-repeat='pmp in pbp.details.plus_players']")
