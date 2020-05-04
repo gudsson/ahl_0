@@ -7,7 +7,11 @@ import time
 import pandas as pd
 # specify the url
 <<<<<<< HEAD
+<<<<<<< HEAD
 gamenumber = 1020540
+=======
+gamenumber = 1020321
+>>>>>>> parent of 844b154... catch penalty shots within shots
 =======
 gamenumber = 1020321
 >>>>>>> parent of 844b154... catch penalty shots within shots
@@ -494,6 +498,7 @@ for period in pbp_periods:
 				#pbp_goalieon_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalieComingIn.jerseyNumber')]").text.replace("#","")
 				#pbp_goalieon_name = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalieComingIn.jerseyNumber')]").text.replace("#","")
 				# print(pbp_event_type)
+<<<<<<< HEAD
 >>>>>>> parent of 844b154... catch penalty shots within shots
 
             so_shooter_number = pbp_event_details.find_element_by_xpath(
@@ -514,6 +519,10 @@ for period in pbp_periods:
                 "div/span[contains(@class,'ht-gc-marker')]")
             attempt_result = ""
 =======
+=======
+
+
+>>>>>>> parent of 844b154... catch penalty shots within shots
 	#elif pbp_event_type == "PENALTY":
 >>>>>>> parent of 844b154... catch penalty shots within shots
 

@@ -1657,6 +1657,7 @@ JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't fin
 1588569812908	Marionette	WARN	TLS certificate errors will be ignored for this session
 1588569838776	Marionette	INFO	Stopped listening on port 61802
 <<<<<<< HEAD
+<<<<<<< HEAD
 1588570080382	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilecOEvWk"
 *** You are running in headless mode.
 1588570080914	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
@@ -1690,5 +1691,7 @@ JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't fin
 1588571104533	Marionette	INFO	Listening on port 62753
 1588571104898	Marionette	WARN	TLS certificate errors will be ignored for this session
 1588571129528	Marionette	INFO	Stopped listening on port 62753
+=======
+>>>>>>> parent of 844b154... catch penalty shots within shots
 =======
 >>>>>>> parent of 844b154... catch penalty shots within shots
