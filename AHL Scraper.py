@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020321
+gamenumber = 1019754
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 
 
@@ -263,7 +263,7 @@ for period in pbp_periods:
 		pbp_event_type = pbp_event_details.find_element_by_xpath("div[contains(@class,'ht-event-type')]").text
 
 		#Pull Shot Info
-		if pbp_event_type == "SHOT":
+		if "SHOT" in pbp_event_type:
 				pbp_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#","")
 				pbp_shooter = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'shooter.lastName')]").text
 				pbp_goalie_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#","")
@@ -273,7 +273,7 @@ for period in pbp_periods:
 					pbp_shot_success = "[" + pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isGoal']").text +"]"
 				except:
 					pbp_shot_success = ""
-				# print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
+				print(f"{pbp_event_type} | {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
 		#Pull Goal Info
 		elif pbp_event_type == "GOAL":
 				pbp_goal_types = []
@@ -349,12 +349,11 @@ for period in pbp_periods:
 					changing_goalie_number = goalie.find_element_by_xpath("span[contains(@ng-bind,'jerseyNumber')]").text.replace("#","").replace("- ","")
 					changing_goalie_name = goalie.find_element_by_xpath("a/span[contains(@ng-bind,'lastName')]").text
 					changing_goalie_action = goalie.find_element_by_xpath("span[@class='ng-binding' and not(contains(@ng-bind,'jerseyNumber'))]").text
-					print(f"#{changing_goalie_number} {changing_goalie_name} {changing_goalie_action} at {pbp_event_time}, {period_name} period.")
-			#try:
-				#pbp_goalieon_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalieComingIn.jerseyNumber')]").text.replace("#","")
-				#pbp_goalieon_name = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalieComingIn.jerseyNumber')]").text.replace("#","")
-				# print(pbp_event_type)
+					#print(f"#{changing_goalie_number} {changing_goalie_name} {changing_goalie_action} at {pbp_event_time}, {period_name} period.")
+		# elif pbp_event_type = 
 
+
+		#HANDLE PENALTY SHOTS
 
 	#elif pbp_event_type == "PENALTY":
 
