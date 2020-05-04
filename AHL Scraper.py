@@ -244,6 +244,7 @@ plus_minus_rows = []
 pbp_events = []
 
 
+
 for period in pbp_periods:
 	period_number = period.get_attribute('ng-show').split("ht_")[1]
 	period_name = period.find_element_by_xpath("div[@ng-bind='gamePBP.longName']").text
@@ -307,7 +308,7 @@ for period in pbp_periods:
 							pbp_assist_count = assist.text.split("(")[1].split(")")[0]
 							pbp_goal_str = pbp_goal_str + f"\n     #{pbp_assistor_number} {pbp_assistor} ({pbp_assist_count})"
 				
-				print(pbp_goal_str + "\n")
+				# print(pbp_goal_str + "\n")
 
 				###Plus-Minus
 				plus_minus_button = pbp_event_row.find_elements_by_xpath("div[@class='ht-event-time']/div/span[@ng-show='!pmbutton.expanded']")[0]
@@ -338,8 +339,21 @@ for period in pbp_periods:
 			except:
 				pbp_pp_type = "ES"
 			# print(f"#{pbp_penalized_number} {pbp_penalized_player} | {pbp_penalty_name} | {pbp_penalty_length} ({pbp_pp_type}) at {pbp_event_time} of {period_name} period")
-		else:
-    			pass#print(pbp_event_type)
+		elif pbp_event_type == "GOALIE CHANGE":
+    		#Goalie
+			goalies_changing = []
+
+			goalies_changing = pbp_event_details.find_elements_by_xpath("div/section[contains(@ng-if,'pbp.details.goalie')]")
+
+			for goalie in goalies_changing:
+					changing_goalie_number = goalie.find_element_by_xpath("span[contains(@ng-bind,'jerseyNumber')]").text.replace("#","").replace("- ","")
+					changing_goalie_name = goalie.find_element_by_xpath("a/span[contains(@ng-bind,'lastName')]").text
+					changing_goalie_action = goalie.find_element_by_xpath("span[@class='ng-binding' and not(contains(@ng-bind,'jerseyNumber'))]").text
+					print(f"#{changing_goalie_number} {changing_goalie_name} {changing_goalie_action} at {pbp_event_time}, {period_name} period.")
+			#try:
+				#pbp_goalieon_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalieComingIn.jerseyNumber')]").text.replace("#","")
+				#pbp_goalieon_name = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalieComingIn.jerseyNumber')]").text.replace("#","")
+				# print(pbp_event_type)
 
 
 	#elif pbp_event_type == "PENALTY":
