@@ -81,22 +81,7 @@ def get_referee_data(summary):   ###COMPLETE
     return game_officials
 
 
-# scoring_boxscore_WE = []
-# scoring_boxscore = []
-# game_tables = []
-
-
-
-# pbp = []
-# pbp_periods = []
-
-
-
-
-
-def get_scoring_summary(summary): ####DOESN'T WORK
-
-    
+def get_scoring_summary(summary): ###COMPLETE
     #Periods (last period is total)
     periods = []
     periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
@@ -113,9 +98,6 @@ def get_scoring_summary(summary): ####DOESN'T WORK
     home_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
     home_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
 
-    # for period in home_shots:
-    #     print(period.text)
-
     scoring_summary = [["period","home_goals","away_goals","home_shots","away_shots"]]
 
     for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
@@ -123,27 +105,45 @@ def get_scoring_summary(summary): ####DOESN'T WORK
 
     return scoring_summary
 
-# ###GAME DETAILS###
-# #Away PP#
-# away_pp = []
-# away_penalties = []
-# away_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
-# away_pp_goals = away_pp[0]
-# away_pp_opps = away_pp[1]
-# away_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
-# away_pims = away_penalties[0]
-# away_infracs = away_penalties[1].split(" ",1)[0]
 
-# #Home PP#
-# home_pp = []
-# home_penalties = []
-# home_pp = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
-# home_pp_goals = home_pp[0]
-# home_pp_opps = home_pp[1]
-# home_penalties = game_tables.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
-# home_pims = home_penalties[0]
-# home_infracs = home_penalties[1].split(" ",1)[0]
-# ###/GAME DETAILS###
+# scoring_boxscore_WE = []
+# scoring_boxscore = []
+# game_tables = []
+
+
+
+# pbp = []
+# pbp_periods = []
+
+
+def get_game_details(summary):
+    #Away PP#
+    away_pp = []
+    away_penalties = []
+    away_pp_array = []
+
+    away_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
+    away_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
+    
+    away_pp_array.append(["away_pp_goals", away_pp[0]])
+    away_pp_array.append(["away_pp_opps", away_pp[1]])
+    away_pp_array.append(["away_pims", away_penalties[0]])
+    away_pp_array.append(["away_infracs", away_penalties[1].split(" ",1)[0]])
+
+    #Home PP#
+    home_pp = []
+    home_penalties = []
+    home_pp_array = []
+
+    home_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
+    home_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
+    
+    home_pp_array.append(["home_pp_goals", home_pp[0]])
+    home_pp_array.append(["home_pp_opps", home_pp[1]])
+    home_pp_array.append(["home_pims", home_penalties[0]])
+    home_pp_array.append(["home_infracs", home_penalties[1].split(" ",1)[0]])
+    
+    return zip(away_pp_array, home_pp_array)
 
 # ###THREE STARS###
 # three_stars = []
@@ -611,10 +611,12 @@ def write_to_csv():
 # game_data = get_game_data(driver)
 # game_data = get_arena_data(summary_container)
 # game_data = get_referee_data(summary_container)
-game_data = get_scoring_summary(summary_container)
+# game_data = get_scoring_summary(summary_container)
+game_data = get_game_details(summary_container)
 
-for item in game_data:
-    print(*item)
+print(*game_data)
+# for item in game_data:
+#     print(*item)
 
 ###/PRINT OUTS###
 
