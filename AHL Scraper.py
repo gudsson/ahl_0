@@ -65,7 +65,7 @@ def get_arena_data(summary):  ###COMPLETE
     return arena_data
 
 
-def get_referee_data(summary):
+def get_referee_data(summary):   ###COMPLETE
     game_officials = []
     referees = []
 
@@ -94,37 +94,34 @@ def get_referee_data(summary):
 
 
 
-def get_scoring_summary(tables): ####DOESN'T WORK
+def get_scoring_summary(summary): ####DOESN'T WORK
 
-    ###SCORING SUMMARY###
+    
     #Periods (last period is total)
     periods = []
-    periods = tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
-
+    periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
 
     #Away Stats#
     away_goals = []
-    # away_shots = []
-    away_goals = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
-    # away_shots = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+    away_shots = []
+    away_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
+    away_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
 
-    for period in away_goals:
-        print(period.text)
+    #Home Stats#
+    home_goals = []
+    home_shots = []
+    home_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
+    home_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
 
-    # #Home Stats#
-    # home_goals = []
-    # home_shots = []
-    # home_goals = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
-    # home_shots = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
-    # ###/SCORING SUMMARY###
+    # for period in home_shots:
+    #     print(period.text)
 
+    scoring_summary = [["period","home_goals","away_goals","home_shots","away_shots"]]
 
-    # scoring_summary = [["period","home_goals","away_goals","home_shots","away_shots"]]
+    for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
+        scoring_summary.append([per.text,hgoals.text,agoals.text,hshots.text,ashots.text])
 
-    # for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
-    #     scoring_summary.append([per.text,hgoals.text,agoals.text,hshots.text,ashots.text])
-
-    return# scoring_summary
+    return scoring_summary
 
 # ###GAME DETAILS###
 # #Away PP#
@@ -613,8 +610,8 @@ def write_to_csv():
 # game_data = []
 # game_data = get_game_data(driver)
 # game_data = get_arena_data(summary_container)
-game_data = get_referee_data(summary_container)
-# game_data = get_scoring_summary(game_tables)
+# game_data = get_referee_data(summary_container)
+game_data = get_scoring_summary(summary_container)
 
 for item in game_data:
     print(*item)
