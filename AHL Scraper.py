@@ -81,7 +81,7 @@ def get_referee_data(summary):   ###COMPLETE
     return game_officials
 
 
-def get_scoring_summary(summary): ###COMPLETE
+def get_scoring_summary(summary):   ###COMPLETE
     #Periods (last period is total)
     periods = []
     periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
@@ -106,17 +106,7 @@ def get_scoring_summary(summary): ###COMPLETE
     return scoring_summary
 
 
-# scoring_boxscore_WE = []
-# scoring_boxscore = []
-# game_tables = []
-
-
-
-# pbp = []
-# pbp_periods = []
-
-
-def get_game_details(summary):
+def get_game_details(summary):   ###COMPLETE
     #Away PP#
     away_pp = []
     away_penalties = []
@@ -145,23 +135,34 @@ def get_game_details(summary):
     
     return zip(away_pp_array, home_pp_array)
 
-# ###THREE STARS###
-# three_stars = []
-# three_stars_WE = []
 
-# three_stars_WE = game_tables.find_element_by_xpath("//div[@class='ht-three-stars']")
+def get_three_stars(summary):  ###COMPLETE
+    stars = []
+    star_containers = []
+    
+    star_containers = summary.find_elements_by_xpath("//div[@class='ht-three-stars']/div/div[@class='ht-star-container']")
 
-# star_number = []
-# star_team = []
-# star_name = []
+    for star in star_containers:
+        star_number = star.find_element_by_xpath("div[@class='ht-star-number']").text
+        star_rawname = star.find_element_by_xpath("div[@class='ht-star-name']").text.split(" (#")
+        star_name = star_rawname[0]
+        star_jersey = star_rawname[1].replace(")","")
+        star_team = star.find_element_by_xpath("div[@class='ht-star-team']").text
+        stars.append([star_number, star_name, star_jersey, star_team])
+    
+    return stars
 
-# star_number = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-number']/*")
-# star_team = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-team']/*")
-# star_name = three_stars_WE.find_elements_by_xpath("//div[@class='ht-star-name']/*")
+# scoring_boxscore_WE = []
+# scoring_boxscore = []
+# game_tables = []
 
-# for i in range(0, len(star_number)-1):
-#     three_stars.append([star_number[i].text, star_team[i].text, star_name[i].text.split(" (",1)[0]])
-# ###/THREE STARS###
+
+
+# pbp = []
+# pbp_periods = []
+
+
+
 
 # ##AWAY STAT SUMMARY##
 # away_line_stats = []
@@ -612,11 +613,12 @@ def write_to_csv():
 # game_data = get_arena_data(summary_container)
 # game_data = get_referee_data(summary_container)
 # game_data = get_scoring_summary(summary_container)
-game_data = get_game_details(summary_container)
+# game_data = get_game_details(summary_container)
+game_data = get_three_stars(summary_container)
 
-print(*game_data)
-# for item in game_data:
-#     print(*item)
+# print(*game_data)
+for item in game_data:
+    print(*item)
 
 ###/PRINT OUTS###
 
