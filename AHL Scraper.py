@@ -53,7 +53,7 @@ def get_game_data(main_driver): ###COMPLETE
     return game_data
 
 
-def get_arena_data(summary):
+def get_arena_data(summary):  ###COMPLETE
     arena_data = []
 
     arena_data.append(["venue", summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
@@ -65,11 +65,11 @@ def get_arena_data(summary):
     return arena_data
 
 
-def get_referee_data(tables):
+def get_referee_data(summary):
     game_officials = []
     referees = []
 
-    referees = tables.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
+    referees = summary.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
 
     for line in referees:
         referee_data = line.find_elements_by_xpath("td")
@@ -612,8 +612,8 @@ def write_to_csv():
 
 # game_data = []
 # game_data = get_game_data(driver)
-game_data = get_arena_data(summary_container)
-# game_data = get_referee_data(game_tables)
+# game_data = get_arena_data(summary_container)
+game_data = get_referee_data(summary_container)
 # game_data = get_scoring_summary(game_tables)
 
 for item in game_data:
