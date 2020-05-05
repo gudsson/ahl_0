@@ -6,68 +6,61 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020530
+gamenumber = 1020541
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
-
+print(urlpage)
 
 options = Options()
 options.headless = True
+
+
+
+# get data from webpage
 driver = webdriver.Firefox(options=options)
-
-print(urlpage)
-
-# run firefox webdriver from executable path of your choice
-# driver = webdriver.Firefox()
-
-# get web page
 driver.get(urlpage)
+# game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
+
+rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
+pbp = driver.find_elements_by_xpath(
+    "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
+pbp_periods = driver.find_elements_by_xpath(
+    "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]")
+
 
 # execute script to scroll down the page
 # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
 # sleep for 10s
-time.sleep(5)
+
 
 # pull highest-level web elements
-game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
+
+
+time.sleep(5)
+
 
 def get_game_data(main_driver):
     game_data = []
+    matchup_container = main_driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
 
-    game_data.append(["game_id", main_driver.find_element_by_xpath("//*[@class='ht-game-number']").text])
-    game_data.append(["game_date", main_driver.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
-    game_data.append(["game_status", main_driver.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text])
-    game_data.append(["away_team", main_driver.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
-    game_data.append(["home_team", main_driver.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
+    game_data.append(["game_id", matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text])
+    game_data.append(["game_date", matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
+    game_data.append(["game_status", matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text])
+    game_data.append(["away_team", matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
+    game_data.append(["home_team", matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
 
     return game_data
 
 
 def get_arena_data(tables):
-    game_data = []
+    arena_data = []
 
-    game_data.append(["venue", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
-    game_data.append(["attendance", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
-    game_data.append(["start_time", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
-    game_data.append(["end_time", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
-    game_data.append(["duration", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
+    arena_data.append(["venue", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
+    arena_data.append(["attendance", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
+    arena_data.append(["start_time", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
+    arena_data.append(["end_time", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
+    arena_data.append(["duration", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
 
-    return game_data
-
-
-# scoring_boxscore_WE = []
-# scoring_boxscore = []
-# game_tables = []
-
-
-
-# pbp = []
-# pbp_periods = []
-
-# rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
-# pbp = driver.find_elements_by_xpath(
-#     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
-# pbp_periods = driver.find_elements_by_xpath(
-#     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]")
+    return arena_data
 
 
 def get_referee_data(tables):
@@ -86,23 +79,50 @@ def get_referee_data(tables):
     return game_officials
 
 
-# ###SCORING SUMMARY###
-# #Periods (last period is total)
-# periods = []
-# periods = game_tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+# scoring_boxscore_WE = []
+# scoring_boxscore = []
+# game_tables = []
 
-# #Away Stats#
-# away_goals = []
-# away_shots = []
-# away_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
-# away_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
 
-# #Home Stats#
-# home_goals = []
-# home_shots = []
-# home_goals = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
-# home_shots = game_tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
-# ###/SCORING SUMMARY###
+
+# pbp = []
+# pbp_periods = []
+
+
+
+
+
+def get_scoring_summary(tables): ####DOESN'T WORK
+
+    ###SCORING SUMMARY###
+    #Periods (last period is total)
+    periods = []
+    periods = tables.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+
+
+    #Away Stats#
+    away_goals = []
+    # away_shots = []
+    away_goals = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
+    # away_shots = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+
+    for period in away_goals:
+        print(period.text)
+
+    # #Home Stats#
+    # home_goals = []
+    # home_shots = []
+    # home_goals = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
+    # home_shots = tables.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
+    # ###/SCORING SUMMARY###
+
+
+    # scoring_summary = [["period","home_goals","away_goals","home_shots","away_shots"]]
+
+    # for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
+    #     scoring_summary.append([per.text,hgoals.text,agoals.text,hshots.text,ashots.text])
+
+    return# scoring_summary
 
 # ###GAME DETAILS###
 # #Away PP#
@@ -589,12 +609,13 @@ def write_to_csv():
 ####PRINT OUTS###
 
 # game_data = []
-# game_data = get_game_data(driver)
+game_data = get_game_data(driver)
 # game_data = get_arena_data(game_tables)
-game_data = get_referee_data(game_tables)
+# game_data = get_referee_data(game_tables)
+# game_data = get_scoring_summary(game_tables)
 
 for item in game_data:
-    print(item)
+    print(*item)
 
 ###/PRINT OUTS###
 
