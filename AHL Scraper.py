@@ -20,6 +20,8 @@ driver = webdriver.Firefox(options=options)
 driver.get(urlpage)
 # game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
 
+summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+
 rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
 pbp = driver.find_elements_by_xpath(
     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
@@ -38,7 +40,7 @@ pbp_periods = driver.find_elements_by_xpath(
 time.sleep(5)
 
 
-def get_game_data(main_driver):
+def get_game_data(main_driver): ###COMPLETE
     game_data = []
     matchup_container = main_driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
 
@@ -51,14 +53,14 @@ def get_game_data(main_driver):
     return game_data
 
 
-def get_arena_data(tables):
+def get_arena_data(summary):
     arena_data = []
 
-    arena_data.append(["venue", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
-    arena_data.append(["attendance", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
-    arena_data.append(["start_time", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
-    arena_data.append(["end_time", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
-    arena_data.append(["duration", tables.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
+    arena_data.append(["venue", summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text])
+    arena_data.append(["attendance", summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text])
+    arena_data.append(["start_time", summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text])
+    arena_data.append(["end_time", summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text])
+    arena_data.append(["duration", summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text])
 
     return arena_data
 
@@ -609,8 +611,8 @@ def write_to_csv():
 ####PRINT OUTS###
 
 # game_data = []
-game_data = get_game_data(driver)
-# game_data = get_arena_data(game_tables)
+# game_data = get_game_data(driver)
+game_data = get_arena_data(summary_container)
 # game_data = get_referee_data(game_tables)
 # game_data = get_scoring_summary(game_tables)
 
