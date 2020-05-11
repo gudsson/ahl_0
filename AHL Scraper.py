@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020543
+gamenumber = 1020546
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 print(urlpage)
 
@@ -482,7 +482,7 @@ def get_pbp(main_driver):
             # print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
 
 
-def get_preview_stats(main_driver):
+def get_preview_stats(main_driver):   ###COMPLETE
     hth_stats = []
     hth_rows = []
 
@@ -495,8 +495,6 @@ def get_preview_stats(main_driver):
 
     tables = []
     tables = main_driver.find_elements_by_xpath("//div[@ng-if='PreviewDataLoaded']/div/div[contains(@ng-class,'sumTableHalf')]/div[@ng-class='sumTableMobile']/table/tbody")
-    # del tables[-2]
-    # tables.pop(2)
 
     hth_rows = tables[0].find_elements_by_xpath("tr")
     previous_meeting_rows = tables[1].find_elements_by_xpath("tr[@class='ng-scope']")
@@ -544,65 +542,32 @@ def get_preview_stats(main_driver):
 
 
     ###LAST 5 GAMES TBA
+    l5g_stats = []
+    l5g_tables = []
+    l5g_tables = tables[3].find_elements_by_xpath("//td[@class='ht-table-last-5']")
+    i = 0
+
+    for table in l5g_tables:
+        for row in table.find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games')]/td"):
+            l5g_stats.append([team[i], row.text])
+        i += 1
+
+    # print(*l5g_stats)
+
 
     #Match Up Stats
     matchup_stats = []
-    matchup_table = main_driver.find_element_by_xpath("//div[@ng-if='PreviewDataLoaded']/div[@ng-class='sumTableContainer']//tbody")
-    # matchup_table = matchup_table.get_attribute('outerHTML')
+    matchup_table = main_driver.find_element_by_xpath("//div[@ng-if='PreviewDataLoaded']/div[@ng-class='sumTableContainter']/div[@ng-class='sumTableMobile']//tbody")
 
     for row in matchup_table.find_elements_by_xpath("tr"):
         tds = []
         tds = row.find_elements_by_xpath("td")
         matchup_stats.append([tds[0].text, tds[1].text, tds[2].text])
 
-    print(*matchup_stats)
+    # print(*matchup_stats)
 
-    # print(len(top_scorer_tables))
-    # # top_scorer_rows = tables[2].find_elements_by_xpath("//div[@class='ht-top-details']")
-    # # i = 0
 
-    # # print(tables[0].text)
 
-    # # print("==========")
-
-    # # print(tables[1].text)
-
-    # print("==========")
-
-    # print(tables[2].text)
-
-    # print("==========")
-
-    # print(tables[3].text)
-
-    
-    # print(away_team)
-
-    # top_scorer_rows = top_scorer_tables[0].find_elements_by_xpath("//td") + top_scorer_tables[1].find_elements_by_xpath("//td")
-
-    # for row in top_scorer_rows:
-    #     print(row.text)
-
-    # for table in top_scorer_tables:
-    #     # top_scorer_rows = table.find_elements_by_xpath("//div[@class='ht_top_details']")
-    #     print(table.text)
-        # for row in top_scorer_rows:
-        #     print(row.text)
-        #     top_details = []
-        #     top_details = row.find_elements_by_xpath("/div[@class='ht_top_details']/div")
-
-        #     for detail in top_details:
-        #         print(detail.text)
-
-        #     top_scorer_name = top_details[0].text
-        #     top_scorer_stats = top_details[1].text
-        #     top_scorers.append([team[i], top_scorer_name, top_scorer_stats])
-            
-        # i += 1
-
-    # print(*top_scorers)
-
-get_preview_stats(driver)
 # pbp_team = pbp_data.find_element_by_xpath("div[contains(@class,'ht-event-row')]/div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
 # 	# if event_type == "S" or event_type == "goal":
 # 		#shot_events.append(event)
@@ -751,7 +716,7 @@ def write_to_csv():
 # game_data = get_three_stars(summary_container)
 # game_data = get_coaches(summary_container)
 # game_data = get_team_summaries(summary_container)
-
+# get_preview_stats(driver)
 # get_pbp(driver)
 
 # print(*game_data)
