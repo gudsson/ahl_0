@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020541
+gamenumber = 1020543
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 print(urlpage)
 
@@ -20,7 +20,10 @@ driver = webdriver.Firefox(options=options)
 driver.get(urlpage)
 # game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
 
+matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
 summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+
+
 
 rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
 pbp = driver.find_elements_by_xpath(
@@ -37,7 +40,7 @@ pbp_periods = driver.find_elements_by_xpath(
 # pull highest-level web elements
 
 
-time.sleep(5)
+# time.sleep(5)
 
 
 def get_game_data(main_driver): ###COMPLETE
@@ -162,7 +165,29 @@ def get_three_stars(summary):  ###COMPLETE
 # pbp_periods = []
 
 
+def get_coaches(summary):
+    # away_coach_container = []
+    coaches = []
+    away_coach_lines = []
+    home_coach_lines = []
 
+    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
+    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").text
+    
+    away_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
+    home_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']//tr[contains(@ng-repeat,'homeTeam.coaches')]")
+
+    for line in away_coach_lines:
+        coach_role = line.text.split(": ")[0]
+        coach_name = line.text.split(": ")[1]
+        coaches.append([away_team, coach_role, coach_name])
+
+    for line in home_coach_lines:
+        coach_role = line.text.split(": ")[0]
+        coach_name = line.text.split(": ")[1]
+        coaches.append([home_team, coach_role, coach_name])
+
+    return coaches
 
 # ##AWAY STAT SUMMARY##
 # away_line_stats = []
@@ -614,7 +639,8 @@ def write_to_csv():
 # game_data = get_referee_data(summary_container)
 # game_data = get_scoring_summary(summary_container)
 # game_data = get_game_details(summary_container)
-game_data = get_three_stars(summary_container)
+# game_data = get_three_stars(summary_container)
+game_data = get_coaches(summary_container)
 
 # print(*game_data)
 for item in game_data:
