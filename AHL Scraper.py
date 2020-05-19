@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 import time
 import pandas as pd
 # specify the url
-gamenumber = 1020546
+gamenumber = 1020542
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 print(urlpage)
 
@@ -227,7 +227,44 @@ def get_team_summaries(summary):   ###COMPLETE
 # scoring_boxscore = []
 # game_tables = []
 
-def get_pins():   ###INCOMPLETE###
+def get_pins(driver, pbp_arr):   ###COMPLETE
+    pins = []
+    rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
+    pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
+    i = 1
+
+    if len(pins) == len(pbp_arr):
+        print("Arrays are equal")
+
+    for pin, data in zip(pins, pbp_arr):
+        event_id = pin.get_attribute("id").split("ht_pin_")[1] #get index
+        event_type = pin.text
+        event_loc = pin.get_attribute("style")
+        event_loc_top = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+        event_loc_left = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+        print(f'#{i} (id={event_id}) | {pin.get_attribute("id")} @ top: {event_loc_top}, left: {event_loc_left} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({event_type}|{data[6]})')
+        i += 1
+
+
+def get_pins2(driver):
+    pins = []
+    rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
+    pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
+    i = 1
+
+    for pin in pins:
+        event_id = pin.get_attribute("id").split("ht_pin_")[1] #get index
+        event_type = pin.text
+        event_loc = pin.get_attribute("style")
+        event_loc_top = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+        event_loc_left = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+        print(f'#{i} (id={event_id}) | {pin.get_attribute("id")} @ top: {event_loc_top}, left: {event_loc_left}')
+        i += 1
+
+
+def get_pin(driver):   ###INCOMPLETE###
     pbp = []
     pbp_periods = []
     pbp_periods = driver.find_elements_by_xpath("//div[@ng-repeat='gamePBP in PlayByPlayPeriodBreakdown track by $index']")
@@ -273,7 +310,7 @@ def get_pins():   ###INCOMPLETE###
             print(event_type + " | " + pbp_team)
 
 
-def get_pbp(main_driver):
+def get_pbp(driver):   # COMPLETE
     pbp = []
     pbp_periods = []
 
@@ -286,6 +323,8 @@ def get_pbp(main_driver):
     plus_minus_tables = []
     plus_minus_rows = []
     pbp_events = []
+
+    pbp_arr = []
 
     for period in pbp_periods:
         period_number = period.get_attribute('ng-show').split("ht_")[1]
@@ -322,12 +361,23 @@ def get_pbp(main_driver):
                 pbp_goalie = pbp_event_details.find_element_by_xpath(
                     "div/a/span[contains(@ng-bind,'goalie.lastName')]").text
 
+                pbp_arr.append([pbp_shooter_number, pbp_shooter, pbp_goalie_number, pbp_goalie, period_number, pbp_event_time, ""])
+
                 try:
                     pbp_shot_success = "[" + pbp_event_details.find_element_by_xpath(
                         "div/span[@ng-if='pbp.details.isGoal']").text + "]"
+
+                    # if shot successful, add new line for goal pin
+                    goal_arr = pbp_arr[-1]
+                    goal_arr.pop()
+                    goal_arr.append("GOAL")
+                    pbp_arr.append(goal_arr)
+
                 except:
                     pbp_shot_success = ""
+
                 print(f"{pbp_event_type} | {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
+            
             # Pull Goal Info
             elif pbp_event_type == "GOAL":
                 pbp_goal_types = []
@@ -394,6 +444,7 @@ def get_pbp(main_driver):
 
                         print(f"{plus_or_minus} | #{plus_minus_number} {plus_minus_player}")
                         # /Plus-Minus
+
             elif pbp_event_type == "PENALTY":
                 pbp_penalized_number = pbp_event_details.find_element_by_xpath(
                     "div/span[contains(@ng-bind,'takenBy.jerseyNumber')]").text.replace("#", "")
@@ -410,6 +461,7 @@ def get_pbp(main_driver):
                 except:
                     pbp_pp_type = "ES"
                 print(f"PENALTY | #{pbp_penalized_number} {pbp_penalized_player} | {pbp_penalty_name} | {pbp_penalty_length} ({pbp_pp_type}) at {pbp_event_time} of {period_name} period")
+
             elif pbp_event_type == "GOALIE CHANGE":
                 goalies_changing = pbp_event_details.find_elements_by_xpath("div/section[contains(@ng-if,'pbp.details.goalie')]")
                 
@@ -422,6 +474,7 @@ def get_pbp(main_driver):
                         "span[@class='ng-binding' and not(contains(@ng-bind,'jerseyNumber'))]").text
 
                     print(f"GOALIE CHANGE | #{changing_goalie_number} {changing_goalie_name} {changing_goalie_action} at {pbp_event_time}, {period_name} period.")
+
             elif pbp_event_type == " ":  # in shootout
                 attempt_results = []
 
@@ -447,15 +500,17 @@ def get_pbp(main_driver):
                         attempt_result = attempt_result + "[" + result.text + "] "
 
                 print(f"SO ATTEMPT | {pbp_team_name} #{so_shooter_number} {so_shooter_name} shootout attempt on #{so_goalie_number} {so_goalie_name}:   {attempt_result}")
+
             else:
-                    print(f"EVENT NOT ACCOUNTED FOR: {pbp_event_type}")
+                print(f"EVENT NOT ACCOUNTED FOR: {pbp_event_type}")
 
 
+    print("==========")
+    
+    # for element in pbp_arr:
+    #     print(element)
 
-
-
-
-
+    get_pins(driver, pbp_arr)
 
 
 			#print(pbp_event_type)
@@ -703,7 +758,7 @@ def write_to_csv():
     # df.to_csv(path + 'asdaYogurtLink.csv')
     pass
 
-
+get_pbp(driver)
 
 ####PRINT OUTS###
 
@@ -717,7 +772,7 @@ def write_to_csv():
 # game_data = get_coaches(summary_container)
 # game_data = get_team_summaries(summary_container)
 # get_preview_stats(driver)
-# get_pbp(driver)
+# get_pins(driver)
 
 # print(*game_data)
 # for item in game_data:
