@@ -1,0 +1,4 @@
+import scrapers
+
+if __name__ == "__main__":
+    print("hello World")
