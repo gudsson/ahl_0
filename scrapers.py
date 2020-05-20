@@ -47,11 +47,16 @@ pbp_periods = driver.find_elements_by_xpath(
 def get_game_data(driver): ###COMPLETE
     game_data = []
     matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
+    scores = matchup_container.find_elements_by_xpath("//div[@class='ht-gc-score-container']")
+    date = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text.split(", ", 1)
 
-    game_data.append(["game_id", matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text])
-    game_data.append(["game_date", matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
+    game_data.append(["game_number", matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]])
+    game_data.append(["dow", date[0]])
+    game_data.append(["game_date", date[1]]) #matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text])
     game_data.append(["game_status", matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text])
     game_data.append(["away_team", matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text])
+    game_data.append(["away_score", scores[0].text])
+    game_data.append(["home_score", scores[1].text])
     game_data.append(["home_team", matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text])# print(game_id.text)
 
     return game_data
@@ -585,7 +590,7 @@ start = time.time()
 ####PRINT OUTS###
 
 # game_data = []
-# game_data = get_game_data(driver)
+game_data = get_game_data(driver)
 # game_data = get_arena_data(driver)
 # game_data = get_referee_data(driver)
 # game_data = get_scoring_summary(driver)
