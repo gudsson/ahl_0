@@ -53,8 +53,7 @@ class Game(Base):
 # c = conn.cursor()
 
 def get_last_game_in_db(session, meta):
-        # games_table = Table('games', meta)
-
+        
         query = session.query(func.max(Game.game_id))
 
         # for _res in query.all():
