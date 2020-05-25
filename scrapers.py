@@ -89,7 +89,7 @@ def get_referee_data(driver):   ###COMPLETE
 
     return game_officials
 
-def get_scoring_summary(driver):   ###COMPLETE
+def get_boxscore(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     #Periods (last period is total)
@@ -590,12 +590,12 @@ start = time.time()
 ####PRINT OUTS###
 
 # game_data = []
-game_data = get_game_data(driver)
+# game_data = get_game_data(driver)
 # game_data = get_arena_data(driver)
 # game_data = get_referee_data(driver)
-# game_data = get_scoring_summary(driver)
+game_data = get_boxscore(driver)
 # game_data = get_game_details(driver)
-# game_data = get_three_stars(driver)
+game_data = get_three_stars(driver)
 # game_data = get_coaches(driver)
 # game_data = get_team_summaries(driver)
 # get_preview_stats(driver)
