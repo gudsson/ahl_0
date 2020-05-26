@@ -76,6 +76,91 @@ class Boxscore(Base):
         def __repr__(self):
                 return "<Game(id='%i', game_id='%i', period='%s', home_goals='%s', away_goals='%s', home_shots='%s', away_shots='%s')>" % (
                         self.id, self.game_id, self.period, self.home_goals, self.away_goals, self.home_shots, self.away_shots)
+
+
+class Star(Base):
+        __tablename__ = 'stars'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        star_number = Column(String(length=3))
+        name = Column(String)
+        jersey_number = Column(String(length=2))
+        team = Column(String)
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', star_number='%s', name='%s', jersey_number='%s', team='%s')>" % (
+                        self.id, self.game_id, self.star_number, self.name, self.jersey_number, self.team)
+
+
+class Coach(Base):
+        __tablename__ = 'coaches'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String)
+        role = Column(String)
+        name = Column(String)
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', role='%s', name='%s')>" % (
+                        self.id, self.game_id, self.team, self.role, self.name)
+
+
+class Penalty_Summary(Base):
+        __tablename__ = 'penalty_summaries'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String(length=4))
+        pp_goals = Column(String(length=2))
+        pp_opps = Column(String(length=2))
+        pims = Column(String(length=4))
+        infracs = Column(String(length=3))
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', pp_goals='%s', pp_opps='%s', pims='%s', infracs='%s')>" % (
+                        self.id, self.game_id, self.team, self.pp_goals, self.pp_opps, self.pims, self.infracs)
+
+
+class Player_Scoreline(Base):
+        __tablename__ = 'player_scorelines'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String)
+        jersey_number = Column(String(length=2))
+        letter = Column(String(length=1))
+        name = Column(String)
+        player_id = Column(Integer)
+        position = Column(String(length=2))
+        goals = Column(String(length=2))
+        assists = Column(String(length=2))
+        pims = Column(String(length=3))
+        shots = Column(String(length=2))
+        plus_minus = Column(String(length=3))
+
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', jersey_number='%s', letter='%s', name='%s', player_id='%i', position='%s', goals='%s', assists='%s', pims='%s', shots='%s', plus_mins='%s')>" % (
+                        self.id, self.game_id, self.team, self.jersey_number, self.letter, self.name, self.player_id, self.position, self.goals, self.assists, self.pims, self.shots, self.plus_minus)
+
+
+class Top_Scorer(Base):
+        __tablename__ = 'top_scorers'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String(length=4))
+        pp_goals = Column(String(length=2))
+        pp_opps = Column(String(length=2))
+        pims = Column(String(length=4))
+        infracs = Column(String(length=3))
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', pp_goals='%s', pp_opps='%s', pims='%s', infracs='%s')>" % (
+                        self.id, self.game_id, self.team, self.pp_goals, self.pp_opps, self.pims, self.infracs)
+
 # create a cursor
 # c = conn.cursor()
 

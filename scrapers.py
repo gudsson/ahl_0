@@ -7,7 +7,7 @@ import time
 import pandas as pd
 
 # specify the url
-gamenumber = 1020546
+gamenumber = 1020544
 urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
 print(urlpage)
 
@@ -115,7 +115,7 @@ def get_boxscore(driver):   ###COMPLETE
 
     return scoring_summary
 
-def get_game_details(driver):   ###COMPLETE
+def get_penalty_summary(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     #Away PP#
@@ -190,7 +190,7 @@ def get_coaches(driver):   ###COMPLETE
 
     return coaches
 
-def get_team_summaries(driver):   ###COMPLETE
+def get_player_scorelines(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
     players = []
@@ -500,6 +500,10 @@ def get_preview_stats(driver):   ###COMPLETE
     hth_stats.append([hth_rows[0].text, hth_rows[1].find_elements_by_xpath("td")[1].text, hth_rows[1].find_elements_by_xpath("td")[3].text]) #previous season
     hth_stats.append([hth_rows[2].text, hth_rows[3].find_elements_by_xpath("td")[1].text, hth_rows[3].find_elements_by_xpath("td")[3].text]) #current season
     hth_stats.append([hth_rows[4].text, hth_rows[5].find_elements_by_xpath("td")[1].text, hth_rows[5].find_elements_by_xpath("td")[3].text]) #Last 5 seasons
+
+    print(*hth_stats)
+
+    print("====")
     
     # Previous Meetings
     for row in previous_meeting_rows:
@@ -511,6 +515,9 @@ def get_preview_stats(driver):   ###COMPLETE
         home_score = score[1]
         date = td[3].text
         previous_meetings.append([away_team, away_score, home_team, home_score, date])
+
+    print(*previous_meetings)
+    print("===")
 
     #Top Scorers Heading Into Game
     away_team = tables[2].find_elements_by_xpath("tr/th")[0].text
@@ -534,7 +541,7 @@ def get_preview_stats(driver):   ###COMPLETE
             
         i += 1
 
-    print(*top_scorers)
+    # print(*top_scorers)
 
 
     ###LAST 5 GAMES TBA
@@ -548,7 +555,7 @@ def get_preview_stats(driver):   ###COMPLETE
             l5g_stats.append([team[i], row.text])
         i += 1
 
-    print(*l5g_stats)
+    # print(*l5g_stats)
 
 
     #Match Up Stats
@@ -593,18 +600,18 @@ start = time.time()
 # game_data = get_game_data(driver)
 # game_data = get_arena_data(driver)
 # game_data = get_referee_data(driver)
-game_data = get_boxscore(driver)
-# game_data = get_game_details(driver)
-game_data = get_three_stars(driver)
+# game_data = get_boxscore(driver)
+# game_data = get_penalty_summary(driver)
+# game_data = get_three_stars(driver)
 # game_data = get_coaches(driver)
-# game_data = get_team_summaries(driver)
-# get_preview_stats(driver)
+# game_data = get_player_scorelines(driver)
+get_preview_stats(driver)
 # get_pins(driver)
 # get_pbp(driver)
 
-print(*game_data)
-for item in game_data:
-    print(*item)
+# print(*game_data)
+# for item in game_data:
+#     print(*item)
 
 end = time.time()
 
