@@ -151,15 +151,83 @@ class Top_Scorer(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String(length=4))
-        pp_goals = Column(String(length=2))
-        pp_opps = Column(String(length=2))
-        pims = Column(String(length=4))
-        infracs = Column(String(length=3))
+        team = Column(String)
+        player = Column(String)
+        statline = Column(String)
 
         def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', pp_goals='%s', pp_opps='%s', pims='%s', infracs='%s')>" % (
-                        self.id, self.game_id, self.team, self.pp_goals, self.pp_opps, self.pims, self.infracs)
+                return "<Game(id='%i', game_id='%i', team='%s', player='%s', statline='%s')>" % (
+                        self.id, self.game_id, self.team, self.player, self.statline)
+
+
+class Recent_Game(Base):
+        __tablename__ = 'recent_games'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String)
+        game_info = Column(String)
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', game_info='%s')>" % (
+                        self.id, self.game_id, self.team, self.game_info)
+
+
+class Matchup_Statline(Base):
+        __tablename__ = 'matchup_statlines'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String)
+        season_record = Column(String)
+        last_10 = Column(String)
+        streak = Column(String)
+        last_game = Column(String)
+        home_record = Column(String)
+        away_record = Column(String)
+        goals_for = Column(Integer)
+        goals_against = Column(Integer)
+        pp = Column(String)
+        pp_home = Column(String)
+        pp_away = Column(String)
+        pk = Column(String)
+        pk_home = Column(String)
+        pk_away = Column(String)
+        
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', last_10='%s', streak='%s', last_game='%s', home_record='%s', away_record='%s', goals_for='%i', goals_against='%i', pp='%s', pp_home='%s', pp_away='%s', pk='%s', pk_home='%s', pk_away='%s')>" % (
+                        self.id, self.game_id, self.team, self.last_10, self.streak, self.last_game, self.home_record, self.away_record, self.goals_for, self.goals_against, self.pp, self.pp_home, self.pp_away, self.pk, self.pk_home, self.pk_away)
+
+
+class Head2Head_Statline(Base):
+        __tablename__ = 'head2head_statlines'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        team = Column(String)
+        previous_season = Column(String)
+        current_season = Column(String)
+        last_5_seasons = Column(String)
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', team='%s', previous_season='%s', current_season='%s', last_5_seasons='%s')>" % (
+                        self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
+
+
+class Previous_Meeting(Base):
+        __tablename__ = 'previous_meetings'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        away_team = Column(String)
+        away_score = Column(String(length=2))
+        home_team = Column(String)
+        home_score = Column(String(length=2))
+        date = Column(Date)
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', away_team='%s', away_score='%s', home_team='%s', home_score='%s', date='%d')>" % (
+                        self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
 
 # create a cursor
 # c = conn.cursor()

@@ -605,9 +605,9 @@ start = time.time()
 # game_data = get_three_stars(driver)
 # game_data = get_coaches(driver)
 # game_data = get_player_scorelines(driver)
-get_preview_stats(driver)
+# get_preview_stats(driver)
 # get_pins(driver)
-# get_pbp(driver)
+get_pbp(driver)
 
 # print(*game_data)
 # for item in game_data:
