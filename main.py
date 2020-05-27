@@ -423,6 +423,9 @@ meta = MetaData()
 Base.metadata.create_all(engine)
 
 
+previous_mtg = Previous_Meeting(game_id=69, away_team='Toronto Marlies', away_score='5', home_team='Utica Comets', home_score='4', date='March 26, 2020')
+session.add(previous_mtg)
+session.commit
 # # Create 
 # doctor_strange = Film(title="Doctor Strange", director="Scott Derrickson", year="2016")  
 # session.add(doctor_strange)  
