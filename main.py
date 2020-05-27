@@ -2,7 +2,7 @@
 # from sqlalchemy import create_engine
 
 import psycopg2
-from sqlalchemy import create_engine, Table, Column, Integer, String, Time, Date, MetaData, select, func
+from sqlalchemy import create_engine, Table, Column, Integer, String, Float, Time, Date, MetaData, select, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -228,6 +228,140 @@ class Previous_Meeting(Base):
         def __repr__(self):
                 return "<Game(id='%i', game_id='%i', away_team='%s', away_score='%s', home_team='%s', home_score='%s', date='%d')>" % (
                         self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
+
+
+class Goalie_Change(Base):
+        __tablename__ = 'goalie_changes'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        event = Column(String)
+        side = Column(String(length=7))
+        team = Column(String)
+        goalie_number = Column(String(length=2))
+        goalie_name = Column(String)
+        action = Column(String(length=3))
+        time = Column(Time)
+        period = Column(String(length=3))
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', goalie_number='%s', goalie_name='%s', action='%s', time='%t', period='%s')>" % (
+                        self.id, self.game_id, self.event, self.side, self.team, self.goalie_number, self.goalie_name, self.action, self.time, self.period)
+
+
+class Shot(Base):
+        __tablename__ = 'shots'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        event = Column(String(length=4))
+        result = Column(String(length=4))
+        side = Column(String(length=7))
+        team = Column(String)
+        player_number = Column(String(length=2))
+        player_name = Column(String)
+        goalie_number = Column(String(length=2))
+        goalie_name = Column(String)
+        time = Column(Time)
+        period = Column(String(length=3))
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', event='%s', result='%s', side='%s', team='%s', player_number='%s', player_name='%s', goalie_number='%s', goalie_name='%s', time='%t', period='%s')>" % (
+                        self.id, self.game_id, self.event, self.result, self.side, self.team, self.player_number, self.player_name, self.goalie_number, self.goalie_name, self.time, self.period)
+
+
+class Penalty(Base):
+        __tablename__ = 'penalties'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        event = Column(String(length=7))
+        side = Column(String(length=7))
+        team = Column(String)
+        player_number = Column(String(length=2))
+        player_name = Column(String)
+        penalty = Column(String(length=2))
+        pim = Column(String(length=2))
+        pp = Column(String(length=2))
+        Time = Column(Time)
+        period = Column(String(length=3))
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', player_number='%s', player_name='%s', penalty='%s', pim='%s', pp='%s', time='%t', period='%s')>" % (
+                        self.id, self.game_id, self.event, self.side, self.team, self.player_number, self.player_name, self.penalty, self.pim, self.pp, self.time, self.period)
+
+
+class Goal(Base):
+        __tablename__ = 'goals'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        event = Column(String(length=4))
+        side = Column(String(length=7))
+        team = Column(String)
+        player_number = Column(String(length=2))
+        player_name = Column(String)
+        season_total = Column(String(length=3))
+        assist1_number = Column(String(length=2))
+        assist1_name = Column(String)
+        assist1_total = Column(String(length=3))
+        assist2_number = Column(String(length=2))
+        assist2_name = Column(String)
+        assist2_total = Column(String(length=3))
+        Time = Column(Time)
+        period = Column(String(length=3))
+        ppg = Column(String)
+        shg = Column(String)
+        eng = Column(String)
+        gwg = Column(String)
+        gtg = Column(String)
+
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', player_number='%s', player_name='%s', season_total='%s', assist1_number='%s', assist1_name='%s', assist1_total='%s', assist2_number='%s', assist2_name='%s', assist2_total='%s', time='%t', period='%s', ppg='%s', shg='%s', eng='%s', gwg='%s', gtg='%s')>" % (
+                        self.id, self.game_id, self.event, self.side, self.team, self.player_number, self.player_name, self.season_total, self.assist1_number, self.assist1_name, self.assist1_total, self.assist2_number, self.assist2_name, self.assist2_total, self.time, self.period, self.ppg, self.shg, self.eng, self.gwg, self.gtg)
+
+
+class Onice_Event(Base):
+        __tablename__ = 'onice_events'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        event = Column(String(length=5))
+        side = Column(String(length=7))
+        team = Column(String)
+        player_number = Column(String(length=2))
+        player_name = Column(String)
+        plus_minus = Column(String(length=2))
+        Time = Column(Time)
+        period = Column(String(length=3))
+ 
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', player_number='%s', player_name='%s', plus_minus='%s', time='%t', period='%s')>" % (
+                        self.id, self.game_id, self.event, self.side, self.team, self.player_number, self.player_name, self.plus_minus, self.time, self.period)
+
+
+class Pin(Base):
+        __tablename__ = 'pins'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        event = Column(String(length=5))
+        result = Column(String(length=4))
+        side = Column(String(length=7))
+        team = Column(String)
+        top_position = Column(Float)
+        left_position = Column(Float)
+        player_number = Column(String(length=2))
+        player_name = Column(String)
+        goalie_number = Column(String(length=2))
+        goalie_name = Column(String)
+        Time = Column(Time)
+        period = Column(String(length=3))
+ 
+        def __repr__(self):
+                return "<Game(id='%i', game_id='%i', event='%s', result='%s', side='%s', team='%s', top_position='%f', left_position='%f', player_number='%s', player_name='%s', goalie_number='%s', goalie_name='%s', time='%t', period='%s')>" % (
+                        self.id, self.game_id, self.event, self.result, self.side, self.team, self.top_position, self.left_position, self.player_number, self.player_name, self.goalie_number, self.goalie_name, self.time, self.period)
+
 
 # create a cursor
 # c = conn.cursor()

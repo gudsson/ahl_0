@@ -24,8 +24,6 @@ driver.get(urlpage)
 matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
 summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
-
-
 rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
 pbp = driver.find_elements_by_xpath(
     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
@@ -606,7 +604,7 @@ start = time.time()
 # game_data = get_coaches(driver)
 # game_data = get_player_scorelines(driver)
 # get_preview_stats(driver)
-# get_pins(driver)
+# get_pins(driver)  
 get_pbp(driver)
 
 # print(*game_data)
