@@ -43,9 +43,21 @@ class Game(Base):
         end_time = Column(String)
         duration = Column(Time)
         
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', game_number='%i', dow='%s', date='%d', status='%s', away_team='%s', away_score='%i', home_score='%i', home_team='%s', venue='%s', attendance='%i', start_time='%s', end_time='%s', duration='%t')>" % (
-                        self.game_id, self.game_number, self.dow, self.date, self.status, self.away_team, self.away_score, self.home_score, self.home_team, self.venue, self.attendance, self.start_time, self.end_time, self.duration)
+        def __init__(self, game_id, game_number, dow, date, status, away_team, away_score, home_score, home_team, venue, attendance, start_time, end_time, duration): 
+                self.game_id = game_id
+                self.game_number = game_number
+                self.dow = dow
+                self.date = date
+                self.status = status
+                self.away_team = away_team
+                self.away_score = away_score
+                self.home_score = home_score
+                self.home_team = home_team
+                self.venue = venue
+                self.attendance = attendance
+                self.start_time = start_time
+                self.end_time = end_time
+                self.duration = duration
 
 
 class Official(Base):
@@ -57,9 +69,11 @@ class Official(Base):
         number = Column(Integer)
         role = Column(Integer)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', name='%s', number='%i', role='%s')>" % (
-                        self.id, self.game_id, self.name, self.number, self.role)
+        def __init__(self, game_id, name, number, role):
+                self.game_id = game_id
+                self.name = name
+                self.number = number
+                self.role = role
 
 
 class Boxscore(Base):
@@ -73,9 +87,13 @@ class Boxscore(Base):
         home_shots = Column(String(length=3))
         away_shots = Column(String(length=3))
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', period='%s', home_goals='%s', away_goals='%s', home_shots='%s', away_shots='%s')>" % (
-                        self.id, self.game_id, self.period, self.home_goals, self.away_goals, self.home_shots, self.away_shots)
+        def __init__(self, game_id, period, home_goals, away_goals, home_shots, away_shots):
+                self.game_id = game_id
+                self.period = period
+                self.home_goals = home_goals
+                self.away_goals = away_goals
+                self.home_shots = home_shots
+                self.away_shots = away_shots
 
 
 class Star(Base):
@@ -88,9 +106,12 @@ class Star(Base):
         jersey_number = Column(String(length=2))
         team = Column(String)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', star_number='%s', name='%s', jersey_number='%s', team='%s')>" % (
-                        self.id, self.game_id, self.star_number, self.name, self.jersey_number, self.team)
+        def __init__(self, game_id, star_number, name, jersey_number, team):
+                self.game_id = game_id
+                self.star_number = star_number
+                self.name = name
+                self.jersey_number = jersey_number
+                self.team = team
 
 
 class Coach(Base):
@@ -102,9 +123,11 @@ class Coach(Base):
         role = Column(String)
         name = Column(String)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', role='%s', name='%s')>" % (
-                        self.id, self.game_id, self.team, self.role, self.name)
+        def __init__(self, game_id, team, role, name):
+                self.game_id = game_id
+                self.team = team
+                self.role = role
+                self.name = name
 
 
 class Penalty_Summary(Base):
@@ -118,9 +141,13 @@ class Penalty_Summary(Base):
         pims = Column(String(length=4))
         infracs = Column(String(length=3))
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', pp_goals='%s', pp_opps='%s', pims='%s', infracs='%s')>" % (
-                        self.id, self.game_id, self.team, self.pp_goals, self.pp_opps, self.pims, self.infracs)
+        def __init__(self, game_id, team, pp_goals, pp_opps, pims, infracs):
+                self.game_id = game_id
+                self.team = team
+                self.pp_goals = pp_goals
+                self.pp_opps = pp_opps
+                self.pims = pims
+                self.infracs = infracs
 
 
 class Player_Scoreline(Base):
@@ -140,10 +167,19 @@ class Player_Scoreline(Base):
         shots = Column(String(length=2))
         plus_minus = Column(String(length=3))
 
-
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', jersey_number='%s', letter='%s', name='%s', player_id='%i', position='%s', goals='%s', assists='%s', pims='%s', shots='%s', plus_mins='%s')>" % (
-                        self.id, self.game_id, self.team, self.jersey_number, self.letter, self.name, self.player_id, self.position, self.goals, self.assists, self.pims, self.shots, self.plus_minus)
+        def __init__(self, game_id, team, jersey_number, letter, name, player_id, position, goals, assists, pims, shots, plus_minus):
+                self.game_id = game_id
+                self.team = team
+                self.jersey_number = jersey_number
+                self.letter = letter
+                self.name = name
+                self.player_id = player_id
+                self.position = position
+                self.goals = goals
+                self.assists = assists
+                self.pims = pims
+                self.shots = shots
+                self.plus_minus = plus_minus
 
 
 class Top_Scorer(Base):
@@ -155,9 +191,11 @@ class Top_Scorer(Base):
         player = Column(String)
         statline = Column(String)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', player='%s', statline='%s')>" % (
-                        self.id, self.game_id, self.team, self.player, self.statline)
+        def __init__(self, game_id, team, player, statline):
+                self.game_id = game_id
+                self.team = team
+                self.player = player
+                self.statline = statline
 
 
 class Recent_Game(Base):
@@ -168,9 +206,10 @@ class Recent_Game(Base):
         team = Column(String)
         game_info = Column(String)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', game_info='%s')>" % (
-                        self.id, self.game_id, self.team, self.game_info)
+        def __init__(self, game_id, team, game_info):
+                self.game_id = game_id
+                self.team = team
+                self.game_info = game_info
 
 
 class Matchup_Statline(Base):
@@ -194,9 +233,22 @@ class Matchup_Statline(Base):
         pk_home = Column(String)
         pk_away = Column(String)
         
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', last_10='%s', streak='%s', last_game='%s', home_record='%s', away_record='%s', goals_for='%i', goals_against='%i', pp='%s', pp_home='%s', pp_away='%s', pk='%s', pk_home='%s', pk_away='%s')>" % (
-                        self.id, self.game_id, self.team, self.last_10, self.streak, self.last_game, self.home_record, self.away_record, self.goals_for, self.goals_against, self.pp, self.pp_home, self.pp_away, self.pk, self.pk_home, self.pk_away)
+        def __init__(self, game_id, team, last_10, streak, last_game, home_record, away_record, goals_for, goals_against, pp, pp_home, pp_away, pk, pk_home, pk_away):
+                self.game_id = game_id
+                self.team = team
+                self.last_10 = last_10
+                self.streak = streak
+                self.last_game = last_game
+                self.home_record = home_record
+                self.away_record = away_record
+                self.goals_for = goals_for
+                self.goals_against = goals_against
+                self.pp = pp
+                self.pp_home = pp_home
+                self.pp_away = pp_away
+                self.pk = pk
+                self.pk_home = pk_home
+                self.pk_away = pk_away
 
 
 class Head2Head_Statline(Base):
@@ -209,9 +261,12 @@ class Head2Head_Statline(Base):
         current_season = Column(String)
         last_5_seasons = Column(String)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', team='%s', previous_season='%s', current_season='%s', last_5_seasons='%s')>" % (
-                        self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
+        def __init__(self, game_id, team, previous_season, current_season, last_5_seasons):
+                self.game_id = game_id
+                self.team = team
+                self.previous_season = previous_season
+                self.current_season = current_season
+                self.last_5_seasons = last_5_seasons
 
 
 class Previous_Meeting(Base):
@@ -232,9 +287,6 @@ class Previous_Meeting(Base):
                 self.home_team = home_team
                 self.home_score = home_score
                 self.date = date
-        # def __repr__(self):
-        #         return "<Game(id='%i', game_id='%i', away_team='%s', away_score='%s', home_team='%s', home_score='%s', date='%d')>" % (
-        #                 self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
 
 
 class Goalie_Change(Base):
@@ -251,9 +303,16 @@ class Goalie_Change(Base):
         time = Column(Time)
         period = Column(String(length=3))
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', goalie_number='%s', goalie_name='%s', action='%s', time='%t', period='%s')>" % (
-                        self.id, self.game_id, self.event, self.side, self.team, self.goalie_number, self.goalie_name, self.action, self.time, self.period)
+        def __init__(self, game_id, event, side, team, goalie_number, goalie_name, action, time, period):
+                self.game_id = game_id
+                self.event = event
+                self.side = side
+                self.team = team
+                self.goalie_number = goalie_number
+                self.goalie_name = goalie_name
+                self.action = action
+                self.time = time
+                self.period = period
 
 
 class Shot(Base):
@@ -272,9 +331,18 @@ class Shot(Base):
         time = Column(Time)
         period = Column(String(length=3))
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', event='%s', result='%s', side='%s', team='%s', player_number='%s', player_name='%s', goalie_number='%s', goalie_name='%s', time='%t', period='%s')>" % (
-                        self.id, self.game_id, self.event, self.result, self.side, self.team, self.player_number, self.player_name, self.goalie_number, self.goalie_name, self.time, self.period)
+        def __init__(self, game_id, event, side, team, goalie_number, goalie_name, action, time, period):
+                self.game_id = game_id
+                self.event = event
+                self.result = result
+                self.side = side
+                self.team = team
+                self.player_number = player_number
+                self.player_name = player_name
+                self.goalie_number = goalie_number
+                self.goalie_name = goalie_name
+                self.time = time
+                self.period = period
 
 
 class Penalty(Base):
@@ -293,9 +361,18 @@ class Penalty(Base):
         Time = Column(Time)
         period = Column(String(length=3))
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', player_number='%s', player_name='%s', penalty='%s', pim='%s', pp='%s', time='%t', period='%s')>" % (
-                        self.id, self.game_id, self.event, self.side, self.team, self.player_number, self.player_name, self.penalty, self.pim, self.pp, self.time, self.period)
+        def __init__(self, game_id, event, side, team, player_number, player_name, penalty, pim, pp, time, period):
+                self.game_id = game_id
+                self.event = event
+                self.side = side
+                self.team = team
+                self.player_number = player_number
+                self.player_name = player_name
+                self.penalty = penalty
+                self.pim = pim
+                self.pp = pp
+                self.time = time
+                self.period = period
 
 
 class Goal(Base):
@@ -323,9 +400,27 @@ class Goal(Base):
         gwg = Column(String)
         gtg = Column(String)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', player_number='%s', player_name='%s', season_total='%s', assist1_number='%s', assist1_name='%s', assist1_total='%s', assist2_number='%s', assist2_name='%s', assist2_total='%s', time='%t', period='%s', ppg='%s', shg='%s', eng='%s', gwg='%s', gtg='%s')>" % (
-                        self.id, self.game_id, self.event, self.side, self.team, self.player_number, self.player_name, self.season_total, self.assist1_number, self.assist1_name, self.assist1_total, self.assist2_number, self.assist2_name, self.assist2_total, self.time, self.period, self.ppg, self.shg, self.eng, self.gwg, self.gtg)
+        def __init__(self, game_id, event, side, team, player_number, player_name, season_total, assist1_number, assist1_name, assist1_total, assist2_number, assist2_name, assist2_total, time, period, ppg, shg, eng, gwg, gtg):
+                self.game_id = game_id
+                self.event = event
+                self.side = side
+                self.team = team
+                self.player_number = player_number
+                self.player_name = player_name
+                self.season_total = season_total
+                self.assist1_number = assist1_number
+                self.assist1_name = assist1_name
+                self.assist1_total = assist1_total
+                self.assist2_number = assist2_number
+                self.assist2_name = assist2_name
+                self.assist2_total = assist2_total
+                self.time = time
+                self.period = period
+                self.ppg = ppg
+                self.shg = shg
+                self.eng = eng
+                self.gwg = gwg
+                self.gtg = gtg
 
 
 class Onice_Event(Base):
@@ -342,9 +437,16 @@ class Onice_Event(Base):
         Time = Column(Time)
         period = Column(String(length=3))
  
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', event='%s', side='%s', team='%s', player_number='%s', player_name='%s', plus_minus='%s', time='%t', period='%s')>" % (
-                        self.id, self.game_id, self.event, self.side, self.team, self.player_number, self.player_name, self.plus_minus, self.time, self.period)
+        def __init__(self, game_id, event, side, team, player_number, player_name, plus_minus, time, period):
+                self.game_id = game_id 
+                self.event = event
+                self.side = side
+                self.team = team
+                self.player_number = player_number
+                self.player_name = player_name
+                self.plus_minus = plus_minus
+                self.time = time
+                self.period = period
 
 
 class Pin(Base):
@@ -365,10 +467,20 @@ class Pin(Base):
         Time = Column(Time)
         period = Column(String(length=3))
  
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', event='%s', result='%s', side='%s', team='%s', top_position='%f', left_position='%f', player_number='%s', player_name='%s', goalie_number='%s', goalie_name='%s', time='%t', period='%s')>" % (
-                        self.id, self.game_id, self.event, self.result, self.side, self.team, self.top_position, self.left_position, self.player_number, self.player_name, self.goalie_number, self.goalie_name, self.time, self.period)
-
+        def __init__(self, game_id, event, result, side, team, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period):  
+                self.game_id = game_id
+                self.event = event
+                self.result = result
+                self.side = side
+                self.team = team
+                self.top_position = top_position
+                self.left_position = left_position
+                self.player_number = player_number
+                self.player_name = player_name
+                self.goalie_number = goalie_number
+                self.goalie_name = goalie_name
+                self.time = time
+                self.period = period
 
 # create a cursor
 # c = conn.cursor()
