@@ -217,17 +217,24 @@ class Head2Head_Statline(Base):
 class Previous_Meeting(Base):
         __tablename__ = 'previous_meetings'
 
-        id = Column(Integer, primary_key = True)
-        game_id = Column(Integer)
-        away_team = Column(String)
+        id = Column(Integer, primary_key = True)#, autoincrement=True)
+        game_id = Column(String(length=5))
+        away_team = Column(String(length=50))
         away_score = Column(String(length=2))
-        home_team = Column(String)
+        home_team = Column(String(length=50))
         home_score = Column(String(length=2))
         date = Column(Date)
 
-        def __repr__(self):
-                return "<Game(id='%i', game_id='%i', away_team='%s', away_score='%s', home_team='%s', home_score='%s', date='%d')>" % (
-                        self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
+        def __init__(self, game_id, away_team, away_score, home_team, home_score, date):
+                self.game_id = game_id
+                self.away_team = away_team
+                self.away_score = away_score
+                self.home_team = home_team
+                self.home_score = home_score
+                self.date = date
+        # def __repr__(self):
+        #         return "<Game(id='%i', game_id='%i', away_team='%s', away_score='%s', home_team='%s', home_score='%s', date='%d')>" % (
+        #                 self.id, self.game_id, self.team, self.previous_season, self.current_season, self.last_5_seasons)
 
 
 class Goalie_Change(Base):
@@ -375,6 +382,15 @@ def get_last_game_in_db(session, meta):
 
         print(query.first()[0])
 
+def get_last_meeting(session, meta):
+        
+        query = session.query(func.max(Previous_Meeting.game_id))
+
+        # for _res in query.all():
+        #         print(_res)
+
+        print(query.first()[0])
+
 
 # def create_table(engine, meta):
         
@@ -415,7 +431,7 @@ def get_last_game_in_db(session, meta):
 # create_table(engine, meta)
 
 # create_table(engine)
-# get_last_game_in_db(session, meta)
+
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -423,9 +439,16 @@ meta = MetaData()
 Base.metadata.create_all(engine)
 
 
-previous_mtg = Previous_Meeting(game_id=69, away_team='Toronto Marlies', away_score='5', home_team='Utica Comets', home_score='4', date='March 26, 2020')
+previous_mtg = Previous_Meeting(game_id=69, away_team='Toronto Marlies', away_score=5, home_team='Utica Comets', home_score=4, date='March 26, 2020')
+
+# get_last_meeting(session, meta)
+
 session.add(previous_mtg)
-session.commit
+
+
+# print(session.new)
+
+session.commit()
 # # Create 
 # doctor_strange = Film(title="Doctor Strange", director="Scott Derrickson", year="2016")  
 # session.add(doctor_strange)  
