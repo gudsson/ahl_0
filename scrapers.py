@@ -24,11 +24,11 @@ driver.get(urlpage)
 matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
 summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
-rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
-pbp = driver.find_elements_by_xpath(
-    "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
-pbp_periods = driver.find_elements_by_xpath(
-    "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]")
+# rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
+# pbp = driver.find_elements_by_xpath(
+#     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
+# pbp_periods = driver.find_elements_by_xpath(
+#     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]")
 
 
 # execute script to scroll down the page
@@ -40,9 +40,9 @@ pbp_periods = driver.find_elements_by_xpath(
 
 
 # time.sleep(5)
+saved_driver = driver
 
-
-def get_game_data(driver): ###COMPLETE
+def game_data(driver): ###COMPLETE
     game_data = []
     matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
     scores = matchup_container.find_elements_by_xpath("//div[@class='ht-gc-score-container']")
@@ -59,7 +59,7 @@ def get_game_data(driver): ###COMPLETE
 
     return game_data
 
-def get_arena_data(driver):  ###COMPLETE
+def arena_data(driver):  ###COMPLETE
     arena_data = []
 
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
@@ -72,7 +72,7 @@ def get_arena_data(driver):  ###COMPLETE
 
     return arena_data
 
-def get_referee_data(driver):   ###COMPLETE
+def referee_data(driver):   ###COMPLETE
     game_officials = []
     referees = []
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
@@ -87,7 +87,7 @@ def get_referee_data(driver):   ###COMPLETE
 
     return game_officials
 
-def get_boxscore(driver):   ###COMPLETE
+def boxscore(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     #Periods (last period is total)
@@ -113,7 +113,7 @@ def get_boxscore(driver):   ###COMPLETE
 
     return scoring_summary
 
-def get_penalty_summary(driver):   ###COMPLETE
+def penalty_summary(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     #Away PP#
@@ -144,7 +144,7 @@ def get_penalty_summary(driver):   ###COMPLETE
     
     return zip(away_pp_array, home_pp_array)
 
-def get_three_stars(driver):  ###COMPLETE
+def three_stars(driver):  ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     stars = []
@@ -162,7 +162,7 @@ def get_three_stars(driver):  ###COMPLETE
     
     return stars
 
-def get_coaches(driver):   ###COMPLETE
+def coaches(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     # away_coach_container = []
@@ -170,8 +170,8 @@ def get_coaches(driver):   ###COMPLETE
     away_coach_lines = []
     home_coach_lines = []
 
-    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
-    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
+    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
+    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
     
     away_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']//tr[contains(@ng-repeat,'homeTeam.coaches')]")
@@ -188,15 +188,15 @@ def get_coaches(driver):   ###COMPLETE
 
     return coaches
 
-def get_player_scorelines(driver):   ###COMPLETE
+def player_scorelines(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
     players = []
     away_player_lines = []
     home_player_lines = []
 
-    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
-    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
+    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
+    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
     
     away_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'visitingTeam.skaters')]") #find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'homeTeam.skaters')]")
@@ -206,7 +206,7 @@ def get_player_scorelines(driver):   ###COMPLETE
     	awayplyr_number = away_td[0].text
     	awayplyr_letter = away_td[1].text
     	awayplyr_name = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
-    	awayplyr_id = away_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+    	awayplyr_id = away_td[2].find_element_by_xpath("a").attribute('href').split('/player/')[1].split('/')[0]
     	awayplyr_pos = away_td[3].text
     	awayplyr_goals = away_td[4].text
     	awayplyr_assists = away_td[5].text
@@ -220,7 +220,7 @@ def get_player_scorelines(driver):   ###COMPLETE
     	homeplyr_number = home_td[0].text
     	homeplyr_letter = home_td[1].text
     	homeplyr_name = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
-    	homeplyr_id = home_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+    	homeplyr_id = home_td[2].find_element_by_xpath("a").attribute('href').split('/player/')[1].split('/')[0]
     	homeplyr_pos = home_td[3].text
     	homeplyr_goals = home_td[4].text
     	homeplyr_assists = home_td[5].text
@@ -231,7 +231,7 @@ def get_player_scorelines(driver):   ###COMPLETE
 
     return players
 
-def get_pins(driver, pbp_arr):   ###COMPLETE
+def pins(driver, pbp_arr):   ###COMPLETE
     pins = []
     rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
     pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
@@ -241,16 +241,16 @@ def get_pins(driver, pbp_arr):   ###COMPLETE
         print("Arrays are equal")
 
     for pin, data in zip(pins, pbp_arr):
-        event_id = pin.get_attribute("id").split("ht_pin_")[1] #get index
+        event_id = pin.attribute("id").split("ht_pin_")[1] #get index
         event_type = pin.text
-        event_loc = pin.get_attribute("style")
-        event_loc_top = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
-        event_loc_left = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+        event_loc = pin.attribute("style")
+        event_loc_top = pin.attribute("style").split("%; left: ")[0].split("top:")[1]
+        event_loc_left = pin.attribute("style").split("%; left: ")[1].split("%;")[0]
 
-        print(f'#{i} (id={event_id}) | {pin.get_attribute("id")} @ top: {event_loc_top}, left: {event_loc_left} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({event_type}|{data[6]})')
+        print(f'#{i} (id={event_id}) | {pin.attribute("id")} @ top: {event_loc_top}, left: {event_loc_left} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({event_type}|{data[6]})')
         i += 1
 
-def get_pbp(driver):   ###COMPLETE
+def pbp(driver):   ###COMPLETE
     pbp = []
     pbp_periods = []
 
@@ -267,7 +267,7 @@ def get_pbp(driver):   ###COMPLETE
     pbp_arr = []
 
     for period in pbp_periods:
-        period_number = period.get_attribute('ng-show').split("ht_")[1]
+        period_number = period.attribute('ng-show').split("ht_")[1]
         period_name = period.find_element_by_xpath(
             "div[@ng-bind='gamePBP.longName']").text
         # print(f"{period_number} | {period_name}")
@@ -278,9 +278,9 @@ def get_pbp(driver):   ###COMPLETE
             pbp_event_row = event.find_element_by_xpath(
                 "div[contains(@class,'ht-event-row')]")
             pbp_team = pbp_event_row.find_element_by_xpath(
-                "div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
+                "div[@class='ht-home-or-visit']/div").attribute('class').split("team")[0].split("ht-")[1]
             pbp_team_name = pbp_event_row.find_element_by_xpath(
-                "div[@class='ht-event-image']/img").get_attribute('title')
+                "div[@class='ht-event-image']/img").attribute('title')
             pbp_event_time = pbp_event_row.find_element_by_xpath(
                 "div[@class='ht-event-time']").text
 
@@ -450,7 +450,7 @@ def get_pbp(driver):   ###COMPLETE
     # for element in pbp_arr:
     #     print(element)
 
-    get_pins(driver, pbp_arr)
+    pins(driver, pbp_arr)
 
 
 			#print(pbp_event_type)
@@ -476,7 +476,7 @@ def get_pbp(driver):   ###COMPLETE
 
             # print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
 
-def get_preview_stats(driver):   ###COMPLETE
+def preview_stats(driver):   ###COMPLETE
     hth_stats = []
     hth_rows = []
 
@@ -506,10 +506,10 @@ def get_preview_stats(driver):   ###COMPLETE
     # Previous Meetings
     for row in previous_meeting_rows:
         td = row.find_elements_by_xpath("td")
-        away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
+        away_team = td[0].find_element_by_xpath("a/img").attribute("title")
         score = td[1].text.split(":")
         away_score = score[0]
-        home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
+        home_team = td[2].find_element_by_xpath("a/img").attribute("title")
         home_score = score[1]
         date = td[3].text
         previous_meetings.append([away_team, away_score, home_team, home_score, date])
@@ -567,12 +567,12 @@ def get_preview_stats(driver):   ###COMPLETE
 
     print(*matchup_stats)
 
-def get_nothing():
+def nothing():
     #### # loop over results
     #### for result in results:
     ####     product_name = result.text
     ####     link = result.find_element_by_tag_name('a')
-    ####     product_link = link.get_attribute("href")
+    ####     product_link = link.attribute("href")
 
     ####     # append dict to array
     ####     data.append({"product" : product_name, "link" : product_link})
@@ -590,31 +590,35 @@ def write_to_csv():
     # df.to_csv(path + 'asdaYogurtLink.csv')
     pass
 
-start = time.time()
+# start = time.time()
 
 ####PRINT OUTS###
 
 # game_data = []
-# game_data = get_game_data(driver)
-# game_data = get_arena_data(driver)
-# game_data = get_referee_data(driver)
-# game_data = get_boxscore(driver)
-# game_data = get_penalty_summary(driver)
-# game_data = get_three_stars(driver)
-# game_data = get_coaches(driver)
-# game_data = get_player_scorelines(driver)
-# get_preview_stats(driver)
-# get_pins(driver)  
-get_pbp(driver)
+# game_data = game_data(driver)
+# game_data = arena_data(driver)
+# game_data = referee_data(driver)
+# game_data = boxscore(driver)
+# game_data = penalty_summary(driver)
+# game_data = three_stars(driver)
+# game_data = coaches(driver)
+# game_data = player_scorelines(driver)
+# preview_stats(driver)
+# pins(driver)  
+#pbp(driver)
 
 # print(*game_data)
 # for item in game_data:
 #     print(*item)
 
-end = time.time()
+# end = time.time()
 
-print(end - start)
+# print(end - start)
 
 ###/PRINT OUTS###
 
 driver.quit()
+
+if __name__ == "__main__":
+    game_data = game_data(saved_driver)
+    print(*game_data)
