@@ -14,33 +14,46 @@ from sqlalchemy.orm import sessionmaker
 #         password="Olafur84!"
 # )
 
+# Base = declarative_base()
+
+# engine = create_engine(
+#     "postgresql+psycopg2://postgres:Olafur84!@localhost/AHLdb",
+#     executemany_mode='batch')
 Base = declarative_base()
 
-engine = create_engine(
-    "postgresql+psycopg2://postgres:Olafur84!@localhost/AHLdb",
-    executemany_mode='batch')
-
-
 # class Games(Base):
+def connect():
+        
 
+        engine = create_engine(
+        "postgresql+psycopg2://postgres:Olafur84!@localhost/AHLdb",
+        executemany_mode='batch')
+
+
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        meta = MetaData()
+        Base.metadata.create_all(engine)
+
+        return engine, session
 
 class Game(Base):
         __tablename__ = 'games'
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        game_number = Column(Integer)
-        dow = Column(String)
+        game_number = Column(String(length=4))
+        dow = Column(String(length=9))
         date = Column(Date)
-        status = Column(String)
-        away_team = Column(String)
+        status = Column(String(length=10))
+        away_team = Column(String(length=50))
         away_score = Column(Integer)
         home_score = Column(Integer)
-        home_team = Column(String)
-        venue = Column(String)
+        home_team = Column(String(length=50))
+        venue = Column(String(length=50))
         attendance = Column(Integer)
-        start_time = Column(String)
-        end_time = Column(String)
+        start_time = Column(String(length=8))
+        end_time = Column(String(length=8))
         duration = Column(Time)
         
         def __init__(self, game_id, game_number, dow, date, status, away_team, away_score, home_score, home_team, venue, attendance, start_time, end_time, duration): 
@@ -65,9 +78,9 @@ class Official(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        name = Column(String)
+        name = Column(String(length=50))
         number = Column(Integer)
-        role = Column(Integer)
+        role = Column(String(length=8))
 
         def __init__(self, game_id, name, number, role):
                 self.game_id = game_id
@@ -545,50 +558,50 @@ def get_last_meeting(session, meta):
 # create_table(engine)
 
 
-Session = sessionmaker(bind=engine)
-session = Session()
-meta = MetaData()
-Base.metadata.create_all(engine)
+# Session = sessionmaker(bind=engine)
+# session = Session()
+# meta = MetaData()
+# Base.metadata.create_all(engine)
 
 
-previous_mtg = Previous_Meeting(game_id=69, away_team='Toronto Marlies', away_score=5, home_team='Utica Comets', home_score=4, date='March 26, 2020')
+# previous_mtg = Previous_Meeting(game_id=69, away_team='Toronto Marlies', away_score=5, home_team='Utica Comets', home_score=4, date='March 26, 2020')
 
-# get_last_meeting(session, meta)
+# # get_last_meeting(session, meta)
 
-session.add(previous_mtg)
+# session.add(previous_mtg)
 
 
-# print(session.new)
+# # print(session.new)
 
-session.commit()
-# # Create 
-# doctor_strange = Film(title="Doctor Strange", director="Scott Derrickson", year="2016")  
-# session.add(doctor_strange)  
 # session.commit()
+# # # Create 
+# # doctor_strange = Film(title="Doctor Strange", director="Scott Derrickson", year="2016")  
+# # session.add(doctor_strange)  
+# # session.commit()
 
-# # Read
-# films = session.query(Film)  
-# for film in films:  
-#     print(film.title)
+# # # Read
+# # films = session.query(Film)  
+# # for film in films:  
+# #     print(film.title)
 
-# # Update
-# doctor_strange.title = "Some2016Film"  
-# session.commit()
+# # # Update
+# # doctor_strange.title = "Some2016Film"  
+# # session.commit()
 
-# # Delete
-# session.delete(doctor_strange)  
-# session.commit()  
-
-
+# # # Delete
+# # session.delete(doctor_strange)  
+# # session.commit()  
 
 
 
-# game = Game(game_id=7682145, game_number=989, dow="Tuesday", date="March 10, 2020", status="Final", away_team="San Jose Barracuda", away_score="7", home_score="4", home_team="Stockton Heat", venue="Stockton Arena", attendance=1639, start_time="7:01 pm", end_time="9:16 pm")
-# session.add(game)
-# session.commit()
 
-session.close()
-engine.dispose()
+
+# # game = Game(game_id=7682145, game_number=989, dow="Tuesday", date="March 10, 2020", status="Final", away_team="San Jose Barracuda", away_score="7", home_score="4", home_team="Stockton Heat", venue="Stockton Arena", attendance=1639, start_time="7:01 pm", end_time="9:16 pm")
+# # session.add(game)
+# # session.commit()
+
+# session.close()
+# engine.dispose()
 
 # c.execute("select * from Teams")
 
