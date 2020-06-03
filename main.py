@@ -45,8 +45,16 @@ for boxscore in boxscores:
     boxscore_data['game_id'] = game_id
     session.add(db.Boxscore(**boxscore_data))
 
-session.commit()
 
+
+#get penalty summary by team
+penalty_summaries = scrape.penalty_summary(driver)
+for summary in penalty_summaries:
+    summary['game_id'] = game_id
+    print(summary)
+    session.add(db.Penalty_Summary(**summary))
+
+session.commit()
 
 # quit
 session.close()

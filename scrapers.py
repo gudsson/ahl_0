@@ -171,34 +171,39 @@ def boxscore(driver):   ###COMPLETE
 
 def penalty_summary(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-    
+    penalty_summary = []
+
     #Away PP#
     away_pp = []
     away_penalties = []
-    away_pp_array = []
+    # away_pp_array = []
 
     away_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
     away_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
     
-    away_pp_array.append(["away_pp_goals", away_pp[0]])
-    away_pp_array.append(["away_pp_opps", away_pp[1]])
-    away_pp_array.append(["away_pims", away_penalties[0]])
-    away_pp_array.append(["away_infracs", away_penalties[1].split(" ",1)[0]])
+    penalty_summary.append({"team": "away", "pp_goals": away_pp[0], "pp_opps": away_pp[1], "pims": away_penalties[0], "infracs": away_penalties[1].split(" ",1)[0]})
+
+    # away_pp_array.append(["away_pp_goals", away_pp[0]])
+    # away_pp_array.append(["away_pp_opps", away_pp[1]])
+    # away_pp_array.append(["away_pims", away_penalties[0]])
+    # away_pp_array.append(["away_infracs", away_penalties[1].split(" ",1)[0]])
 
     #Home PP#
     home_pp = []
     home_penalties = []
-    home_pp_array = []
+    # home_pp_array = []
 
     home_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
     home_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
     
-    home_pp_array.append(["home_pp_goals", home_pp[0]])
-    home_pp_array.append(["home_pp_opps", home_pp[1]])
-    home_pp_array.append(["home_pims", home_penalties[0]])
-    home_pp_array.append(["home_infracs", home_penalties[1].split(" ",1)[0]])
-    
-    return zip(away_pp_array, home_pp_array)
+    penalty_summary.append({"team": "home", "pp_goals": home_pp[0], "pp_opps": home_pp[1], "pims": home_penalties[0], "infracs": home_penalties[1].split(" ",1)[0]})
+
+    # home_pp_array.append(["home_pp_goals", home_pp[0]])
+    # home_pp_array.append(["home_pp_opps", home_pp[1]])
+    # home_pp_array.append(["home_pims", home_penalties[0]])
+    # home_pp_array.append(["home_infracs", home_penalties[1].split(" ",1)[0]])
+    # return zip(away_pp_array, home_pp_array)
+    return penalty_summary
 
 def three_stars(driver):  ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
