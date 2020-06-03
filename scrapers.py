@@ -7,6 +7,7 @@ import time
 from datetime import datetime
 import pandas as pd
 
+game_id = ''
 # specify the url
 # gamenumber = 1020544
 # urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
@@ -43,8 +44,11 @@ import pandas as pd
 # time.sleep(5)
 # saved_driver = driver
 
-def get_driver(game_id):
-    urlpage = 'https://theahl.com/stats/game-center/' + str(game_id)
+def get_driver(id):
+    global game_id
+    game_id = id
+
+    urlpage = 'https://theahl.com/stats/game-center/' + str(id)
     print(urlpage)
 
     options = Options()
@@ -63,6 +67,7 @@ def game_data(driver): ###COMPLETE`
     scores = matchup_container.find_elements_by_xpath("//div[@class='ht-gc-score-container']")
     date = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text.split(", ", 1)
 
+    game["game_id"] = game_id
     game["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
     game["date"] = date[1]
     game["season"] = game["date"].split(",")[1].strip()
@@ -106,7 +111,7 @@ def referee_data(driver):   ###COMPLETE
         referee_role = referee_data[0].text
         referee_name = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
         referee_number = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
-        game_officials.append({'role': referee_role, 'name': referee_name, 'number': referee_number})
+        game_officials.append({'game_id': game_id, 'role': referee_role, 'name': referee_name, 'number': referee_number})
 
     return game_officials
 
@@ -137,21 +142,14 @@ def boxscore(driver):   ###COMPLETE
     shot_summary = dict()
 
     for period, agoals, hgoals in zip(goal_periods, away_goals, home_goals):
-        goal_summary[period.text] = {"away_goals": agoals.text, "home_goals": hgoals.text}
+        goal_summary[period.text] = {"game_id": game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
 
     for period, ashots, hshots in zip(shot_periods, away_shots, home_shots):
-        shot_summary[period.text] = {"home_shots": hshots.text, "away_shots": ashots.text}
-
-    # print("goal_summary:")
-    # print(goal_summary)
-    # print("===")
+        shot_summary[period.text] = {"game_id": game_id, "home_shots": hshots.text, "away_shots": ashots.text}
 
     scoring_summary = dict() #["period","home_goals","away_goals","home_shots","away_shots"]]
 
     for summary in goal_summary:
-        # print(summary +":")
-        # print(goal_summary[summary])
-        # print("---")
 
         scoring_summary[summary] = goal_summary[summary]
 
@@ -159,15 +157,8 @@ def boxscore(driver):   ###COMPLETE
             scoring_summary[summary].update(shot_summary[summary])
         except:
             scoring_summary[summary].update({"home_shots": 0, "away_shots": 0})
-        # print(goal_summary[summary])
-
-    # print(scoring_summary)
-
-    # for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
-    #     scoring_summary.append({"period": per.text, "home_goals": hgoals.text, "away_goals": agoals.text, "home_shots": hshots.text, "away_shots": ashots.text})
 
     return scoring_summary
-
 
 def penalty_summary(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
@@ -176,33 +167,21 @@ def penalty_summary(driver):   ###COMPLETE
     #Away PP#
     away_pp = []
     away_penalties = []
-    # away_pp_array = []
 
     away_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
     away_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
     
-    penalty_summary.append({"team": "away", "pp_goals": away_pp[0], "pp_opps": away_pp[1], "pims": away_penalties[0], "infracs": away_penalties[1].split(" ",1)[0]})
-
-    # away_pp_array.append(["away_pp_goals", away_pp[0]])
-    # away_pp_array.append(["away_pp_opps", away_pp[1]])
-    # away_pp_array.append(["away_pims", away_penalties[0]])
-    # away_pp_array.append(["away_infracs", away_penalties[1].split(" ",1)[0]])
-
     #Home PP#
     home_pp = []
     home_penalties = []
-    # home_pp_array = []
 
     home_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
     home_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
     
-    penalty_summary.append({"team": "home", "pp_goals": home_pp[0], "pp_opps": home_pp[1], "pims": home_penalties[0], "infracs": home_penalties[1].split(" ",1)[0]})
+    #build return array
+    penalty_summary.append({"game_id": game_id, "team": "away", "pp_goals": away_pp[0], "pp_opps": away_pp[1], "pims": away_penalties[0], "infracs": away_penalties[1].split(" ",1)[0]})
+    penalty_summary.append({"game_id": game_id, "team": "home", "pp_goals": home_pp[0], "pp_opps": home_pp[1], "pims": home_penalties[0], "infracs": home_penalties[1].split(" ",1)[0]})
 
-    # home_pp_array.append(["home_pp_goals", home_pp[0]])
-    # home_pp_array.append(["home_pp_opps", home_pp[1]])
-    # home_pp_array.append(["home_pims", home_penalties[0]])
-    # home_pp_array.append(["home_infracs", home_penalties[1].split(" ",1)[0]])
-    # return zip(away_pp_array, home_pp_array)
     return penalty_summary
 
 def three_stars(driver):  ###COMPLETE
@@ -219,7 +198,7 @@ def three_stars(driver):  ###COMPLETE
         star_name = star_rawname[0]
         star_jersey = star_rawname[1].replace(")","")
         star_team = star.find_element_by_xpath("div[@class='ht-star-team']").text
-        stars.append([star_number, star_name, star_jersey, star_team])
+        stars.append({"game_id": game_id, "star_number": star_number, "name": star_name, "jersey_number": star_jersey, "team": star_team})
     
     return stars
 
