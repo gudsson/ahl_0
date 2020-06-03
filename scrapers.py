@@ -55,7 +55,7 @@ def get_driver(game_id):
 
     return driver
 
-def game_data(driver): ###COMPLETE
+def game_data(driver): ###COMPLETE`
     game = dict()
     arena = dict()
 
@@ -114,8 +114,12 @@ def boxscore(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     #Periods (last period is total)
-    periods = []
-    periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+    goal_periods = []
+    goal_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
+
+    #Periods (last period is total)
+    shot_periods = []
+    shot_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'shotSummaryHeadings')]")
 
     #Away Stats#
     away_goals = []
@@ -129,12 +133,41 @@ def boxscore(driver):   ###COMPLETE
     home_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
     home_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
 
-    scoring_summary = [["period","home_goals","away_goals","home_shots","away_shots"]]
+    goal_summary = dict()
+    shot_summary = dict()
 
-    for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
-        scoring_summary.append([per.text,hgoals.text,agoals.text,hshots.text,ashots.text])
+    for period, agoals, hgoals in zip(goal_periods, away_goals, home_goals):
+        goal_summary[period.text] = {"away_goals": agoals.text, "home_goals": hgoals.text}
+
+    for period, ashots, hshots in zip(shot_periods, away_shots, home_shots):
+        shot_summary[period.text] = {"home_shots": hshots.text, "away_shots": ashots.text}
+
+    # print("goal_summary:")
+    # print(goal_summary)
+    # print("===")
+
+    scoring_summary = dict() #["period","home_goals","away_goals","home_shots","away_shots"]]
+
+    for summary in goal_summary:
+        # print(summary +":")
+        # print(goal_summary[summary])
+        # print("---")
+
+        scoring_summary[summary] = goal_summary[summary]
+
+        try:
+            scoring_summary[summary].update(shot_summary[summary])
+        except:
+            scoring_summary[summary].update({"home_shots": 0, "away_shots": 0})
+        # print(goal_summary[summary])
+
+    # print(scoring_summary)
+
+    # for per, hgoals, agoals, hshots, ashots in zip(periods, home_goals, away_goals, home_shots, away_shots):
+    #     scoring_summary.append({"period": per.text, "home_goals": hgoals.text, "away_goals": agoals.text, "home_shots": hshots.text, "away_shots": ashots.text})
 
     return scoring_summary
+
 
 def penalty_summary(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")

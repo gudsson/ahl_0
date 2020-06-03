@@ -23,20 +23,27 @@ game_id = 1020540
 
 driver = scrape.get_driver(game_id)
 
-# get game data
-game_data = dict()
-game_data = scrape.game_data(driver)
-game_data['game_id'] = game_id
-game = db.Game(**game_data)
-session.add(game)
+# # get game data
+# game_data = dict()
+# game_data = scrape.game_data(driver)
+# game_data['game_id'] = game_id
+# game = db.Game(**game_data)
+# session.add(game)
 
-# get ref data
-referees = scrape.referee_data(driver)
-for ref in referees:
-    ref_data = dict()
-    ref_data = ref
-    ref_data['game_id'] = game_id
-    session.add(db.Official(**ref_data))
+# # get ref data
+# referees = scrape.referee_data(driver)
+# for ref in referees:
+#     ref_data = dict()
+#     ref_data = ref
+#     ref_data['game_id'] = game_id
+#     session.add(db.Official(**ref_data))
+
+# get boxscore by period
+boxscores = scrape.boxscore(driver)
+for boxscore in boxscores:
+    boxscore_data = {"period": boxscore, **boxscores[boxscore]}
+    boxscore_data['game_id'] = game_id
+    session.add(db.Boxscore(**boxscore_data))
 
 session.commit()
 
