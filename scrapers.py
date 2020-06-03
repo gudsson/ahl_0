@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 import time
+from datetime import datetime
 import pandas as pd
 
 # specify the url
@@ -63,14 +64,20 @@ def game_data(driver): ###COMPLETE
     date = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text.split(", ", 1)
 
     game["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
-    game["dow"] = date[0]
     game["date"] = date[1]
+    game["season"] = game["date"].split(",")[1].strip()
+    game["dow"] = date[0]
     game["status"] = matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text
     game["away_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text
     game["away_score"] = scores[0].text
     game["home_score"] = scores[1].text
     game["home_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text
-    
+
+    #Gets season based on date.  Assumes season will always end before September 1 
+    game_date = datetime.strptime(game["date"],"%B %d, %Y")
+
+    game["season"] = game["season"] + str(int(game["season"])+1) if game_date.month > 8 else str(int(game["season"])-1) + game["season"]
+
     arena = arena_data(driver)
     game_data = {**game, **arena}
     return game_data

@@ -19,7 +19,7 @@ import pandas as pd
 
 engine, session = db.connect()
 
-game_id = 1020538
+game_id = 1020540
 
 driver = scrape.get_driver(game_id)
 

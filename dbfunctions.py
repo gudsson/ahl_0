@@ -43,8 +43,9 @@ class Game(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         game_number = Column(String(length=4))
-        dow = Column(String(length=9))
+        season = Column(Integer)
         date = Column(Date)
+        dow = Column(String(length=9))
         status = Column(String(length=10))
         away_team = Column(String(length=50))
         away_score = Column(Integer)
@@ -56,11 +57,12 @@ class Game(Base):
         end_time = Column(String(length=8))
         duration = Column(Time)
         
-        def __init__(self, game_id, game_number, dow, date, status, away_team, away_score, home_score, home_team, venue, attendance, start_time, end_time, duration): 
+        def __init__(self, game_id, game_number, season, date, dow, status, away_team, away_score, home_score, home_team, venue, attendance, start_time, end_time, duration): 
                 self.game_id = game_id
                 self.game_number = game_number
-                self.dow = dow
+                self.season = season
                 self.date = date
+                self.dow = dow
                 self.status = status
                 self.away_team = away_team
                 self.away_score = away_score
