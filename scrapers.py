@@ -560,10 +560,10 @@ def preview_stats(driver):   ###COMPLETE
     # Previous Meetings
     for row in previous_meeting_rows:
         td = row.find_elements_by_xpath("td")
-        away_team = td[0].find_element_by_xpath("a/img").attribute("title")
+        away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
         score = td[1].text.split(":")
         away_score = score[0]
-        home_team = td[2].find_element_by_xpath("a/img").attribute("title")
+        home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
         home_score = score[1]
         date = td[3].text
         previous_meetings.append([away_team, away_score, home_team, home_score, date])
@@ -572,8 +572,8 @@ def preview_stats(driver):   ###COMPLETE
     print("===")
 
     #Top Scorers Heading Into Game
-    away_team = tables[2].find_elements_by_xpath("tr/th")[0].text
-    home_team = tables[2].find_elements_by_xpath("tr/th")[1].text
+    # away_team = tables[2].find_elements_by_xpath("tr/th")[0].text
+    # home_team = tables[2].find_elements_by_xpath("tr/th")[1].text
     team = [away_team, home_team]
     top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody")
     i = 0
@@ -585,11 +585,15 @@ def preview_stats(driver):   ###COMPLETE
             top_details = []
             top_details = row.find_elements_by_xpath("td/a/div[@class='ht-top-details']/div")
 
-            for detail in top_details:
-                top_scorer_name = top_details[0].text
-                top_scorer_stats = top_details[1].text
-            
-            top_scorers.append([team[i], top_scorer_name, top_scorer_stats])
+            # for detail in top_details:
+                # print(detail.text)
+            top_scorer = dict()
+            top_scorer["game_id"] = game_id
+            top_scorer["team"] = team[i]
+            top_scorer["player"] = top_details[0].text
+            top_scorer["statline"] = top_details[1].text
+            print(top_scorer)
+            top_scorers.append(top_scorer)
             
         i += 1
 
@@ -620,6 +624,8 @@ def preview_stats(driver):   ###COMPLETE
         matchup_stats.append([tds[0].text, tds[1].text, tds[2].text])
 
     print(*matchup_stats)
+
+    return top_scorers
 
 def nothing():
     #### # loop over results

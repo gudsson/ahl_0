@@ -202,9 +202,9 @@ class Top_Scorer(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String)
-        player = Column(String)
-        statline = Column(String)
+        team = Column(String(length=35))
+        player = Column(String(length=50))
+        statline = Column(String(length=50))
 
         def __init__(self, game_id, team, player, statline):
                 self.game_id = game_id
