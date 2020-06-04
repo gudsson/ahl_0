@@ -8,6 +8,8 @@ from datetime import datetime
 import pandas as pd
 
 game_id = ''
+home_team = ''
+away_team = ''
 # specify the url
 # gamenumber = 1020544
 # urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
@@ -85,6 +87,11 @@ def game_data(driver): ###COMPLETE`
 
     arena = arena_data(driver)
     game_data = {**game, **arena}
+
+    global home_team, away_team
+    home_team = game["home_team"]
+    away_team = game["away_team"]
+
     return game_data
 
 def arena_data(driver):  ###COMPLETE
@@ -205,13 +212,12 @@ def three_stars(driver):  ###COMPLETE
 def coaches(driver):   ###COMPLETE
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
-    # away_coach_container = []
     coaches = []
     away_coach_lines = []
     home_coach_lines = []
 
-    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
-    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
+    # away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
+    # home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
     
     away_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']//tr[contains(@ng-repeat,'homeTeam.coaches')]")
@@ -219,12 +225,12 @@ def coaches(driver):   ###COMPLETE
     for line in away_coach_lines:
         coach_role = line.text.split(": ")[0]
         coach_name = line.text.split(": ")[1]
-        coaches.append([away_team, coach_role, coach_name])
+        coaches.append({"game_id": game_id, "team": away_team, "role": coach_role, "name": coach_name})
 
     for line in home_coach_lines:
         coach_role = line.text.split(": ")[0]
         coach_name = line.text.split(": ")[1]
-        coaches.append([home_team, coach_role, coach_name])
+        coaches.append({"game_id": game_id, "team": home_team, "role": coach_role, "name": coach_name})
 
     return coaches
 

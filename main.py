@@ -29,29 +29,33 @@ game_data = scrape.game_data(driver)
 game = db.Game(**game_data)
 session.add(game)
 
-# get ref data
-referees = scrape.referee_data(driver)
-for ref in referees:
-    ref_data = dict()
-    ref_data = ref
-    session.add(db.Official(**ref_data))
+# # get ref data
+# referees = scrape.referee_data(driver)
+# for ref in referees:
+#     ref_data = dict()
+#     ref_data = ref
+#     session.add(db.Official(**ref_data))
 
-# get boxscore by period
-boxscores = scrape.boxscore(driver)
-for boxscore in boxscores:
-    boxscore_data = {"period": boxscore, **boxscores[boxscore]}
-    session.add(db.Boxscore(**boxscore_data))
+# # get boxscore by period
+# boxscores = scrape.boxscore(driver)
+# for boxscore in boxscores:
+#     boxscore_data = {"period": boxscore, **boxscores[boxscore]}
+#     session.add(db.Boxscore(**boxscore_data))
 
-#get penalty summary by team
-penalty_summaries = scrape.penalty_summary(driver)
-for summary in penalty_summaries:
-    session.add(db.Penalty_Summary(**summary))
+# #get penalty summary by team
+# penalty_summaries = scrape.penalty_summary(driver)
+# for summary in penalty_summaries:
+#     session.add(db.Penalty_Summary(**summary))
 
-#get three stars
-stars = scrape.three_stars(driver)
-for star in stars:
-    # print(star)
-    session.add(db.Star(**star))
+# #get three stars
+# stars = scrape.three_stars(driver)
+# for star in stars:
+#     session.add(db.Star(**star))
+
+#get coaches
+coaches = scrape.coaches(driver)
+for coach in coaches:
+    session.add(db.Coach(**coach))
 
 
 

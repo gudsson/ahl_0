@@ -134,9 +134,9 @@ class Coach(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String)
-        role = Column(String)
-        name = Column(String)
+        team = Column(String(length=50))
+        role = Column(String(length=20))
+        name = Column(String(length=50))
 
         def __init__(self, game_id, team, role, name):
                 self.game_id = game_id
