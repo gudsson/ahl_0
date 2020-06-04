@@ -240,40 +240,48 @@ def player_scorelines(driver):   ###COMPLETE
     players = []
     away_player_lines = []
     home_player_lines = []
-
-    away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
-    home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
     
     away_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'visitingTeam.skaters')]") #find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'homeTeam.skaters')]")
 
     for line in away_player_lines:
-    	away_td = line.find_elements_by_xpath("td")
-    	awayplyr_number = away_td[0].text
-    	awayplyr_letter = away_td[1].text
-    	awayplyr_name = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
-    	awayplyr_id = away_td[2].find_element_by_xpath("a").attribute('href').split('/player/')[1].split('/')[0]
-    	awayplyr_pos = away_td[3].text
-    	awayplyr_goals = away_td[4].text
-    	awayplyr_assists = away_td[5].text
-    	awayplyr_pim = away_td[6].text
-    	awayplyr_shots = away_td[7].text
-    	awayplyr_plusminus = away_td[8].text
-    	players.append([away_team, awayplyr_number, awayplyr_letter, awayplyr_name, awayplyr_id, awayplyr_pos, awayplyr_goals, awayplyr_assists, awayplyr_pim, awayplyr_shots, awayplyr_plusminus])
+        awayplyr = dict()
+        away_td = line.find_elements_by_xpath("td")
+
+        awayplyr["game_id"] = game_id
+        awayplyr["team"] = away_team
+        awayplyr["jersey_number"] = away_td[0].text
+        awayplyr["letter"] = away_td[1].text
+        awayplyr["name"] = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
+        awayplyr["player_id"] = away_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+        awayplyr["position"] = away_td[3].text
+        awayplyr["goals"] = away_td[4].text
+        awayplyr["assists"] = away_td[5].text
+        awayplyr["pims"] = away_td[6].text
+        awayplyr["shots"] = away_td[7].text
+        awayplyr["plus_minus"] = away_td[8].text
+        
+        players.append(awayplyr)
+
 
     for line in home_player_lines:
-    	home_td = line.find_elements_by_xpath("td")
-    	homeplyr_number = home_td[0].text
-    	homeplyr_letter = home_td[1].text
-    	homeplyr_name = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
-    	homeplyr_id = home_td[2].find_element_by_xpath("a").attribute('href').split('/player/')[1].split('/')[0]
-    	homeplyr_pos = home_td[3].text
-    	homeplyr_goals = home_td[4].text
-    	homeplyr_assists = home_td[5].text
-    	homeplyr_pim = home_td[6].text
-    	homeplyr_shots = home_td[7].text
-    	homeplyr_plusminus = home_td[8].text
-    	players.append([home_team, homeplyr_number, homeplyr_letter, homeplyr_name, homeplyr_id, homeplyr_pos, homeplyr_goals, homeplyr_assists, homeplyr_pim, homeplyr_shots, homeplyr_plusminus])
+        homeplyr = dict()
+        home_td = line.find_elements_by_xpath("td")
+
+        homeplyr["game_id"] = game_id
+        homeplyr["team"] = home_team
+        homeplyr["jersey_number"] = home_td[0].text
+        homeplyr["letter"] = home_td[1].text
+        homeplyr["name"] = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
+        homeplyr["player_id"] = home_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+        homeplyr["position"] = home_td[3].text
+        homeplyr["goals"] = home_td[4].text
+        homeplyr["assists"] = home_td[5].text
+        homeplyr["pims"] = home_td[6].text
+        homeplyr["shots"] = home_td[7].text
+        homeplyr["plus_minus"] = home_td[8].text
+    	
+        players.append(homeplyr)
 
     return players
 

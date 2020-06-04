@@ -173,7 +173,7 @@ class Player_Scoreline(Base):
         team = Column(String)
         jersey_number = Column(String(length=2))
         letter = Column(String(length=1))
-        name = Column(String)
+        name = Column(String(length=50))
         player_id = Column(Integer)
         position = Column(String(length=2))
         goals = Column(String(length=2))

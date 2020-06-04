@@ -53,11 +53,14 @@ session.add(game)
 #     session.add(db.Star(**star))
 
 #get coaches
-coaches = scrape.coaches(driver)
-for coach in coaches:
-    session.add(db.Coach(**coach))
+# coaches = scrape.coaches(driver)
+# for coach in coaches:
+#     session.add(db.Coach(**coach))
 
-
+# get individual scorelines
+player_scorlines = scrape.player_scorelines(driver)
+for player_scoreline in player_scorlines:
+    session.add(db.Player_Scoreline(**player_scoreline))
 
 session.commit()
 
