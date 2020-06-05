@@ -336,7 +336,7 @@ class Shot(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        event = Column(String(length=4))
+        event = Column(String(length=12))
         result = Column(String(length=4))
         team = Column(String(length=35))
         player_number = Column(String(length=2))
@@ -344,9 +344,9 @@ class Shot(Base):
         goalie_number = Column(String(length=2))
         goalie_name = Column(String(length=50))
         time = Column(Time)
-        period = Column(String(length=3))
+        period = Column(String(length=4))
 
-        def __init__(self, game_id, event, team, goalie_number, goalie_name, action, time, period):
+        def __init__(self, game_id, event, result, team, player_number, player_name, goalie_number, goalie_name, time, period):
                 self.game_id = game_id
                 self.event = event
                 self.result = result

@@ -88,11 +88,15 @@ session.add(game)
 
 
 ###get all pbp data
-goalie_changes = scrape.pbp(driver)
+shots, goalie_changes = scrape.pbp(driver)
 
-#get goalie changes
-for goalie_change in goalie_changes:
-    session.add(db.Goalie_Change(**goalie_change))
+# #get goalie changes
+# for goalie_change in goalie_changes:
+#     session.add(db.Goalie_Change(**goalie_change))
+
+#get shots
+for shot in shots:
+    session.add(db.Shot(**shot))
 
 
 session.commit()

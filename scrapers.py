@@ -320,6 +320,7 @@ def pbp(driver):   ###COMPLETE
 
     #returned arrays
     goalie_changes = []
+    shots = []
 
     pbp_arr = []
 
@@ -350,8 +351,8 @@ def pbp(driver):   ###COMPLETE
                 pbp_arr.append([pbp_shooter_number, pbp_shooter, pbp_goalie_number, pbp_goalie, period_number, pbp_event_time, ""])
 
                 try:
-                    pbp_shot_success = "[" + pbp_event_details.find_element_by_xpath(
-                        "div/span[@ng-if='pbp.details.isGoal']").text + "]"
+                    pbp_shot_success = pbp_event_details.find_element_by_xpath(
+                        "div/span[@ng-if='pbp.details.isGoal']").text
 
                     # if shot successful, add new line for goal pin
                     goal_arr = pbp_arr[-1]
@@ -362,6 +363,7 @@ def pbp(driver):   ###COMPLETE
                 except:
                     pbp_shot_success = ""
 
+                shots.append({"game_id": game_id, "event": pbp_event_type, "result": pbp_shot_success, "team": pbp_team_name, "player_number": pbp_shooter_number, "player_name": pbp_shooter, "goalie_number": pbp_goalie_number, "goalie_name": pbp_goalie, "time": pbp_event_time, "period": period_name})
                 print(f"{pbp_event_type} | {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} on #{pbp_goalie_number} {pbp_goalie} at {pbp_event_time} {pbp_shot_success}")
             
             # Pull Goal Info
@@ -500,7 +502,7 @@ def pbp(driver):   ###COMPLETE
 
             # print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
 
-    return goalie_changes
+    return shots, goalie_changes
 
 def preview_stats(driver):   ###COMPLETE
 
