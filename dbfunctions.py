@@ -365,20 +365,18 @@ class Penalty(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         event = Column(String(length=7))
-        side = Column(String(length=7))
-        team = Column(String)
+        team = Column(String(length=35))
         player_number = Column(String(length=2))
         player_name = Column(String)
         penalty = Column(String(length=2))
         pim = Column(String(length=2))
         pp = Column(String(length=2))
-        Time = Column(Time)
+        time = Column(Time)
         period = Column(String(length=3))
 
-        def __init__(self, game_id, event, side, team, player_number, player_name, penalty, pim, pp, time, period):
+        def __init__(self, game_id, event, team, player_number, player_name, penalty, pim, pp, time, period):
                 self.game_id = game_id
                 self.event = event
-                self.side = side
                 self.team = team
                 self.player_number = player_number
                 self.player_name = player_name
