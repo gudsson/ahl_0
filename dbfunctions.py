@@ -291,10 +291,10 @@ class Previous_Meeting(Base):
         __tablename__ = 'previous_meetings'
 
         id = Column(Integer, primary_key = True)#, autoincrement=True)
-        game_id = Column(String(length=5))
-        away_team = Column(String(length=50))
+        game_id = Column(Integer)
+        away_team = Column(String(length=35))
         away_score = Column(String(length=2))
-        home_team = Column(String(length=50))
+        home_team = Column(String(length=35))
         home_score = Column(String(length=2))
         date = Column(Date)
 

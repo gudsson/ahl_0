@@ -532,14 +532,7 @@ def pbp(driver):   ###COMPLETE
 
 def preview_stats(driver):   ###COMPLETE
 
-
-    previous_meeting_rows = []
-    previous_meetings = []
-
-    top_scorers = []
-    top_scorer_tables = []
-    top_scorer_rows = []
-
+    ###Get preview stat tables
     tables = []
     tables = driver.find_elements_by_xpath("//div[@ng-if='PreviewDataLoaded']/div/div[contains(@ng-class,'sumTableHalf')]/div[@ng-class='sumTableMobile']/table/tbody")
 
@@ -550,12 +543,6 @@ def preview_stats(driver):   ###COMPLETE
     h2h_rows = tables[0].find_elements_by_xpath("tr")
     h2h_away = {"game_id": game_id, "team": away_team, "versus": home_team}
     h2h_home = {"game_id": game_id, "team": home_team, "versus": away_team}
-    #season | away_team_record | home_team_record
-    # h2h_stats.append([h2h_rows[0].text, h2h_rows[1].find_elements_by_xpath("td")[1].text, h2h_rows[1].find_elements_by_xpath("td")[3].text]) #previous season
-    # h2h_stats.append([h2h_rows[2].text, h2h_rows[3].find_elements_by_xpath("td")[1].text, h2h_rows[3].find_elements_by_xpath("td")[3].text]) #current season
-    # h2h_stats.append([h2h_rows[4].text, h2h_rows[5].find_elements_by_xpath("td")[1].text, h2h_rows[5].find_elements_by_xpath("td")[3].text]) #Last 5 seasons
-
-    # print(*h2h_stats)
 
     #previous season
     h2h_away[h2h_rows[0].text.lower().replace(" ","_")] = h2h_rows[1].find_elements_by_xpath("td")[1].text
@@ -572,32 +559,32 @@ def preview_stats(driver):   ###COMPLETE
     head2head_statlines.append(h2h_away)
     head2head_statlines.append(h2h_home)
 
-    print(*head2head_statlines)
 
-    # print("====")
-    
     ###Scrape Previous Meetings
+    previous_meetings = []
+    previous_meeting_rows = []
     previous_meeting_rows = tables[1].find_elements_by_xpath("tr[@class='ng-scope']")
 
     for row in previous_meeting_rows:
         td = row.find_elements_by_xpath("td")
 
-        # away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
+        previous_away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
         score = td[1].text.split(":")
         away_score = score[0]
-        # home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
+        previous_home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
         home_score = score[1]
         date = td[3].text
-        previous_meetings.append([away_team, away_score, home_team, home_score, date])
+        previous_meetings.append({"game_id": game_id, "away_team": previous_away_team, "away_score": away_score, "home_team": previous_home_team, "home_score": home_score, "date": date})
 
-    # print(*previous_meetings)
-    # print("===")
 
-    ###Top Scorers Heading Into Game
+    ###Scrape top Scorers Heading Into Game
+    top_scorers = []
+    top_scorer_tables = []
+    top_scorer_rows = []
     team = [away_team, home_team]
-    top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody")
     i = 0
-
+    top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody")
+    
     for table in top_scorer_tables:
         top_scorer_rows = table.find_elements_by_xpath("tr")
 
@@ -625,7 +612,8 @@ def preview_stats(driver):   ###COMPLETE
     for row in recent_game_tables[0].find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games in ::gameCP.homeTeam')]/td"):
         recent_games.append({"game_id": game_id, "team": home_team, "game_info": row.text})
 
-    ###Match Up Stats
+
+    ###Scrape Match Up Stats
     matchup_statlines = []
     matchup_away = {"game_id": game_id, "team": away_team}
     matchup_home = {"game_id": game_id, "team": home_team}
@@ -641,8 +629,9 @@ def preview_stats(driver):   ###COMPLETE
     matchup_statlines.append(matchup_away)
     matchup_statlines.append(matchup_home)
 
+
     ###Return Data
-    return top_scorers, recent_games, matchup_statlines, head2head_statlines
+    return top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings
 
 def nothing():
     #### # loop over results
