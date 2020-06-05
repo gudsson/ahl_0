@@ -216,8 +216,8 @@ def coaches(driver):   ###COMPLETE
     away_coach_lines = []
     home_coach_lines = []
 
-    # away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
-    # home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").attribute("innerHTML")
+    # away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
+    # home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
     
     away_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']//tr[contains(@ng-repeat,'homeTeam.coaches')]")
@@ -295,13 +295,13 @@ def pins(driver, pbp_arr):   ###COMPLETE
         print("Arrays are equal")
 
     for pin, data in zip(pins, pbp_arr):
-        event_id = pin.attribute("id").split("ht_pin_")[1] #get index
+        event_id = pin.get_attribute("id").split("ht_pin_")[1] #get index
         event_type = pin.text
-        event_loc = pin.attribute("style")
-        event_loc_top = pin.attribute("style").split("%; left: ")[0].split("top:")[1]
-        event_loc_left = pin.attribute("style").split("%; left: ")[1].split("%;")[0]
+        event_loc = pin.get_attribute("style")
+        event_loc_top = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+        event_loc_left = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
 
-        print(f'#{i} (id={event_id}) | {pin.attribute("id")} @ top: {event_loc_top}, left: {event_loc_left} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({event_type}|{data[6]})')
+        print(f'#{i} (id={event_id}) | {pin.get_attribute("id")} @ top: {event_loc_top}, left: {event_loc_left} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({event_type}|{data[6]})')
         i += 1
 
 def pbp(driver):   ###COMPLETE
@@ -318,42 +318,34 @@ def pbp(driver):   ###COMPLETE
     plus_minus_rows = []
     pbp_events = []
 
+    #returned arrays
+    goalie_changes = []
+
     pbp_arr = []
 
     for period in pbp_periods:
-        period_number = period.attribute('ng-show').split("ht_")[1]
-        period_name = period.find_element_by_xpath(
-            "div[@ng-bind='gamePBP.longName']").text
+        period_number = period.get_attribute('ng-show').split("ht_")[1]
+        period_name = period.find_element_by_xpath("div[@ng-bind='gamePBP.longName']").text
         # print(f"{period_number} | {period_name}")
 
         pbp_events = period.find_elements_by_xpath("div[contains(@ng-show,'ht_')]")
 
         for event in pbp_events:
-            pbp_event_row = event.find_element_by_xpath(
-                "div[contains(@class,'ht-event-row')]")
-            pbp_team = pbp_event_row.find_element_by_xpath(
-                "div[@class='ht-home-or-visit']/div").attribute('class').split("team")[0].split("ht-")[1]
-            pbp_team_name = pbp_event_row.find_element_by_xpath(
-                "div[@class='ht-event-image']/img").attribute('title')
-            pbp_event_time = pbp_event_row.find_element_by_xpath(
-                "div[@class='ht-event-time']").text
+            pbp_event_row = event.find_element_by_xpath("div[contains(@class,'ht-event-row')]")
+            pbp_team = pbp_event_row.find_element_by_xpath("div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1]
+            pbp_team_name = pbp_event_row.find_element_by_xpath("div[@class='ht-event-image']/img").get_attribute('title')
+            pbp_event_time = pbp_event_row.find_element_by_xpath("div[@class='ht-event-time']").text
 
             # Pull Event Details
-            pbp_event_details = pbp_event_row.find_element_by_xpath(
-                "div[@class='ht-event-details']")
-            pbp_event_type = pbp_event_details.find_element_by_xpath(
-                "div[contains(@class,'ht-event-type')]").text
+            pbp_event_details = pbp_event_row.find_element_by_xpath("div[@class='ht-event-details']")
+            pbp_event_type = pbp_event_details.find_element_by_xpath("div[contains(@class,'ht-event-type')]").text
 
             # Pull Shot Info
             if "SHOT" in pbp_event_type:
-                pbp_shooter_number = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#", "")
-                pbp_shooter = pbp_event_details.find_element_by_xpath(
-                    "div/a/span[contains(@ng-bind,'shooter.lastName')]").text
-                pbp_goalie_number = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
-                pbp_goalie = pbp_event_details.find_element_by_xpath(
-                    "div/a/span[contains(@ng-bind,'goalie.lastName')]").text
+                pbp_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#", "")
+                pbp_shooter = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'shooter.lastName')]").text
+                pbp_goalie_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
+                pbp_goalie = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'goalie.lastName')]").text
 
                 pbp_arr.append([pbp_shooter_number, pbp_shooter, pbp_goalie_number, pbp_goalie, period_number, pbp_event_time, ""])
 
@@ -377,15 +369,11 @@ def pbp(driver):   ###COMPLETE
                 pbp_goal_types = []
 
                 # Goal Info2
-                pbp_shooter_number = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'scoredBy.jerseyNumber')]").text.replace("#", "")
-                pbp_shooter = pbp_event_details.find_element_by_xpath(
-                    "div/a[contains(@ng-bind,'scoredBy.lastName')]").text
-                pbp_goal_count = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'pbp.details.scorerGoalNumber')]").text.replace("(", "").replace(")", "")
+                pbp_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'scoredBy.jerseyNumber')]").text.replace("#", "")
+                pbp_shooter = pbp_event_details.find_element_by_xpath("div/a[contains(@ng-bind,'scoredBy.lastName')]").text
+                pbp_goal_count = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.scorerGoalNumber')]").text.replace("(", "").replace(")", "")
 
-                pbp_goal_types = pbp_event_details.find_elements_by_xpath(
-                    "div/span[contains(@ng-if,'pbp.details.properties')]")
+                pbp_goal_types = pbp_event_details.find_elements_by_xpath("div/span[contains(@ng-if,'pbp.details.properties')]")
                 pbp_goal_type = ""
 
                 if(len(pbp_goal_types)) != 0:
@@ -395,8 +383,7 @@ def pbp(driver):   ###COMPLETE
                 pbp_goal_str = f"\n {pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}){pbp_goal_type} at {pbp_event_time} of the {period_name} period"
 
                 # Assist1 Info
-                pbp_assists = pbp_event_details.find_elements_by_xpath(
-                    "div/span[@ng-show='pbp.details.assists.length']/span[contains(@ng-repeat,'assist in pbp.details.assists')]")
+                pbp_assists = pbp_event_details.find_elements_by_xpath("div/span[@ng-show='pbp.details.assists.length']/span[contains(@ng-repeat,'assist in pbp.details.assists')]")
 
                 pbp_assists_given = len(pbp_assists)
 
@@ -405,51 +392,37 @@ def pbp(driver):   ###COMPLETE
                 else:
                     pbp_goal_str = pbp_goal_str + ", assisted by:"
                     for assist in pbp_assists:
-                        pbp_assistor_number = assist.find_element_by_xpath(
-                            "span[contains(@ng-bind,'assist.jerseyNumber')]").text.replace("#", "")
-                        pbp_assistor = assist.find_element_by_xpath(
-                            "a[contains(@ng-bind,'assist.lastName')]").text
+                        pbp_assistor_number = assist.find_element_by_xpath("span[contains(@ng-bind,'assist.jerseyNumber')]").text.replace("#", "")
+                        pbp_assistor = assist.find_element_by_xpath("a[contains(@ng-bind,'assist.lastName')]").text
                         pbp_assist_count = assist.text.split("(")[1].split(")")[0]
-                        pbp_goal_str = pbp_goal_str + \
-                            f"\n     #{pbp_assistor_number} {pbp_assistor} ({pbp_assist_count})"
+                        pbp_goal_str = pbp_goal_str + f"\n     #{pbp_assistor_number} {pbp_assistor} ({pbp_assist_count})"
 
                 print(pbp_goal_str + "\n")
 
                 # Plus-Minus
-                plus_minus_button = pbp_event_row.find_elements_by_xpath(
-                    "div[@class='ht-event-time']/div/span[@ng-show='!pmbutton.expanded']")[0]
+                plus_minus_button = pbp_event_row.find_elements_by_xpath("div[@class='ht-event-time']/div/span[@ng-show='!pmbutton.expanded']")[0]
                 plus_minus_button.click()
 
-                plus_minus_tables = pbp_event_row.find_elements_by_xpath(
-                    "div[@ng-show='pmbutton.expanded']/table")
+                plus_minus_tables = pbp_event_row.find_elements_by_xpath("div[@ng-show='pmbutton.expanded']/table")
 
                 for table in plus_minus_tables:
-                    plus_or_minus = table.find_element_by_xpath(
-                        "tbody/tr/th").text.lower()
+                    plus_or_minus = table.find_element_by_xpath("tbody/tr/th").text.lower()
 
-                    plus_minus_rows = table.find_elements_by_xpath(
-                        "tbody/tr[contains(@ng-repeat,'in pbp.details')]")
+                    plus_minus_rows = table.find_elements_by_xpath("tbody/tr[contains(@ng-repeat,'in pbp.details')]")
 
                     for row in plus_minus_rows:
-                        plus_minus_number = row.find_element_by_xpath(
-                            "td/span[contains(@ng-bind,'.jerseyNumber')]").text.replace("#", "")
-                        plus_minus_player = row.find_element_by_xpath(
-                            "td/a[contains(@ng-bind,'.lastName')]").text
+                        plus_minus_number = row.find_element_by_xpath("td/span[contains(@ng-bind,'.jerseyNumber')]").text.replace("#", "")
+                        plus_minus_player = row.find_element_by_xpath("td/a[contains(@ng-bind,'.lastName')]").text
 
                         print(f"{plus_or_minus} | #{plus_minus_number} {plus_minus_player}")
                         # /Plus-Minus
 
             elif pbp_event_type == "PENALTY":
-                pbp_penalized_number = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'takenBy.jerseyNumber')]").text.replace("#", "")
-                pbp_penalized_player = pbp_event_details.find_element_by_xpath(
-                    "div/a/span[contains(@ng-bind,'takenBy.lastName')]").text
-                pbp_penalty_name = pbp_event_details.find_element_by_xpath(
-                    "div/span[@ng-bind='pbp.details.description']").text
-                pbp_penalty_length = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'pbp.details.minutes')]").text
-                pbp_pim = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'pbp.details.minutes')]").text.split(" ")[0]
+                pbp_penalized_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'takenBy.jerseyNumber')]").text.replace("#", "")
+                pbp_penalized_player = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'takenBy.lastName')]").text
+                pbp_penalty_name = pbp_event_details.find_element_by_xpath("div/span[@ng-bind='pbp.details.description']").text
+                pbp_penalty_length = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text
+                pbp_pim = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text.split(" ")[0]
                 try:
                     pbp_pp_type = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isPowerPlay']").text
                 except:
@@ -460,33 +433,30 @@ def pbp(driver):   ###COMPLETE
                 goalies_changing = pbp_event_details.find_elements_by_xpath("div/section[contains(@ng-if,'pbp.details.goalie')]")
                 
                 for goalie in goalies_changing:
-                    changing_goalie_number = goalie.find_element_by_xpath(
-                        "span[contains(@ng-bind,'jerseyNumber')]").text.replace("#", "").replace("- ", "")
-                    changing_goalie_name = goalie.find_element_by_xpath(
-                        "a/span[contains(@ng-bind,'lastName')]").text
-                    changing_goalie_action = goalie.find_element_by_xpath(
-                        "span[@class='ng-binding' and not(contains(@ng-bind,'jerseyNumber'))]").text
+                    goalie_dict = {"game_id": game_id, "event": "GOALIE CHANGE"}
+                    goalie_dict["team"] = pbp_team
+                    goalie_dict["goalie_number"] = goalie.find_element_by_xpath("span[contains(@ng-bind,'jerseyNumber')]").text.replace("#", "").replace("- ", "")
+                    goalie_dict["goalie_name"] = goalie.find_element_by_xpath("a/span[contains(@ng-bind,'lastName')]").text
+                    goalie_dict["action"] = goalie.find_element_by_xpath("span[@class='ng-binding' and not(contains(@ng-bind,'jerseyNumber'))]").text
+                    goalie_dict["time"] = pbp_event_time
+                    goalie_dict["period"] = period_name
 
-                    print(f"GOALIE CHANGE | #{changing_goalie_number} {changing_goalie_name} {changing_goalie_action} at {pbp_event_time}, {period_name} period.")
+                    print(f'GOALIE CHANGE | {pbp_team} #{goalie_dict["goalie_number"]} {goalie_dict["goalie_name"]} {goalie_dict["action"]} at {pbp_event_time}, {period_name} period.')
+                    goalie_changes.append(goalie_dict)
 
             elif pbp_event_type == " ":  # in shootout
                 attempt_results = []
 
-                so_shooter_number = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#", "")
-                so_shooter_name = pbp_event_details.find_element_by_xpath(
-                    "div/a/span[contains(@ng-bind,'shooter.lastName')]").text
+                so_shooter_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#", "")
+                so_shooter_name = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'shooter.lastName')]").text
                 # so_shooter_team = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#","")
 
-                so_goalie_number = pbp_event_details.find_element_by_xpath(
-                    "div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
-                so_goalie_name = pbp_event_details.find_element_by_xpath(
-                    "div/a/span[contains(@ng-bind,'goalie.lastName')]").text
+                so_goalie_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
+                so_goalie_name = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'goalie.lastName')]").text
                 # so_goalie_team = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#","")
 
                 # results
-                attempt_results = pbp_event_details.find_elements_by_xpath(
-                    "div/span[contains(@class,'ht-gc-marker')]")
+                attempt_results = pbp_event_details.find_elements_by_xpath("div/span[contains(@class,'ht-gc-marker')]")
                 attempt_result = ""
 
                 if(len(attempt_results)) != 0:
@@ -529,6 +499,8 @@ def pbp(driver):   ###COMPLETE
             # 		print(f"#{pbp_assist_number}")
 
             # print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
+
+    return goalie_changes
 
 def preview_stats(driver):   ###COMPLETE
 
@@ -638,7 +610,7 @@ def nothing():
     #### for result in results:
     ####     product_name = result.text
     ####     link = result.find_element_by_tag_name('a')
-    ####     product_link = link.attribute("href")
+    ####     product_link = link.get_attribute("href")
 
     ####     # append dict to array
     ####     data.append({"product" : product_name, "link" : product_link})
@@ -683,7 +655,9 @@ def write_to_csv():
 
 ###/PRINT OUTS###
 
+# dr = get_driver(1020540)
 
+# pbp(dr)
 
 # if __name__ == "__main__":
 #     # game_data = game_data(saved_driver)

@@ -312,19 +312,17 @@ class Goalie_Change(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        event = Column(String)
-        side = Column(String(length=7))
-        team = Column(String)
+        event = Column(String(length=14))
+        team = Column(String(length=35))
         goalie_number = Column(String(length=2))
         goalie_name = Column(String)
         action = Column(String(length=3))
         time = Column(Time)
-        period = Column(String(length=3))
+        period = Column(String(length=4))
 
-        def __init__(self, game_id, event, side, team, goalie_number, goalie_name, action, time, period):
+        def __init__(self, game_id, event, team, goalie_number, goalie_name, action, time, period):
                 self.game_id = game_id
                 self.event = event
-                self.side = side
                 self.team = team
                 self.goalie_number = goalie_number
                 self.goalie_name = goalie_name
@@ -340,20 +338,18 @@ class Shot(Base):
         game_id = Column(Integer)
         event = Column(String(length=4))
         result = Column(String(length=4))
-        side = Column(String(length=7))
-        team = Column(String)
+        team = Column(String(length=35))
         player_number = Column(String(length=2))
-        player_name = Column(String)
+        player_name = Column(String(length=50))
         goalie_number = Column(String(length=2))
-        goalie_name = Column(String)
+        goalie_name = Column(String(length=50))
         time = Column(Time)
         period = Column(String(length=3))
 
-        def __init__(self, game_id, event, side, team, goalie_number, goalie_name, action, time, period):
+        def __init__(self, game_id, event, team, goalie_number, goalie_name, action, time, period):
                 self.game_id = game_id
                 self.event = event
                 self.result = result
-                self.side = side
                 self.team = team
                 self.player_number = player_number
                 self.player_name = player_name

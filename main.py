@@ -66,7 +66,7 @@ session.add(game)
 # ###get all preview stats
 
 # #get top scorers
-top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
+# top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
 # for top_scorer in top_scorers:
 #     session.add(db.Top_Scorer(**top_scorer))
 
@@ -82,9 +82,18 @@ top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meet
 # for head2head_statline in head2head_statlines:
 #     session.add(db.Head2Head_Statline(**head2head_statline))
 
-#get previous meetings
-for previous_meeting in previous_meetings:
-    session.add(db.Previous_Meeting(**previous_meeting))
+# #get previous meetings
+# for previous_meeting in previous_meetings:
+#     session.add(db.Previous_Meeting(**previous_meeting))
+
+
+###get all pbp data
+goalie_changes = scrape.pbp(driver)
+
+#get goalie changes
+for goalie_change in goalie_changes:
+    session.add(db.Goalie_Change(**goalie_change))
+
 
 session.commit()
 
