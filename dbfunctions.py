@@ -272,14 +272,16 @@ class Head2Head_Statline(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String)
-        previous_season = Column(String)
-        current_season = Column(String)
-        last_5_seasons = Column(String)
+        team = Column(String(length=35))
+        versus = Column(String(length=35))
+        previous_season = Column(String(length=11))
+        current_season = Column(String(length=11))
+        last_5_seasons = Column(String(length=11))
 
-        def __init__(self, game_id, team, previous_season, current_season, last_5_seasons):
+        def __init__(self, game_id, team, versus, previous_season, current_season, last_5_seasons):
                 self.game_id = game_id
                 self.team = team
+                self.versus = versus
                 self.previous_season = previous_season
                 self.current_season = current_season
                 self.last_5_seasons = last_5_seasons
