@@ -62,10 +62,22 @@ session.add(game)
 # for player_scoreline in player_scorlines:
 #     session.add(db.Player_Scoreline(**player_scoreline))
 
-#get top scorers
-top_scorers = scrape.preview_stats(driver)
-for top_scorer in top_scorers:
-    session.add(db.Top_Scorer(**top_scorer))
+
+# ###get all preview stats
+
+# #get top scorers
+top_scorers, recent_games, matchup_statlines = scrape.preview_stats(driver)
+# for top_scorer in top_scorers:
+#     session.add(db.Top_Scorer(**top_scorer))
+
+# #get recent games
+# for recent_game in recent_games:
+#     session.add(db.Recent_Game(**recent_game))
+
+#get matchup stats
+for matchup_statline in matchup_statlines:
+    session.add(db.Matchup_Statline(**matchup_statline))
+
 
 session.commit()
 

@@ -218,8 +218,8 @@ class Recent_Game(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String)
-        game_info = Column(String)
+        team = Column(String(length=35))
+        game_info = Column(String(length=50))
 
         def __init__(self, game_id, team, game_info):
                 self.game_id = game_id
@@ -232,38 +232,39 @@ class Matchup_Statline(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String)
-        season_record = Column(String)
-        last_10 = Column(String)
-        streak = Column(String)
-        last_game = Column(String)
-        home_record = Column(String)
-        away_record = Column(String)
+        team = Column(String(length=35))
+        season_record = Column(String(length=15))
+        last_10_games = Column(String(length=15))
+        streak = Column(String(length=15))
+        last_game = Column(String(length=35))
+        home_record = Column(String(length=15))
+        away_record = Column(String(length=15))
         goals_for = Column(Integer)
         goals_against = Column(Integer)
-        pp = Column(String)
-        pp_home = Column(String)
-        pp_away = Column(String)
-        pk = Column(String)
-        pk_home = Column(String)
-        pk_away = Column(String)
+        power_plays = Column(String(length=20))
+        power_plays_home = Column(String(length=20))
+        power_plays_away = Column(String(length=20))
+        penalty_killing = Column(String(length=20))
+        penalty_killing_home = Column(String(length=20))
+        penalty_killing_away = Column(String(length=20))
         
-        def __init__(self, game_id, team, last_10, streak, last_game, home_record, away_record, goals_for, goals_against, pp, pp_home, pp_away, pk, pk_home, pk_away):
+        def __init__(self, game_id, team, season_record, last_10_games, streak, last_game, home_record, away_record, goals_for, goals_against, power_plays, power_plays_home, power_plays_away, penalty_killing, penalty_killing_home, penalty_killing_away):
                 self.game_id = game_id
                 self.team = team
-                self.last_10 = last_10
+                self.season_record = season_record
+                self.last_10_games = last_10_games
                 self.streak = streak
                 self.last_game = last_game
                 self.home_record = home_record
                 self.away_record = away_record
                 self.goals_for = goals_for
                 self.goals_against = goals_against
-                self.pp = pp
-                self.pp_home = pp_home
-                self.pp_away = pp_away
-                self.pk = pk
-                self.pk_home = pk_home
-                self.pk_away = pk_away
+                self.power_plays = power_plays
+                self.power_plays_home = power_plays_home
+                self.power_plays_away = power_plays_away
+                self.penalty_killing = penalty_killing
+                self.penalty_killing_home = penalty_killing_home
+                self.penalty_killing_away = penalty_killing_away
 
 
 class Head2Head_Statline(Base):

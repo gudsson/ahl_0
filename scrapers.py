@@ -553,23 +553,24 @@ def preview_stats(driver):   ###COMPLETE
     hth_stats.append([hth_rows[2].text, hth_rows[3].find_elements_by_xpath("td")[1].text, hth_rows[3].find_elements_by_xpath("td")[3].text]) #current season
     hth_stats.append([hth_rows[4].text, hth_rows[5].find_elements_by_xpath("td")[1].text, hth_rows[5].find_elements_by_xpath("td")[3].text]) #Last 5 seasons
 
-    print(*hth_stats)
+    # print(*hth_stats)
 
-    print("====")
+    # print("====")
     
-    # Previous Meetings
+    # Scrape Previous Meetings
     for row in previous_meeting_rows:
         td = row.find_elements_by_xpath("td")
-        away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
+
+        # away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
         score = td[1].text.split(":")
         away_score = score[0]
-        home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
+        # home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
         home_score = score[1]
         date = td[3].text
         previous_meetings.append([away_team, away_score, home_team, home_score, date])
 
-    print(*previous_meetings)
-    print("===")
+    # print(*previous_meetings)
+    # print("===")
 
     #Top Scorers Heading Into Game
     # away_team = tables[2].find_elements_by_xpath("tr/th")[0].text
@@ -578,21 +579,18 @@ def preview_stats(driver):   ###COMPLETE
     top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody")
     i = 0
 
+    ### Scrape Top Scorers
     for table in top_scorer_tables:
         top_scorer_rows = table.find_elements_by_xpath("tr")
 
         for row in top_scorer_rows:
             top_details = []
             top_details = row.find_elements_by_xpath("td/a/div[@class='ht-top-details']/div")
-
-            # for detail in top_details:
-                # print(detail.text)
             top_scorer = dict()
             top_scorer["game_id"] = game_id
             top_scorer["team"] = team[i]
             top_scorer["player"] = top_details[0].text
             top_scorer["statline"] = top_details[1].text
-            print(top_scorer)
             top_scorers.append(top_scorer)
             
         i += 1
@@ -600,32 +598,34 @@ def preview_stats(driver):   ###COMPLETE
     # print(*top_scorers)
 
 
-    ###LAST 5 GAMES TBA
-    l5g_stats = []
-    l5g_tables = []
-    l5g_tables = tables[3].find_elements_by_xpath("//td[@class='ht-table-last-5']")
-    i = 0
+    ### Scrape Recent Games
+    recent_games = []
+    recent_game_tables = []
+    recent_game_tables = tables[3].find_elements_by_xpath("//td[@class='ht-table-last-5']")
 
-    for table in l5g_tables:
-        for row in table.find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games')]/td"):
-            l5g_stats.append([team[i], row.text])
-        i += 1
+    for row in recent_game_tables[0].find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games in ::gameCP.visitingTeam')]/td"):
+        recent_games.append({"game_id": game_id, "team": away_team, "game_info": row.text})
 
-    # print(*l5g_stats)
-
+    for row in recent_game_tables[0].find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games in ::gameCP.homeTeam')]/td"):
+        recent_games.append({"game_id": game_id, "team": home_team, "game_info": row.text})
 
     #Match Up Stats
-    matchup_stats = []
+    matchup_statlines = []
+    away_dict = {"game_id": game_id, "team": away_team}
+    home_dict = {"game_id": game_id, "team": home_team}
     matchup_table = driver.find_element_by_xpath("//div[@ng-if='PreviewDataLoaded']/div[@ng-class='sumTableContainter']/div[@ng-class='sumTableMobile']//tbody")
 
     for row in matchup_table.find_elements_by_xpath("tr"):
         tds = []
         tds = row.find_elements_by_xpath("td")
-        matchup_stats.append([tds[0].text, tds[1].text, tds[2].text])
+        
+        away_dict[tds[0].text.lower().replace(" ","_").replace("(","").replace(")","")] = tds[1].text
+        home_dict[tds[0].text.lower().replace(" ","_").replace("(","").replace(")","")] = tds[2].text
+        
+    matchup_statlines.append(away_dict)
+    matchup_statlines.append(home_dict)
 
-    print(*matchup_stats)
-
-    return top_scorers
+    return top_scorers, recent_games, matchup_statlines
 
 def nothing():
     #### # loop over results
