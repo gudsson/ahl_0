@@ -157,38 +157,34 @@ def referee_data(driver):   ###COMPLETE
     return game_officials
 
 def boxscore(driver):   ###COMPLETE
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-    
-    #Periods (last period is total)
+    #declarations
     goal_periods = []
-    goal_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]")
-
-    #Periods (last period is total)
     shot_periods = []
-    shot_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'shotSummaryHeadings')]")
-
-    #Away Stats#
     away_goals = []
     away_shots = []
+    home_goals = []
+    home_shots = []
+    goal_summary = dict()
+    shot_summary = dict()
+    scoring_summary = dict()
+
+    #scrape elements
+    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']") #main container
+    goal_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]") #Goals by Period (last period is total)
+    shot_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'shotSummaryHeadings')]") #Shots by Period (last period is total)
+
     away_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
     away_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
 
-    #Home Stats#
-    home_goals = []
-    home_shots = []
     home_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
     home_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
 
-    goal_summary = dict()
-    shot_summary = dict()
-
+    #dump scrapings into dicts
     for period, agoals, hgoals in zip(goal_periods, away_goals, home_goals):
         goal_summary[period.text] = {"game_id": game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
 
     for period, ashots, hshots in zip(shot_periods, away_shots, home_shots):
-        shot_summary[period.text] = {"game_id": game_id, "home_shots": hshots.text, "away_shots": ashots.text}
-
-    scoring_summary = dict() #["period","home_goals","away_goals","home_shots","away_shots"]]
+        shot_summary[period.text] = {"game_id": game.game_id, "home_shots": hshots.text, "away_shots": ashots.text}
 
     for summary in goal_summary:
 
@@ -199,6 +195,7 @@ def boxscore(driver):   ###COMPLETE
         except:
             scoring_summary[summary].update({"home_shots": 0, "away_shots": 0})
 
+    #return array of dicts
     return scoring_summary
 
 def penalty_summary(driver):   ###COMPLETE
