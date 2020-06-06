@@ -321,6 +321,7 @@ def pbp(driver):   ###COMPLETE
     #returned arrays
     goalie_changes = []
     shots = []
+    penalties = []
 
     pbp_arr = []
 
@@ -420,16 +421,18 @@ def pbp(driver):   ###COMPLETE
                         # /Plus-Minus
 
             elif pbp_event_type == "PENALTY":
-                pbp_penalized_number = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'takenBy.jerseyNumber')]").text.replace("#", "")
-                pbp_penalized_player = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'takenBy.lastName')]").text
-                pbp_penalty_name = pbp_event_details.find_element_by_xpath("div/span[@ng-bind='pbp.details.description']").text
-                pbp_penalty_length = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text
-                pbp_pim = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text.split(" ")[0]
+                penalty_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team_name, "time": pbp_event_time, "period": period_name}
+                penalty_dict["player_number"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'takenBy.jerseyNumber')]").text.replace("#", "")
+                penalty_dict["player_name"] = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'takenBy.lastName')]").text
+                penalty_dict["penalty"] = pbp_event_details.find_element_by_xpath("div/span[@ng-bind='pbp.details.description']").text
+                penalty_dict["pim"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'pbp.details.minutes')]").text.split(" ")[0]
                 try:
-                    pbp_pp_type = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isPowerPlay']").text
+                    penalty_dict["pp"] = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isPowerPlay']").text
                 except:
-                    pbp_pp_type = "ES"
-                print(f"PENALTY | #{pbp_penalized_number} {pbp_penalized_player} | {pbp_penalty_name} | {pbp_penalty_length} ({pbp_pp_type}) at {pbp_event_time} of {period_name} period")
+                    penalty_dict["pp"] = "ES"
+
+                penalties.append(penalty_dict)
+                print(f'PENALTY | #{penalty_dict["player_number"]} {penalty_dict["player_name"]} | {penalty_dict["penalty"]} | {penalty_dict["pim"]} ({penalty_dict["pp"]}) at {penalty_dict["time"]} of {penalty_dict["period"]} period')
 
             elif pbp_event_type == "GOALIE CHANGE":
                 goalies_changing = pbp_event_details.find_elements_by_xpath("div/section[contains(@ng-if,'pbp.details.goalie')]")
@@ -502,7 +505,7 @@ def pbp(driver):   ###COMPLETE
 
             # print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
 
-    return shots, goalie_changes
+    return shots, goalie_changes, penalties
 
 def preview_stats(driver):   ###COMPLETE
 

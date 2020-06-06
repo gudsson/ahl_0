@@ -368,7 +368,7 @@ class Penalty(Base):
         team = Column(String(length=35))
         player_number = Column(String(length=2))
         player_name = Column(String)
-        penalty = Column(String(length=2))
+        penalty = Column(String(length=50))
         pim = Column(String(length=2))
         pp = Column(String(length=2))
         time = Column(Time)
