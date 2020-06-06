@@ -448,7 +448,7 @@ class Onice_Event(Base):
         time = Column(Time)
         period = Column(String(length=3))
  
-        def __init__(self, game_id, event, side, team, player_number, player_name, plus_minus, time, period):
+        def __init__(self, game_id, event, team, player_number, player_name, plus_minus, time, period):
                 self.game_id = game_id 
                 self.event = event
                 self.team = team

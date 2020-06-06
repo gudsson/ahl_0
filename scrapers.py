@@ -425,14 +425,19 @@ def pbp(driver):   ###COMPLETE
                 print(pbp_goal_str + "\n")
 
                 # Plus-Minus
-                onice_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team_name, "time": pbp_event_time, "period": period_name}
+                
                 plus_minus_button = pbp_event_row.find_elements_by_xpath("div[@class='ht-event-time']/div/span[@ng-show='!pmbutton.expanded']")[0]
                 plus_minus_button.click()
 
                 plus_minus_tables = pbp_event_row.find_elements_by_xpath("div[@ng-show='pmbutton.expanded']/table")
 
                 for table in plus_minus_tables:
-                    onice_dict["plus_minus"] = table.find_element_by_xpath("tbody/tr/th").text.lower()
+                    onice_dict = {"game_id": game_id, "team": pbp_team_name, "time": pbp_event_time, "period": period_name}
+                    onice_dict["event"] = table.find_element_by_xpath("tbody/tr/th").text.lower()
+                    if onice_dict["event"] == "plus":
+                        onice_dict["plus_minus"] = 1
+                    else:
+                        onice_dict["plus_minus"] = -1
 
                     plus_minus_rows = table.find_elements_by_xpath("tbody/tr[contains(@ng-repeat,'in pbp.details')]")
 

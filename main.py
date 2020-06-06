@@ -106,6 +106,10 @@ goals, shots, goalie_changes, penalties, onice_events = scrape.pbp(driver)
 # for goal in goals:
 #     session.add(db.Goal(**goal))
 
+#get onice_events
+for onice_event in onice_events:
+    session.add(db.Onice_Event(**onice_event))
+
 
     
 session.commit()
