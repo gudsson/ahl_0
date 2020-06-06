@@ -47,14 +47,27 @@
 #     print(val)
 #     print("====")
 
-class Game():
-    def __init__(self, game_id=None, home_team=None, away_team=None):
-        self.game_id = game_id
-        self.home_team = home_team
-        self.away_team = away_team
+# class Game():
+#     def __init__(self, game_id=None, home_team=None, away_team=None):
+#         self.game_id = game_id
+#         self.home_team = home_team
+#         self.away_team = away_team
 
 
-game = Game(1, "Toronto")
-game.away_team = "Utica"
+# game = Game(1, "Toronto")
+# game.away_team = "Utica"
 
-print(game.away_team)
+# print(game.away_team)
+
+def Test():
+    hello = dict()
+    hello["a"] = 1
+    hello["b"] = 2
+    hello["c"] = 3
+
+    # print("Penis")
+
+    def __repr__(self):
+        return hello
+
+Test()

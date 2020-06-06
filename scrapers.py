@@ -11,6 +11,10 @@ game_id = ''
 home_team = ''
 away_team = ''
 
+
+
+
+
 class Game():
     def __init__(self, game_id=None, home_team=None, away_team=None):
         self.game_id = game_id
@@ -57,10 +61,11 @@ class Game():
 # saved_driver = driver
 
 def get_driver(id):
-    global game_id
-    game_id = id
+    global game_id ####Delete at end
+    game_id = id ####Delete at end
 
-    game = Game(id)
+    global game
+    game.game_id = id
 
     urlpage = 'https://theahl.com/stats/game-center/' + str(id)
     print(f'Pulling AHL Game #{id} from: {urlpage}')
@@ -74,64 +79,81 @@ def get_driver(id):
     return driver
 
 def game_data(driver): ###COMPLETE`
-    game = dict()
+    #declarations
+    global game
+    game_info = dict()
     arena = dict()
 
+    #get various elements
     matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
     scores = matchup_container.find_elements_by_xpath("//div[@class='ht-gc-score-container']")
     date = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text.split(", ", 1)
 
-    game["game_id"] = game_id
-    game["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
-    game["date"] = date[1]
-    game["season"] = game["date"].split(",")[1].strip()
-    game["dow"] = date[0]
-    game["status"] = matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text
-    game["away_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text
-    game["away_score"] = scores[0].text
-    game["home_score"] = scores[1].text
-    game["home_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text
+    #add scraping to dict
+    game_info["game_id"] = game.game_id
+    game_info["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
+    game_info["date"] = date[1]
+    game_info["season"] = game_info["date"].split(",")[1].strip()
+    game_info["dow"] = date[0]
+    game_info["status"] = matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text
+    game_info["away_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text
+    game_info["away_score"] = scores[0].text
+    game_info["home_score"] = scores[1].text
+    game_info["home_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text
 
     #Gets season based on date.  Assumes season will always end before September 1 
-    game_date = datetime.strptime(game["date"],"%B %d, %Y")
+    game_date = datetime.strptime(game_info["date"],"%B %d, %Y")
+    game_info["season"] = game_info["season"] + str(int(game_info["season"])+1) if game_date.month > 8 else str(int(game_info["season"])-1) + game_info["season"]
 
-    game["season"] = game["season"] + str(int(game["season"])+1) if game_date.month > 8 else str(int(game["season"])-1) + game["season"]
-
+    #add arena to returned dict
     arena = arena_data(driver)
-    game_data = {**game, **arena}
+    game_data = {**game_info, **arena}
 
-    global home_team, away_team
-    home_team = game["home_team"]
-    away_team = game["away_team"]
+    global home_team, away_team ####Delete at end
+    home_team = game_info["home_team"]####Delete at end
+    away_team = game_info["away_team"]####Delete at end
 
+    #update class instance 'game'
+    game.home_team = game_info["home_team"]
+    game.away_team = game_info["away_team"]
+
+    #return dict
     return game_data
 
 def arena_data(driver):  ###COMPLETE
+    #declarations
     arena_data = dict()
 
+    #get elements
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
+    #add scrapings to dict
     arena_data["venue"] = summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text
     arena_data["attendance"] = summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.attendance')]").text
     arena_data["start_time"] = summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.startTime')]").text
     arena_data["end_time"] = summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.endTime')]").text
     arena_data["duration"] = summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.duration')]").text
 
+    #return
     return arena_data
 
 def referee_data(driver):   ###COMPLETE
+    #declarations
     game_officials = []
-    referees = []
+    officials = []
     summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-    referees = summary.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
+    officials = summary.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
 
-    for line in referees:
-        referee_data = line.find_elements_by_xpath("td")
-        referee_role = referee_data[0].text
-        referee_name = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
-        referee_number = referee_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
-        game_officials.append({'game_id': game_id, 'role': referee_role, 'name': referee_name, 'number': referee_number})
+    #loop through officials and add scrapings to dict
+    for official in officials:
+        officials_dict = {"game_id": game.game_id}
+        official_data = official.find_elements_by_xpath("td")
+        officials_dict["role"] = official_data[0].text
+        officials_dict["name"] = official_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
+        officials_dict["number"] = official_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
+        game_officials.append(officials_dict)
 
+    #return array of dicts
     return game_officials
 
 def boxscore(driver):   ###COMPLETE
@@ -695,7 +717,7 @@ def write_to_csv():
 # start = time.time()
 
 ####PRINT OUTS###
-
+game = Game()
 # game_data = []
 # game_data = game_data(driver)
 # game_data = arena_data(driver)

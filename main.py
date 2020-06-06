@@ -24,17 +24,17 @@ game_id = 1020540
 driver = scrape.get_driver(game_id)
 
 # get game data
-game_data = dict()
+# game_data = dict()
 game_data = scrape.game_data(driver)
 game = db.Game(**game_data)
 session.add(game)
 
-# # get ref data
-# referees = scrape.referee_data(driver)
-# for ref in referees:
-#     ref_data = dict()
-#     ref_data = ref
-#     session.add(db.Official(**ref_data))
+# get ref data
+referees = scrape.referee_data(driver)
+for ref in referees:
+    ref_data = dict()
+    ref_data = ref
+    session.add(db.Official(**ref_data))
 
 # # get boxscore by period
 # boxscores = scrape.boxscore(driver)
@@ -88,7 +88,7 @@ session.add(game)
 
 
 ###get all pbp data
-goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
+# goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
 
 # #get goalie changes
 # for goalie_change in goalie_changes:
@@ -110,9 +110,9 @@ goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
 # for onice_event in onice_events:
 #     session.add(db.Onice_Event(**onice_event))
 
-#get pins
-for pin in pins:
-    session.add(db.Pin(**pin))
+# #get pins
+# for pin in pins:
+#     session.add(db.Pin(**pin))
 
     
 session.commit()
