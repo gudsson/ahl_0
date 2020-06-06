@@ -40,9 +40,21 @@
 
 # print(summarys)
 
-test_array = [[1,2,3],["a","b","c"]]
+# test_array = [[1,2,3],["a","b","c"]]
 
-for i, val in enumerate(test_array):
-    print(i)
-    print(val)
-    print("====")
+# for i, val in enumerate(test_array):
+#     print(i)
+#     print(val)
+#     print("====")
+
+class Game():
+    def __init__(self, game_id=None, home_team=None, away_team=None):
+        self.game_id = game_id
+        self.home_team = home_team
+        self.away_team = away_team
+
+
+game = Game(1, "Toronto")
+game.away_team = "Utica"
+
+print(game.away_team)

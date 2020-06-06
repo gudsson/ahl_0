@@ -10,6 +10,13 @@ import pandas as pd
 game_id = ''
 home_team = ''
 away_team = ''
+
+class Game():
+    def __init__(self, game_id=None, home_team=None, away_team=None):
+        self.game_id = game_id
+        self.home_team = home_team
+        self.away_team = away_team
+
 # specify the url
 # gamenumber = 1020544
 # urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
@@ -43,6 +50,9 @@ away_team = ''
 # pull highest-level web elements
 
 
+
+
+
 # time.sleep(5)
 # saved_driver = driver
 
@@ -50,8 +60,10 @@ def get_driver(id):
     global game_id
     game_id = id
 
+    game = Game(id)
+
     urlpage = 'https://theahl.com/stats/game-center/' + str(id)
-    print(urlpage)
+    print(f'Pulling AHL Game #{id} from: {urlpage}')
 
     options = Options()
     options.headless = True
