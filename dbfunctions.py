@@ -2,7 +2,7 @@
 # from sqlalchemy import create_engine
 
 import psycopg2
-from sqlalchemy import create_engine, Table, Column, Integer, String, Float, Time, Date, MetaData, select, func
+from sqlalchemy import create_engine, Table, Column, Integer, String, Boolean, Float, Time, Date, MetaData, select, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -367,7 +367,7 @@ class Penalty(Base):
         event = Column(String(length=7))
         team = Column(String(length=35))
         player_number = Column(String(length=2))
-        player_name = Column(String)
+        player_name = Column(String(length=50))
         penalty = Column(String(length=50))
         pim = Column(String(length=2))
         pp = Column(String(length=2))
@@ -393,29 +393,28 @@ class Goal(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         event = Column(String(length=4))
-        side = Column(String(length=7))
-        team = Column(String)
+        team = Column(String(length=35))
         player_number = Column(String(length=2))
-        player_name = Column(String)
+        player_name = Column(String(length=50))
         season_total = Column(String(length=3))
         assist1_number = Column(String(length=2))
-        assist1_name = Column(String)
+        assist1_name = Column(String(length=50))
         assist1_total = Column(String(length=3))
         assist2_number = Column(String(length=2))
-        assist2_name = Column(String)
+        assist2_name = Column(String(length=50))
         assist2_total = Column(String(length=3))
-        Time = Column(Time)
+        time = Column(Time)
         period = Column(String(length=3))
-        ppg = Column(String)
-        shg = Column(String)
-        eng = Column(String)
-        gwg = Column(String)
-        gtg = Column(String)
+        ppg = Column(Boolean, default=False)
+        shg = Column(Boolean, default=False)
+        eng = Column(Boolean, default=False)
+        gwg = Column(Boolean, default=False)
+        insurance = Column(Boolean, unique=False, default=False)
+        psg = Column(Boolean, unique=False, default=False)
 
-        def __init__(self, game_id, event, side, team, player_number, player_name, season_total, assist1_number, assist1_name, assist1_total, assist2_number, assist2_name, assist2_total, time, period, ppg, shg, eng, gwg, gtg):
+        def __init__(self, game_id, event, team, player_number, player_name, season_total, assist1_number, assist1_name, assist1_total, assist2_number, assist2_name, assist2_total, time, period, ppg=False, shg=False, eng=False, gwg=False, insurance=False, psg=False):
                 self.game_id = game_id
                 self.event = event
-                self.side = side
                 self.team = team
                 self.player_number = player_number
                 self.player_name = player_name
@@ -432,7 +431,8 @@ class Goal(Base):
                 self.shg = shg
                 self.eng = eng
                 self.gwg = gwg
-                self.gtg = gtg
+                self.insurance = insurance
+                self.psg = psg
 
 
 class Onice_Event(Base):
@@ -441,18 +441,16 @@ class Onice_Event(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         event = Column(String(length=5))
-        side = Column(String(length=7))
-        team = Column(String)
+        team = Column(String(length=35))
         player_number = Column(String(length=2))
-        player_name = Column(String)
+        player_name = Column(String(length=50))
         plus_minus = Column(String(length=2))
-        Time = Column(Time)
+        time = Column(Time)
         period = Column(String(length=3))
  
         def __init__(self, game_id, event, side, team, player_number, player_name, plus_minus, time, period):
                 self.game_id = game_id 
                 self.event = event
-                self.side = side
                 self.team = team
                 self.player_number = player_number
                 self.player_name = player_name
