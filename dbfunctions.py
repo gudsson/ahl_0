@@ -464,24 +464,24 @@ class Pin(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        event = Column(String(length=5))
+        event_id = Column(String(length=4))
+        pin_id = Column(String(length=4))
         result = Column(String(length=4))
-        side = Column(String(length=7))
-        team = Column(String)
+        team = Column(String(length=35))
         top_position = Column(Float)
         left_position = Column(Float)
         player_number = Column(String(length=2))
-        player_name = Column(String)
+        player_name = Column(String(length=50))
         goalie_number = Column(String(length=2))
-        goalie_name = Column(String)
-        Time = Column(Time)
+        goalie_name = Column(String(length=50))
+        time = Column(Time)
         period = Column(String(length=3))
  
-        def __init__(self, game_id, event, result, side, team, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period):  
+        def __init__(self, game_id, event_id, pin_id, result, team, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period):  
                 self.game_id = game_id
-                self.event = event
+                self.event_id = event_id
+                self.pin_id = pin_id
                 self.result = result
-                self.side = side
                 self.team = team
                 self.top_position = top_position
                 self.left_position = left_position
@@ -491,6 +491,41 @@ class Pin(Base):
                 self.goalie_name = goalie_name
                 self.time = time
                 self.period = period
+
+
+#class Shootout_Attempt(Base):
+        # __tablename__ = 'shootout_attempts'
+
+        # id = Column(Integer, primary_key = True)
+        # game_id = Column(Integer)
+        # event = Column(String(length=5))
+        # result = Column(String(length=4))
+        # side = Column(String(length=7))
+        # team = Column(String)
+        # top_position = Column(Float)
+        # left_position = Column(Float)
+        # player_number = Column(String(length=2))
+        # player_name = Column(String)
+        # goalie_number = Column(String(length=2))
+        # goalie_name = Column(String)
+        # time = Column(Time)
+        # period = Column(String(length=3))
+ 
+        # def __init__(self, game_id, event, result, side, team, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period):  
+        #         self.game_id = game_id
+        #         self.event = event
+        #         self.result = result
+        #         self.side = side
+        #         self.team = team
+        #         self.top_position = top_position
+        #         self.left_position = left_position
+        #         self.player_number = player_number
+        #         self.player_name = player_name
+        #         self.goalie_number = goalie_number
+        #         self.goalie_name = goalie_name
+        #         self.time = time
+        #         self.period = period
+
 
 # create a cursor
 # c = conn.cursor()

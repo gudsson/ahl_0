@@ -285,24 +285,39 @@ def player_scorelines(driver):   ###COMPLETE
 
     return players
 
-def pins(driver, pbp_arr):   ###COMPLETE
+def get_pins(driver, pbp_arr):   ###COMPLETE
     pins = []
     rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
-    pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
+    found_pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
     i = 1
 
-    if len(pins) == len(pbp_arr):
+    # goal_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team_name, "time": pbp_event_time, "period": period_name}
+
+    if len(found_pins) == len(pbp_arr):
         print("Arrays are equal")
 
-    for pin, data in zip(pins, pbp_arr):
-        event_id = pin.get_attribute("id").split("ht_pin_")[1] #get index
-        event_type = pin.text
-        event_loc = pin.get_attribute("style")
-        event_loc_top = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
-        event_loc_left = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+    for pin, data in zip(found_pins, pbp_arr):
+        pin_dict = {"game_id": game_id, "team": "FUCK", "time": data[5], "period": data[4]}
+        pin_dict["event_id"] = 1 ####TBD
+        pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
+        pin_dict["result"] = pin.text
 
-        print(f'#{i} (id={event_id}) | {pin.get_attribute("id")} @ top: {event_loc_top}, left: {event_loc_left} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({event_type}|{data[6]})')
-        i += 1
+        #player info
+        pin_dict["player_number"] = data[0]
+        pin_dict["player_name"] = data[1]
+        pin_dict["goalie_number"] = data[2]
+        pin_dict["goalie_name"] = data[3]
+
+        #pin locations
+        event_loc = pin.get_attribute("style")
+        pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+        pin_dict["left_position"] = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+        print(f'#{pin_dict["pin_id"]} (id={pin_dict["pin_id"]}) | {pin.get_attribute("id")} @ top: {pin_dict["top_position"]}, left: {pin_dict["left_position"]} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({pin_dict["result"]})')
+
+        pins.append(pin_dict)
+    
+    return pins
 
 def pbp(driver):   ###COMPLETE
     pbp = []
@@ -511,7 +526,7 @@ def pbp(driver):   ###COMPLETE
     # for element in pbp_arr:
     #     print(element)
 
-    pins(driver, pbp_arr)
+    pins = get_pins(driver, pbp_arr)
 
 
 			#print(pbp_event_type)
@@ -537,7 +552,7 @@ def pbp(driver):   ###COMPLETE
 
             # print(f"{pbp_team} | {pbp_team_name} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
 
-    return goals, shots, goalie_changes, penalties, onice_events
+    return goals, shots, goalie_changes, penalties, onice_events, pins
 
 def preview_stats(driver):   ###COMPLETE
 
