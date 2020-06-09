@@ -116,17 +116,21 @@ class Star(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
+        team = Column(String(length=35))
+        side = Column(String(length=4))
         star_number = Column(String(length=3))
-        name = Column(String)
+        name = Column(String(length=50))
         jersey_number = Column(String(length=2))
-        team = Column(String)
+        
 
-        def __init__(self, game_id, star_number, name, jersey_number, team):
+        def __init__(self, game_id, team, side, star_number, name, jersey_number):
                 self.game_id = game_id
+                self.team = team
+                self.side = side
                 self.star_number = star_number
                 self.name = name
                 self.jersey_number = jersey_number
-                self.team = team
+                
 
 
 class Coach(Base):
@@ -135,12 +139,14 @@ class Coach(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         team = Column(String(length=50))
+        side = Column(String(length=4))
         role = Column(String(length=20))
         name = Column(String(length=50))
 
-        def __init__(self, game_id, team, role, name):
+        def __init__(self, game_id, team, side, role, name):
                 self.game_id = game_id
                 self.team = team
+                self.side = side
                 self.role = role
                 self.name = name
 
@@ -150,15 +156,17 @@ class Penalty_Summary(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String(length=4))
+        team = Column(String(length=35))
+        side = Column(String(length=4))
         pp_goals = Column(String(length=2))
         pp_opps = Column(String(length=2))
         pims = Column(String(length=4))
         infracs = Column(String(length=3))
 
-        def __init__(self, game_id, team, pp_goals, pp_opps, pims, infracs):
+        def __init__(self, game_id, team, side, pp_goals, pp_opps, pims, infracs):
                 self.game_id = game_id
                 self.team = team
+                self.side = side
                 self.pp_goals = pp_goals
                 self.pp_opps = pp_opps
                 self.pims = pims
@@ -170,7 +178,8 @@ class Player_Scoreline(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        team = Column(String)
+        team = Column(String(length=35))
+        side = Column(String(length=4))
         jersey_number = Column(String(length=2))
         letter = Column(String(length=1))
         name = Column(String(length=50))
@@ -182,9 +191,10 @@ class Player_Scoreline(Base):
         shots = Column(String(length=2))
         plus_minus = Column(String(length=3))
 
-        def __init__(self, game_id, team, jersey_number, letter, name, player_id, position, goals, assists, pims, shots, plus_minus):
+        def __init__(self, game_id, team, side, jersey_number, letter, name, player_id, position, goals, assists, pims, shots, plus_minus):
                 self.game_id = game_id
                 self.team = team
+                self.side = side
                 self.jersey_number = jersey_number
                 self.letter = letter
                 self.name = name
@@ -203,12 +213,14 @@ class Top_Scorer(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         team = Column(String(length=35))
+        side = Column(String(length=4))
         player = Column(String(length=50))
         statline = Column(String(length=50))
 
-        def __init__(self, game_id, team, player, statline):
+        def __init__(self, game_id, team, side, player, statline):
                 self.game_id = game_id
                 self.team = team
+                self.side = side
                 self.player = player
                 self.statline = statline
 
@@ -219,11 +231,13 @@ class Recent_Game(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         team = Column(String(length=35))
+        side = Column(String(length=4))
         game_info = Column(String(length=50))
 
-        def __init__(self, game_id, team, game_info):
+        def __init__(self, game_id, team, side, game_info):
                 self.game_id = game_id
                 self.team = team
+                self.side = side
                 self.game_info = game_info
 
 
@@ -233,6 +247,7 @@ class Matchup_Statline(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         team = Column(String(length=35))
+        side = Column(String(length=4))
         season_record = Column(String(length=15))
         last_10_games = Column(String(length=15))
         streak = Column(String(length=15))
@@ -248,9 +263,10 @@ class Matchup_Statline(Base):
         penalty_killing_home = Column(String(length=20))
         penalty_killing_away = Column(String(length=20))
         
-        def __init__(self, game_id, team, season_record, last_10_games, streak, last_game, home_record, away_record, goals_for, goals_against, power_plays, power_plays_home, power_plays_away, penalty_killing, penalty_killing_home, penalty_killing_away):
+        def __init__(self, game_id, team, side, season_record, last_10_games, streak, last_game, home_record, away_record, goals_for, goals_against, power_plays, power_plays_home, power_plays_away, penalty_killing, penalty_killing_home, penalty_killing_away):
                 self.game_id = game_id
                 self.team = team
+                self.side = side
                 self.season_record = season_record
                 self.last_10_games = last_10_games
                 self.streak = streak

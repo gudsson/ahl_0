@@ -19,7 +19,7 @@ import pandas as pd
 
 engine, session = db.connect()
 
-game_id = 1020540
+game_id = 1020531
 
 driver = scrape.get_driver(game_id)
 
@@ -29,12 +29,12 @@ game_data = scrape.game_data(driver)
 game = db.Game(**game_data)
 session.add(game)
 
-# get ref data
-referees = scrape.referee_data(driver)
-for ref in referees:
-    ref_data = dict()
-    ref_data = ref
-    session.add(db.Official(**ref_data))
+# # get ref data
+# referees = scrape.referee_data(driver)
+# for ref in referees:
+#     ref_data = dict()
+#     ref_data = ref
+#     session.add(db.Official(**ref_data))
 
 # # get boxscore by period
 # boxscores = scrape.boxscore(driver)
@@ -65,10 +65,10 @@ for ref in referees:
 
 # ###get all preview stats
 
-# #get top scorers
-# top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
-# for top_scorer in top_scorers:
-#     session.add(db.Top_Scorer(**top_scorer))
+#get top scorers
+top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
+for top_scorer in top_scorers:
+    session.add(db.Top_Scorer(**top_scorer))
 
 # #get recent games
 # for recent_game in recent_games:

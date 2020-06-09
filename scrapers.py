@@ -78,7 +78,35 @@ def get_driver(id):
 
     return driver
 
-def game_data(driver): ###COMPLETE`
+def get_summary(driver):
+    return driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+
+def get_scoreline(line, side):
+    #declarations
+    player = dict()
+
+    #get elements
+    td = line.find_elements_by_xpath("td")
+
+    #dump scrapings into dict
+    player["game_id"] = game.game_id
+    player["team"] = getattr(game, str(side + "_team"))
+    player["side"] = side
+    player["jersey_number"] = td[0].text
+    player["letter"] = td[1].text
+    player["name"] = td[2].text.split(", ",1)[1] + " " + td[2].text.split(", ",1)[0]
+    player["player_id"] = td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+    player["position"] = td[3].text
+    player["goals"] = td[4].text
+    player["assists"] = td[5].text
+    player["pims"] = td[6].text
+    player["shots"] = td[7].text
+    player["plus_minus"] = td[8].text
+    
+    #return dict
+    return player
+
+def game_data(driver):
     #declarations
     global game
     game_info = dict()
@@ -120,12 +148,12 @@ def game_data(driver): ###COMPLETE`
     #return dict
     return game_data
 
-def arena_data(driver):  ###COMPLETE
+def arena_data(driver):
     #declarations
     arena_data = dict()
 
     #get elements
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+    summary = get_summary(driver)
 
     #add scrapings to dict
     arena_data["venue"] = summary.find_element_by_xpath("//td[contains(@ng-bind,'gameSummary.details.venue')]").text
@@ -137,11 +165,13 @@ def arena_data(driver):  ###COMPLETE
     #return
     return arena_data
 
-def referee_data(driver):   ###COMPLETE
+def referee_data(driver):
     #declarations
     game_officials = []
     officials = []
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+
+    #get elements
+    summary = get_summary(driver)
     officials = summary.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
 
     #loop through officials and add scrapings to dict
@@ -156,7 +186,7 @@ def referee_data(driver):   ###COMPLETE
     #return array of dicts
     return game_officials
 
-def boxscore(driver):   ###COMPLETE
+def boxscore(driver):
     #declarations
     goal_periods = []
     shot_periods = []
@@ -169,7 +199,7 @@ def boxscore(driver):   ###COMPLETE
     scoring_summary = dict()
 
     #scrape elements
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']") #main container
+    summary = get_summary(driver)
     goal_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]") #Goals by Period (last period is total)
     shot_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'shotSummaryHeadings')]") #Shots by Period (last period is total)
 
@@ -181,174 +211,111 @@ def boxscore(driver):   ###COMPLETE
 
     #dump scrapings into dicts
     for period, agoals, hgoals in zip(goal_periods, away_goals, home_goals):
-        goal_summary[period.text] = {"game_id": game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
+        goal_summary[period.text] = {"game_id": game.game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
 
     for period, ashots, hshots in zip(shot_periods, away_shots, home_shots):
         shot_summary[period.text] = {"game_id": game.game_id, "home_shots": hshots.text, "away_shots": ashots.text}
 
     for summary in goal_summary:
-
         scoring_summary[summary] = goal_summary[summary]
-
         try:
-            scoring_summary[summary].update(shot_summary[summary])
+            scoring_summary[summary].update(shot_summary[summary]) #if nothing to update, shootout with no shot data
         except:
-            scoring_summary[summary].update({"home_shots": 0, "away_shots": 0})
+            scoring_summary[summary].update({"home_shots": 0, "away_shots": 0}) #insert shot data for shootout
 
     #return array of dicts
     return scoring_summary
 
-def penalty_summary(driver):   ###COMPLETE
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+def penalty_summary(driver):
+    #declarations
     penalty_summary = []
-
-    #Away PP#
     away_pp = []
     away_penalties = []
-
-    away_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
-    away_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
-    
-    #Home PP#
     home_pp = []
     home_penalties = []
 
+    #get elements
+    summary = get_summary(driver)
+    away_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
     home_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
+    away_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
     home_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
     
     #build return array
-    penalty_summary.append({"game_id": game_id, "team": "away", "pp_goals": away_pp[0], "pp_opps": away_pp[1], "pims": away_penalties[0], "infracs": away_penalties[1].split(" ",1)[0]})
-    penalty_summary.append({"game_id": game_id, "team": "home", "pp_goals": home_pp[0], "pp_opps": home_pp[1], "pims": home_penalties[0], "infracs": home_penalties[1].split(" ",1)[0]})
+    penalty_summary.append({"game_id": game.game_id, "team": game.away_team, "side": "away", "pp_goals": away_pp[0], "pp_opps": away_pp[1], "pims": away_penalties[0], "infracs": away_penalties[1].split(" ",1)[0]})
+    penalty_summary.append({"game_id": game.game_id, "team": game.home_team, "side": "home", "pp_goals": home_pp[0], "pp_opps": home_pp[1], "pims": home_penalties[0], "infracs": home_penalties[1].split(" ",1)[0]})
 
+    #return array of dicts
     return penalty_summary
 
-def three_stars(driver):  ###COMPLETE
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-    
+def three_stars(driver):
+    #declarations
     stars = []
     star_containers = []
-    
+
+    #get elements
+    summary = get_summary(driver)
     star_containers = summary.find_elements_by_xpath("//div[@class='ht-three-stars']/div/div[@class='ht-star-container']")
 
+    #dump scrapings into dict, add dict to array
     for star in star_containers:
         star_number = star.find_element_by_xpath("div[@class='ht-star-number']").text
         star_rawname = star.find_element_by_xpath("div[@class='ht-star-name']").text.split(" (#")
         star_name = star_rawname[0]
         star_jersey = star_rawname[1].replace(")","")
         star_team = star.find_element_by_xpath("div[@class='ht-star-team']").text
-        stars.append({"game_id": game_id, "star_number": star_number, "name": star_name, "jersey_number": star_jersey, "team": star_team})
+        star_side = "away" if star_team == game.away_team else "home"
+        stars.append({"game_id": game.game_id, "team": star_team, "side": star_side, "star_number": star_number, "name": star_name, "jersey_number": star_jersey})
     
+    #return array of dicts
     return stars
 
-def coaches(driver):   ###COMPLETE
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-    
+def coaches(driver):
+    #declarations
     coaches = []
     away_coach_lines = []
     home_coach_lines = []
 
-    # away_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
-    # home_team = summary.find_element_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@class='ht-gc-section-header']/a").get_attribute("innerHTML")
-    
+
+    #get elements
+    summary = get_summary(driver)
     away_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']//tr[contains(@ng-repeat,'homeTeam.coaches')]")
 
+    #dump scrapings into dict, append to array
     for line in away_coach_lines:
         coach_role = line.text.split(": ")[0]
         coach_name = line.text.split(": ")[1]
-        coaches.append({"game_id": game_id, "team": away_team, "role": coach_role, "name": coach_name})
+        coaches.append({"game_id": game.game_id, "team": game.away_team, "side": "away", "role": coach_role, "name": coach_name})
 
     for line in home_coach_lines:
         coach_role = line.text.split(": ")[0]
         coach_name = line.text.split(": ")[1]
-        coaches.append({"game_id": game_id, "team": home_team, "role": coach_role, "name": coach_name})
+        coaches.append({"game_id": game.game_id, "team": game.home_team, "side": "home", "role": coach_role, "name": coach_name})
 
+    #return dict of arrays
     return coaches
 
-def player_scorelines(driver):   ###COMPLETE
-    summary = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-
+def player_scorelines(driver):
+    #declarations
     players = []
     away_player_lines = []
     home_player_lines = []
     
+    #get elements
+    summary = get_summary(driver)
     away_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'visitingTeam.skaters')]") #find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
     home_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'homeTeam.skaters')]")
 
+    #dump player data into dict, append to player array
     for line in away_player_lines:
-        awayplyr = dict()
-        away_td = line.find_elements_by_xpath("td")
-
-        awayplyr["game_id"] = game_id
-        awayplyr["team"] = away_team
-        awayplyr["jersey_number"] = away_td[0].text
-        awayplyr["letter"] = away_td[1].text
-        awayplyr["name"] = away_td[2].text.split(", ",1)[1] + " " + away_td[2].text.split(", ",1)[0]
-        awayplyr["player_id"] = away_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
-        awayplyr["position"] = away_td[3].text
-        awayplyr["goals"] = away_td[4].text
-        awayplyr["assists"] = away_td[5].text
-        awayplyr["pims"] = away_td[6].text
-        awayplyr["shots"] = away_td[7].text
-        awayplyr["plus_minus"] = away_td[8].text
-        
-        players.append(awayplyr)
-
+        players.append(get_scoreline(line, "away"))
 
     for line in home_player_lines:
-        homeplyr = dict()
-        home_td = line.find_elements_by_xpath("td")
+        players.append(get_scoreline(line, "home"))
 
-        homeplyr["game_id"] = game_id
-        homeplyr["team"] = home_team
-        homeplyr["jersey_number"] = home_td[0].text
-        homeplyr["letter"] = home_td[1].text
-        homeplyr["name"] = home_td[2].text.split(", ",1)[1] + " " + home_td[2].text.split(", ",1)[0]
-        homeplyr["player_id"] = home_td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
-        homeplyr["position"] = home_td[3].text
-        homeplyr["goals"] = home_td[4].text
-        homeplyr["assists"] = home_td[5].text
-        homeplyr["pims"] = home_td[6].text
-        homeplyr["shots"] = home_td[7].text
-        homeplyr["plus_minus"] = home_td[8].text
-    	
-        players.append(homeplyr)
-
+    #return array of dicts
     return players
-
-def get_pins(driver, pbp_arr):   ###COMPLETE
-    pins = []
-    rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
-    found_pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
-    i = 1
-
-    # goal_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team_name, "time": pbp_event_time, "period": period_name}
-
-    if len(found_pins) == len(pbp_arr):
-        print("Arrays are equal")
-
-    for pin, data in zip(found_pins, pbp_arr):
-        pin_dict = {"game_id": game_id, "team": "FUCK", "time": data[5], "period": data[4]}
-        pin_dict["event_id"] = 1 ####TBD
-        pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
-        pin_dict["result"] = pin.text
-
-        #player info
-        pin_dict["player_number"] = data[0]
-        pin_dict["player_name"] = data[1]
-        pin_dict["goalie_number"] = data[2]
-        pin_dict["goalie_name"] = data[3]
-
-        #pin locations
-        event_loc = pin.get_attribute("style")
-        pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
-        pin_dict["left_position"] = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
-
-        print(f'#{pin_dict["pin_id"]} (id={pin_dict["pin_id"]}) | {pin.get_attribute("id")} @ top: {pin_dict["top_position"]}, left: {pin_dict["left_position"]} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({pin_dict["result"]})')
-
-        pins.append(pin_dict)
-    
-    return pins
 
 def pbp(driver):   ###COMPLETE
     pbp = []
@@ -585,41 +552,82 @@ def pbp(driver):   ###COMPLETE
 
     return goals, shots, goalie_changes, penalties, onice_events, pins
 
-def preview_stats(driver):   ###COMPLETE
+def get_pins(driver, pbp_arr):   ###COMPLETE
+    pins = []
+    rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
+    found_pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
+    i = 1
 
-    ###Get preview stat tables
+    # goal_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team_name, "time": pbp_event_time, "period": period_name}
+
+    if len(found_pins) == len(pbp_arr):
+        print("Arrays are equal")
+
+    for pin, data in zip(found_pins, pbp_arr):
+        pin_dict = {"game_id": game_id, "team": "FUCK", "time": data[5], "period": data[4]}
+        pin_dict["event_id"] = 1 ####TBD
+        pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
+        pin_dict["result"] = pin.text
+
+        #player info
+        pin_dict["player_number"] = data[0]
+        pin_dict["player_name"] = data[1]
+        pin_dict["goalie_number"] = data[2]
+        pin_dict["goalie_name"] = data[3]
+
+        #pin locations
+        event_loc = pin.get_attribute("style")
+        pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+        pin_dict["left_position"] = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+        print(f'#{pin_dict["pin_id"]} (id={pin_dict["pin_id"]}) | {pin.get_attribute("id")} @ top: {pin_dict["top_position"]}, left: {pin_dict["left_position"]} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({pin_dict["result"]})')
+
+        pins.append(pin_dict)
+    
+    return pins
+
+def preview_stats(driver):
+    #declarations
     tables = []
-    tables = driver.find_elements_by_xpath("//div[@ng-if='PreviewDataLoaded']/div/div[contains(@ng-class,'sumTableHalf')]/div[@ng-class='sumTableMobile']/table/tbody")
 
-    ###Head-to-Head Stats
-    head2head_statlines = []
+    head2head_statlines = [] #h2h
     h2h_rows = []
     h2h_stats = []
-    h2h_rows = tables[0].find_elements_by_xpath("tr")
-    h2h_away = {"game_id": game_id, "team": away_team, "versus": home_team}
-    h2h_home = {"game_id": game_id, "team": home_team, "versus": away_team}
 
-    #previous season
-    h2h_away[h2h_rows[0].text.lower().replace(" ","_")] = h2h_rows[1].find_elements_by_xpath("td")[1].text
+    previous_meetings = [] #previous meetings
+    previous_meeting_rows = []
+
+    top_scorers = [] #top scorers
+    top_scorer_tables = []
+    top_scorer_rows = []
+    
+    #get elements
+    tables = driver.find_elements_by_xpath("//div[@ng-if='PreviewDataLoaded']/div/div[contains(@ng-class,'sumTableHalf')]/div[@ng-class='sumTableMobile']/table/tbody")
+    h2h_rows = tables[0].find_elements_by_xpath("tr") #h2h
+    previous_meeting_rows = tables[1].find_elements_by_xpath("tr[@class='ng-scope']") #previous meetings
+    top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody") #top scorers
+
+    ##### h2h #####
+    #get head-to-head stats
+    h2h_away = {"game_id": game.game_id, "team": game.away_team, "versus": game.home_team}
+    h2h_home = {"game_id": game.game_id, "team": game.home_team, "versus": game.away_team}
+
+    h2h_away[h2h_rows[0].text.lower().replace(" ","_")] = h2h_rows[1].find_elements_by_xpath("td")[1].text #previous season
     h2h_home[h2h_rows[0].text.lower().replace(" ","_")] = h2h_rows[1].find_elements_by_xpath("td")[3].text
 
-    #current season
-    h2h_away[h2h_rows[2].text.lower().replace(" ","_")] = h2h_rows[3].find_elements_by_xpath("td")[1].text
+    h2h_away[h2h_rows[2].text.lower().replace(" ","_")] = h2h_rows[3].find_elements_by_xpath("td")[1].text #current season
     h2h_home[h2h_rows[2].text.lower().replace(" ","_")] = h2h_rows[3].find_elements_by_xpath("td")[3].text
 
-    #last 5 seasons
-    h2h_away[h2h_rows[4].text.lower().replace(" ","_")] = h2h_rows[5].find_elements_by_xpath("td")[1].text
+    h2h_away[h2h_rows[4].text.lower().replace(" ","_")] = h2h_rows[5].find_elements_by_xpath("td")[1].text #last 5 seasons
     h2h_home[h2h_rows[4].text.lower().replace(" ","_")] = h2h_rows[5].find_elements_by_xpath("td")[3].text
 
+    #append h2h stats to array
     head2head_statlines.append(h2h_away)
     head2head_statlines.append(h2h_home)
+    ##### /h2h #####
 
-
-    ###Scrape Previous Meetings
-    previous_meetings = []
-    previous_meeting_rows = []
-    previous_meeting_rows = tables[1].find_elements_by_xpath("tr[@class='ng-scope']")
-
+    ##### previous meetings #####
+    #get previous meetings
     for row in previous_meeting_rows:
         td = row.find_elements_by_xpath("td")
 
@@ -629,17 +637,17 @@ def preview_stats(driver):   ###COMPLETE
         previous_home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
         home_score = score[1]
         date = td[3].text
-        previous_meetings.append({"game_id": game_id, "away_team": previous_away_team, "away_score": away_score, "home_team": previous_home_team, "home_score": home_score, "date": date})
-
+        previous_meetings.append({"game_id": game.game_id, "away_team": previous_away_team, "away_score": away_score, "home_team": previous_home_team, "home_score": home_score, "date": date})
+    ##### /previous meetings #####
 
     ###Scrape top Scorers Heading Into Game
-    top_scorers = []
-    top_scorer_tables = []
-    top_scorer_rows = []
-    team = [away_team, home_team]
-    i = 0
-    top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody")
+
+    # teams = [game.away_team, game.home_team]
+    # i = 0
     
+    ##### top scorers #####
+    team = game.away_team
+
     for table in top_scorer_tables:
         top_scorer_rows = table.find_elements_by_xpath("tr")
 
@@ -647,13 +655,36 @@ def preview_stats(driver):   ###COMPLETE
             top_details = []
             top_details = row.find_elements_by_xpath("td/a/div[@class='ht-top-details']/div")
             top_scorer = dict()
-            top_scorer["game_id"] = game_id
-            top_scorer["team"] = team[i]
+            top_scorer["game_id"] = game.game_id
+            top_scorer["team"] = team
+            top_scorer["side"] = "away" if team == game.away_team else "home"
             top_scorer["player"] = top_details[0].text
             top_scorer["statline"] = top_details[1].text
             top_scorers.append(top_scorer)   
         
-        i += 1
+        team = home_team
+    ##### /top scorers #####
+
+
+    # team = [away_team, home_team]
+    # i = 0
+    
+    
+    # for table in top_scorer_tables:
+    #     top_scorer_rows = table.find_elements_by_xpath("tr")
+
+    #     for row in top_scorer_rows:
+            
+    #         top_details = []
+    #         top_details = row.find_elements_by_xpath("td/a/div[@class='ht-top-details']/div")
+    #         top_scorer = dict()
+    #         top_scorer["game_id"] = game_id
+    #         top_scorer["team"] = team[i]
+    #         top_scorer["player"] = top_details[0].text
+    #         top_scorer["statline"] = top_details[1].text
+    #         top_scorers.append(top_scorer)   
+        
+    #     i += 1
 
 
     ###Scrape Recent Games
