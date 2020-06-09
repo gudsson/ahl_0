@@ -589,20 +589,11 @@ def get_pins(driver, pbp_arr):   ###COMPLETE
 def preview_stats(driver):
     #declarations
     tables = []
-
-    head2head_statlines = [] #h2h
-    h2h_rows = []
-    h2h_stats = []
-
-    previous_meetings = [] #previous meetings
-    previous_meeting_rows = []
-
-    top_scorers = [] #top scorers
-    top_scorer_tables = []
-    top_scorer_rows = []
-
-    recent_games = [] #recent games
-    recent_game_tables = []
+    head2head_statlines, h2h_rows, h2h_stats = [], [], [] #h2h
+    previous_meeting_rows, previous_meetings = [], [] #previous meetings
+    top_scorer_tables, top_scorer_rows, top_scorers = [], [], [] #top scorers
+    recent_game_tables, recent_games = [], [] #recent games
+    matchup_statlines = [] #matchup stats
     
     #get elements
     tables = driver.find_elements_by_xpath("//div[@ng-if='PreviewDataLoaded']/div/div[contains(@ng-class,'sumTableHalf')]/div[@ng-class='sumTableMobile']/table/tbody")
@@ -610,6 +601,7 @@ def preview_stats(driver):
     previous_meeting_rows = tables[1].find_elements_by_xpath("tr[@class='ng-scope']") #previous meetings
     top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody") #top scorers
     recent_game_tables = tables[3].find_elements_by_xpath("//td[@class='ht-table-last-5']") #recent games
+    matchup_table = driver.find_element_by_xpath("//div[@ng-if='PreviewDataLoaded']/div[@ng-class='sumTableContainter']/div[@ng-class='sumTableMobile']//tbody") #matchup stats
 
     ##### h2h #####
     #get head-to-head stats
@@ -672,22 +664,22 @@ def preview_stats(driver):
         recent_games.append({"game_id": game.game_id, "team": game.home_team, "side": "home", "game_info": row.text})
     ##### /recent games #####
 
-    ###Scrape Match Up Stats
-    matchup_statlines = []
-    matchup_away = {"game_id": game_id, "team": away_team}
-    matchup_home = {"game_id": game_id, "team": home_team}
-    matchup_table = driver.find_element_by_xpath("//div[@ng-if='PreviewDataLoaded']/div[@ng-class='sumTableContainter']/div[@ng-class='sumTableMobile']//tbody")
-
+    ##### matchup stats #####
+    #scrape Matchup Stats
+    matchup_away = {"game_id": game.game_id, "team": game.away_team, "side": "away"}
+    matchup_home = {"game_id": game.game_id, "team": game.home_team, "side": "home"}
+    
     for row in matchup_table.find_elements_by_xpath("tr"):
         tds = []
         tds = row.find_elements_by_xpath("td")
         
         matchup_away[tds[0].text.lower().replace(" ","_").replace("(","").replace(")","")] = tds[1].text
         matchup_home[tds[0].text.lower().replace(" ","_").replace("(","").replace(")","")] = tds[2].text
-        
+    
+    #append dicts
     matchup_statlines.append(matchup_away)
     matchup_statlines.append(matchup_home)
-
+    ##### /matchup stats #####
 
     ###Return Data
     return top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings
