@@ -67,12 +67,12 @@ session.add(game)
 
 #get top scorers
 top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
-for top_scorer in top_scorers:
-    session.add(db.Top_Scorer(**top_scorer))
+# for top_scorer in top_scorers:
+#     session.add(db.Top_Scorer(**top_scorer))
 
 # #get recent games
-# for recent_game in recent_games:
-#     session.add(db.Recent_Game(**recent_game))
+for recent_game in recent_games:
+    session.add(db.Recent_Game(**recent_game))
 
 # #get matchup stats
 # for matchup_statline in matchup_statlines:
