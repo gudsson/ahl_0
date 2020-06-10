@@ -131,8 +131,7 @@ class Star(Base):
                 self.name = name
                 self.jersey_number = jersey_number
                 
-
-
+                
 class Coach(Base):
         __tablename__ = 'coaches'
 
@@ -353,8 +352,10 @@ class Shot(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         event = Column(String(length=12))
+        pbp_id = Column(String(length=4))
         result = Column(String(length=4))
         team = Column(String(length=35))
+        side = Column(String(length=4))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
         goalie_number = Column(String(length=2))
@@ -362,11 +363,13 @@ class Shot(Base):
         time = Column(Time)
         period = Column(String(length=4))
 
-        def __init__(self, game_id, event, result, team, player_number, player_name, goalie_number, goalie_name, time, period):
+        def __init__(self, game_id, pbp_id, event, result, team, side, player_number, player_name, goalie_number, goalie_name, time, period):
                 self.game_id = game_id
                 self.event = event
+                self.pbp_id = pbp_id
                 self.result = result
                 self.team = team
+                self.side = side
                 self.player_number = player_number
                 self.player_name = player_name
                 self.goalie_number = goalie_number

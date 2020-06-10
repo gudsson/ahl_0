@@ -65,8 +65,8 @@ session.add(game)
 
 # ###get all preview stats
 
-#get top scorers
-top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
+# #get top scorers
+# top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
 # for top_scorer in top_scorers:
 #     session.add(db.Top_Scorer(**top_scorer))
 
@@ -74,9 +74,9 @@ top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meet
 # for recent_game in recent_games:
 #     session.add(db.Recent_Game(**recent_game))
 
-#get matchup stats
-for matchup_statline in matchup_statlines:
-    session.add(db.Matchup_Statline(**matchup_statline))
+# #get matchup stats
+# for matchup_statline in matchup_statlines:
+#     session.add(db.Matchup_Statline(**matchup_statline))
 
 # #get head2head stats
 # for head2head_statline in head2head_statlines:
@@ -87,16 +87,16 @@ for matchup_statline in matchup_statlines:
 #     session.add(db.Previous_Meeting(**previous_meeting))
 
 
-###get all pbp data
-# goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
+##get all pbp data
+goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
 
 # #get goalie changes
 # for goalie_change in goalie_changes:
 #     session.add(db.Goalie_Change(**goalie_change))
 
-# #get shots
-# for shot in shots:
-#     session.add(db.Shot(**shot))
+#get shots
+for shot in shots:
+    session.add(db.Shot(**shot))
 
 # #get penalties
 # for penalty in penalties:
