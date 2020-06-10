@@ -327,18 +327,22 @@ class Goalie_Change(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
+        pbp_id = Column(String(length=4))
         event = Column(String(length=14))
         team = Column(String(length=35))
+        side = Column(String(length=4))
         goalie_number = Column(String(length=2))
         goalie_name = Column(String)
         action = Column(String(length=3))
         time = Column(Time)
         period = Column(String(length=4))
 
-        def __init__(self, game_id, event, team, goalie_number, goalie_name, action, time, period):
+        def __init__(self, game_id, pbp_id, event, team, side, goalie_number, goalie_name, action, time, period):
                 self.game_id = game_id
+                self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
+                self.side = side
                 self.goalie_number = goalie_number
                 self.goalie_name = goalie_name
                 self.action = action
@@ -383,8 +387,10 @@ class Penalty(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
+        pbp_id = Column(String(length=4))
         event = Column(String(length=7))
         team = Column(String(length=35))
+        side = Column(String(length=4))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
         penalty = Column(String(length=50))
@@ -393,10 +399,12 @@ class Penalty(Base):
         time = Column(Time)
         period = Column(String(length=3))
 
-        def __init__(self, game_id, event, team, player_number, player_name, penalty, pim, pp, time, period):
+        def __init__(self, game_id, pbp_id, event, team, side, player_number, player_name, penalty, pim, pp, time, period):
                 self.game_id = game_id
+                self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
+                self.side = side
                 self.player_number = player_number
                 self.player_name = player_name
                 self.penalty = penalty
@@ -463,7 +471,9 @@ class Onice_Event(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
+        pbp_id = Column(String(length=4))
         event = Column(String(length=5))
+        side = Column(String(length=4))
         team = Column(String(length=35))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
@@ -471,10 +481,12 @@ class Onice_Event(Base):
         time = Column(Time)
         period = Column(String(length=3))
  
-        def __init__(self, game_id, event, team, player_number, player_name, plus_minus, time, period):
+        def __init__(self, game_id, pbp_id, event, team, side, player_number, player_name, plus_minus, time, period):
                 self.game_id = game_id 
+                self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
+                self.side = side
                 self.player_number = player_number
                 self.player_name = player_name
                 self.plus_minus = plus_minus

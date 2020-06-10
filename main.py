@@ -19,7 +19,7 @@ import pandas as pd
 
 engine, session = db.connect()
 
-game_id = 1020531
+game_id = 1020530
 
 driver = scrape.get_driver(game_id)
 
@@ -90,25 +90,25 @@ session.add(game)
 ##get all pbp data
 goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
 
-# #get goalie changes
-# for goalie_change in goalie_changes:
-#     session.add(db.Goalie_Change(**goalie_change))
+#get goalie changes
+for goalie_change in goalie_changes:
+    session.add(db.Goalie_Change(**goalie_change))
 
 #get shots
 for shot in shots:
     session.add(db.Shot(**shot))
 
-# #get penalties
-# for penalty in penalties:
-#     session.add(db.Penalty(**penalty))
+#get penalties
+for penalty in penalties:
+    session.add(db.Penalty(**penalty))
 
-# #get goals
-# for goal in goals:
-#     session.add(db.Goal(**goal))
+#get goals
+for goal in goals:
+    session.add(db.Goal(**goal))
 
-# #get onice_events
-# for onice_event in onice_events:
-#     session.add(db.Onice_Event(**onice_event))
+#get onice_events
+for onice_event in onice_events:
+    session.add(db.Onice_Event(**onice_event))
 
 # #get pins
 # for pin in pins:
