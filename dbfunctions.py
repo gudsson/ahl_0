@@ -131,7 +131,7 @@ class Star(Base):
                 self.name = name
                 self.jersey_number = jersey_number
                 
-                
+
 class Coach(Base):
         __tablename__ = 'coaches'
 
@@ -351,8 +351,8 @@ class Shot(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        event = Column(String(length=12))
         pbp_id = Column(String(length=4))
+        event = Column(String(length=12))
         result = Column(String(length=4))
         team = Column(String(length=35))
         side = Column(String(length=4))
@@ -365,8 +365,8 @@ class Shot(Base):
 
         def __init__(self, game_id, pbp_id, event, result, team, side, player_number, player_name, goalie_number, goalie_name, time, period):
                 self.game_id = game_id
-                self.event = event
                 self.pbp_id = pbp_id
+                self.event = event
                 self.result = result
                 self.team = team
                 self.side = side
@@ -411,8 +411,10 @@ class Goal(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
+        pbp_id = Column(String(length=4))
         event = Column(String(length=4))
         team = Column(String(length=35))
+        side = Column(String(length=4))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
         season_total = Column(String(length=3))
@@ -431,10 +433,12 @@ class Goal(Base):
         insurance = Column(Boolean, unique=False, default=False)
         psg = Column(Boolean, unique=False, default=False)
 
-        def __init__(self, game_id, event, team, player_number, player_name, season_total, assist1_number, assist1_name, assist1_total, assist2_number, assist2_name, assist2_total, time, period, ppg=False, shg=False, eng=False, gwg=False, insurance=False, psg=False):
+        def __init__(self, game_id, pbp_id, event, team, side, player_number, player_name, season_total, assist1_number, assist1_name, assist1_total, assist2_number, assist2_name, assist2_total, time, period, ppg=False, shg=False, eng=False, gwg=False, insurance=False, psg=False):
                 self.game_id = game_id
+                self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
+                self.side = side
                 self.player_number = player_number
                 self.player_name = player_name
                 self.season_total = season_total
