@@ -88,7 +88,7 @@ session.add(game)
 
 
 ##get all pbp data
-goals, shots, goalie_changes, penalties, onice_events, pins = scrape.pbp(driver)
+goals, shots, goalie_changes, penalties, onice_events, shootout_attempts, pins = scrape.pbp(driver)
 
 #get goalie changes
 for goalie_change in goalie_changes:
@@ -104,11 +104,16 @@ for penalty in penalties:
 
 #get goals
 for goal in goals:
+    print(goal)
     session.add(db.Goal(**goal))
 
 #get onice_events
 for onice_event in onice_events:
     session.add(db.Onice_Event(**onice_event))
+
+#get shootout_attempts
+for shootout_attempt in shootout_attempts:
+    session.add(db.Shootout_Attempt(**shootout_attempt))
 
 # #get pins
 # for pin in pins:
