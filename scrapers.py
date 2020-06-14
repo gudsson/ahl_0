@@ -329,9 +329,10 @@ def player_scorelines(driver):
 def pbp(driver):   ###COMPLETE
     #declarations
     pbp_periods, pbp_events, pbp_arr = [], [], []
-    pbp_assists, pbp_assist_line = [], []
-    plus_minus_tables, pbp_plus_players, pbp_minus_players, plus_minus_rows = [], [], [], []
+    pbp_assists = [] #pbp_assists, pbp_assist_line = [], []
+    plus_minus_tables, plus_minus_rows = [], [] #plus_minus_tables, pbp_plus_players, pbp_minus_players, plus_minus_rows = [], [], [], []
     goals, shots, onice_events, penalties, goalie_changes, shootout_attempts = [], [], [], [], [], []
+    pins = []
     pbp_id = 0
 
     #get elements
@@ -552,10 +553,15 @@ def pbp(driver):   ###COMPLETE
 
     print("==========")
 
+    print(pbp_arr[0])
+
+    print("==========")
+
+    print(*pbp_arr)
 
     # pins = get_pins(driver, pbp_arr)
 
-    pins = []
+    
 
 
     
@@ -624,7 +630,7 @@ def get_pins(driver, pbp_arr):   ###COMPLETE
 def preview_stats(driver):
     #declarations
     tables = []
-    head2head_statlines, h2h_rows, h2h_stats = [], [], [] #h2h
+    head2head_statlines, h2h_rows = [], [] # h2h_stats = [] #h2h
     previous_meeting_rows, previous_meetings = [], [] #previous meetings
     top_scorer_tables, top_scorer_rows, top_scorers = [], [], [] #top scorers
     recent_game_tables, recent_games = [], [] #recent games
