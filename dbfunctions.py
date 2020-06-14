@@ -26,7 +26,7 @@ def connect():
         
 
         engine = create_engine(
-        "postgresql+psycopg2://postgres:Olafur84!@localhost/AHLdb",
+        "postgresql+psycopg2://postgres:root@localhost/AHLdb",
         executemany_mode='batch')
 
 
@@ -534,17 +534,18 @@ class Shootout_Attempt(Base):
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
         pbp_id = Column(String(length=4))
-        event = Column(String(length=7))
+        event = Column(String(length=16))
         team = Column(String(length=35))
         side = Column(String(length=4))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
+        goalie_number = Column(String(length=2))
+        goalie_name = Column(String(length=50))
         result = Column(String(length=7))
-        gwg = Column(Boolean, default=False)
-        time = Column(Time)
         period = Column(String(length=3))
+        gwg = Column(Boolean, default=False)
 
-        def __init__(self, game_id, pbp_id, event, team, side, player_number, player_name, result, gwg, time, period):
+        def __init__(self, game_id, pbp_id, event, team, side, player_number, player_name, goalie_number, goalie_name, result, period, gwg=False):
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.event = event
@@ -552,11 +553,11 @@ class Shootout_Attempt(Base):
                 self.side = side
                 self.player_number = player_number
                 self.player_name = player_name
+                self.goalie_number = goalie_number
+                self.goalie_name = goalie_name
                 self.result = result
-                self.gwg = gwg
-                self.time = time
                 self.period = period
-        # 
+                self.gwg = gwg
  
         # def __init__(self, game_id, event, result, side, team, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period):  
         #         self.game_id = game_id

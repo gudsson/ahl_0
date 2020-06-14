@@ -1,6 +1,6 @@
 # import libraries
 import urllib.request
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 import time
@@ -523,7 +523,7 @@ def pbp(driver):   ###COMPLETE
 
             elif pbp_event_type == " ":  # in shootout
                 #declaration
-                shootout_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number, "time": pbp_event_time}
+                shootout_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number}
 
                 #scrape shootout data
                 shootout_dict["event"] = "SHOOTOUT ATTEMPT"

@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 import dbfunctions as db
 import scrapers as scrape
 import pandas as pd
+import time
 
 # connect to the db
 # conn = psycopg2.connect(
@@ -19,9 +20,17 @@ import pandas as pd
 
 engine, session = db.connect()
 
-game_id = 1020530
+game_id = 1020531
 
 driver = scrape.get_driver(game_id)
+
+
+
+
+time.sleep(10)
+
+
+
 
 # get game data
 # game_data = dict()
@@ -104,7 +113,6 @@ for penalty in penalties:
 
 #get goals
 for goal in goals:
-    print(goal)
     session.add(db.Goal(**goal))
 
 #get onice_events
