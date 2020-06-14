@@ -179,6 +179,7 @@ class Player_Scoreline(Base):
         game_id = Column(Integer)
         team = Column(String(length=35))
         side = Column(String(length=4))
+        opponent = Column(String(length=35))
         jersey_number = Column(String(length=2))
         letter = Column(String(length=1))
         name = Column(String(length=50))
@@ -190,10 +191,11 @@ class Player_Scoreline(Base):
         shots = Column(String(length=2))
         plus_minus = Column(String(length=3))
 
-        def __init__(self, game_id, team, side, jersey_number, letter, name, player_id, position, goals, assists, pims, shots, plus_minus):
+        def __init__(self, game_id, team, side, opponent, jersey_number, letter, name, player_id, position, goals, assists, pims, shots, plus_minus):
                 self.game_id = game_id
                 self.team = team
                 self.side = side
+                self.opponent = opponent
                 self.jersey_number = jersey_number
                 self.letter = letter
                 self.name = name
@@ -536,7 +538,7 @@ class Shootout_Attempt(Base):
                 self.result = result
                 self.period = period
                 self.gwg = gwg
-                
+
 
 class Pin(Base):
         __tablename__ = 'pins'
