@@ -361,7 +361,6 @@ class Shot(Base):
         game_id = Column(Integer)
         pbp_id = Column(String(length=4))
         event = Column(String(length=12))
-        result = Column(String(length=4))
         team = Column(String(length=35))
         side = Column(String(length=4))
         opponent = Column(String(length=35))
@@ -371,12 +370,12 @@ class Shot(Base):
         goalie_name = Column(String(length=50))
         time = Column(Time)
         period = Column(String(length=4))
+        result = Column(String(length=4), default="")
 
-        def __init__(self, game_id, pbp_id, event, result, team, side, opponent, player_number, player_name, goalie_number, goalie_name, time, period):
+        def __init__(self, game_id, pbp_id, event, team, side, opponent, player_number, player_name, goalie_number, goalie_name, time, period,  result=""):
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.event = event
-                self.result = result
                 self.team = team
                 self.side = side
                 self.opponent = opponent
@@ -386,6 +385,7 @@ class Shot(Base):
                 self.goalie_name = goalie_name
                 self.time = time
                 self.period = period
+                self.result = result
 
 
 class Penalty(Base):
@@ -545,10 +545,12 @@ class Pin(Base):
 
         id = Column(Integer, primary_key = True)
         game_id = Column(Integer)
-        event_id = Column(String(length=4))
+        pbp_id = Column(String(length=4))
         pin_id = Column(String(length=4))
-        result = Column(String(length=4))
+        event = Column(String(length=4))
         team = Column(String(length=35))
+        side = Column(String(length=4))
+        opponent = Column(String(length=35))
         top_position = Column(Float)
         left_position = Column(Float)
         player_number = Column(String(length=2))
@@ -557,13 +559,16 @@ class Pin(Base):
         goalie_name = Column(String(length=50))
         time = Column(Time)
         period = Column(String(length=3))
+        result = Column(String(length=4), default="")
  
-        def __init__(self, game_id, event_id, pin_id, result, team, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period):  
+        def __init__(self, game_id, pbp_id, pin_id, event, team, side, opponent, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period, result=""):  
                 self.game_id = game_id
-                self.event_id = event_id
+                self.pbp_id = pbp_id
                 self.pin_id = pin_id
-                self.result = result
+                self.event = event
                 self.team = team
+                self.side = side
+                self.opponent = opponent
                 self.top_position = top_position
                 self.left_position = left_position
                 self.player_number = player_number
@@ -572,6 +577,7 @@ class Pin(Base):
                 self.goalie_name = goalie_name
                 self.time = time
                 self.period = period
+                self.result = result
 
 
 

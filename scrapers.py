@@ -101,6 +101,7 @@ def get_scoreline(line, side):
     player["game_id"] = game.game_id
     player["team"] = getattr(game, str(side + "_team"))
     player["side"] = side
+    player["opponent"] = game.away_team if side == game.home_team else game.home_team
     player["jersey_number"] = td[0].text
     player["letter"] = td[1].text
     player["name"] = td[2].text.split(", ",1)[1] + " " + td[2].text.split(", ",1)[0]
@@ -355,6 +356,7 @@ def pbp(driver):   ###COMPLETE
             pbp_event_row = event.find_element_by_xpath("div[contains(@class,'ht-event-row')]")
             pbp_side = "away" if pbp_event_row.find_element_by_xpath("div[@class='ht-home-or-visit']/div").get_attribute('class').split("team")[0].split("ht-")[1] == "visit" else "home"
             pbp_team = pbp_event_row.find_element_by_xpath("div[@class='ht-event-image']/img").get_attribute('title')
+            pbp_opponent = game.home_team if pbp_team == game.away_team else game.away_team
             pbp_event_time = pbp_event_row.find_element_by_xpath("div[@class='ht-event-time']").text
 
             # Pull Event Details
@@ -366,35 +368,43 @@ def pbp(driver):   ###COMPLETE
             # Pull Shot Info
             if "SHOT" in pbp_event_type:
                 #delcarations
-                shot_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number, "time": pbp_event_time}
-                
+                shot_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "opponent": pbp_opponent, "period": period_number, "time": pbp_event_time}
+                goal_dict = {}
                 #assign scraped shot info
                 shot_dict["event"] = pbp_event_type
                 shot_dict["player_number"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#", "")
                 shot_dict["player_name"] = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'shooter.lastName')]").text
                 shot_dict["goalie_number"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
                 shot_dict["goalie_name"] = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'goalie.lastName')]").text
-                shot_dict["result"] = ""
-                pbp_arr.append(shot_dict)
+                # shot_dict["result"] = ""
+                
 
                 try:
-                    #if shot event resulted in a goal, add line to pbp_array as goal
+                    #if shot is a goal
                     shot_dict["result"] = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isGoal']").text
-
-                    pbp_arr.append(shot_dict)
+                    
+                    #append second event to pbp_array with blank result
+                    goal_dict.update(shot_dict)
+                    goal_dict["result"] = ""
+                    pbp_arr.append(goal_dict)
 
                 except:
                     pass
 
+                #append shot to pbp_array
+                pbp_arr.append(shot_dict)
+
+                #append dict to result array
                 shots.append(shot_dict)
-                print(f'{shot_dict["event"]} | {shot_dict["side"]} | {shot_dict["team"]} | {shot_dict["event"]} by #{shot_dict["player_number"]} {shot_dict["player_name"]} on #{shot_dict["goalie_number"]} {shot_dict["goalie_name"]} at {shot_dict["time"]} {shot_dict["period"]}')
+                # print(shot_dict)
+                # print(f'{shot_dict["event"]} | {shot_dict["side"]} | {shot_dict["team"]} | {shot_dict["event"]} by #{shot_dict["player_number"]} {shot_dict["player_name"]} on #{shot_dict["goalie_number"]} {shot_dict["goalie_name"]} at {shot_dict["time"]} {shot_dict["period"]}')
 
             # Pull Goal Info
             elif pbp_event_type == "GOAL":
                 #declarations
                 pbp_goal_types = []
                 pbp_goal_type = ""
-                goal_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number, "time": pbp_event_time}
+                goal_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "opponent": pbp_opponent,  "period": period_number, "time": pbp_event_time}
 
                 #get elements
                 pbp_goal_types = pbp_event_details.find_elements_by_xpath("div/span[contains(@ng-if,'pbp.details.properties')]")
@@ -442,7 +452,7 @@ def pbp(driver):   ###COMPLETE
 
                 goals.append(goal_dict)
 
-                print(pbp_goal_str + "\n")
+                # print(pbp_goal_str + "\n")
 
             # Pull Plus-Minus Info
 
@@ -455,7 +465,7 @@ def pbp(driver):   ###COMPLETE
 
                 #loop through +/- tables (note: not actual plus/minus, just who is on ice for a goal)
                 for table in plus_minus_tables:
-                    onice_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number, "time": pbp_event_time}
+                    onice_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "opponent": pbp_opponent,  "period": period_number, "time": pbp_event_time}
                     onice_dict["event"] = table.find_element_by_xpath("tbody/tr/th").text.lower()
                     if onice_dict["event"] == "plus":
                         onice_dict["plus_minus"] = 1
@@ -476,12 +486,12 @@ def pbp(driver):   ###COMPLETE
 
                         #add to return array
                         onice_events.append(onice_dict)
-                        print(f'{onice_dict["plus_minus"]} | #{onice_dict["player_number"]} {onice_dict["player_name"]}')
+                        # print(f'{onice_dict["plus_minus"]} | #{onice_dict["player_number"]} {onice_dict["player_name"]}')
 
             # Pull Penalty Info
             elif pbp_event_type == "PENALTY":
                 #declaration
-                penalty_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number, "time": pbp_event_time}
+                penalty_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "opponent": pbp_opponent, "period": period_number, "time": pbp_event_time}
 
                 #scrape player/penalty info
                 penalty_dict["event"] = pbp_event_type
@@ -498,7 +508,7 @@ def pbp(driver):   ###COMPLETE
 
                 #append dict to return array
                 penalties.append(penalty_dict)
-                print(f'PENALTY | #{penalty_dict["player_number"]} {penalty_dict["player_name"]} | {penalty_dict["penalty"]} | {penalty_dict["pim"]} ({penalty_dict["pp"]}) at {penalty_dict["time"]} of {penalty_dict["period"]} period')
+                # print(f'PENALTY | #{penalty_dict["player_number"]} {penalty_dict["player_name"]} | {penalty_dict["penalty"]} | {penalty_dict["pim"]} ({penalty_dict["pp"]}) at {penalty_dict["time"]} of {penalty_dict["period"]} period')
 
             # Pull Goalie Change Info
             elif pbp_event_type == "GOALIE CHANGE":
@@ -508,7 +518,7 @@ def pbp(driver):   ###COMPLETE
                 #loop through all goalie change elements
                 for goalie in goalies_changing:
                     #declaration
-                    goalie_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number, "time": pbp_event_time}
+                    goalie_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side,  "opponent": pbp_opponent, "period": period_number, "time": pbp_event_time}
 
                     #scrape goalie change info
                     goalie_dict["event"] = pbp_event_type
@@ -520,11 +530,11 @@ def pbp(driver):   ###COMPLETE
 
                     #append dict to return array
                     goalie_changes.append(goalie_dict)
-                    print(f'GOALIE CHANGE | {pbp_side} #{goalie_dict["goalie_number"]} {goalie_dict["goalie_name"]} {goalie_dict["action"]} at {pbp_event_time}, {period_name} period.')
+                    # print(f'GOALIE CHANGE | {pbp_side} #{goalie_dict["goalie_number"]} {goalie_dict["goalie_name"]} {goalie_dict["action"]} at {pbp_event_time}, {period_name} period.')
 
             elif pbp_event_type == " ":  # in shootout
                 #declaration
-                shootout_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "period": period_number}
+                shootout_dict = {"game_id": game.game_id, "pbp_id": pbp_id, "team": pbp_team, "side": pbp_side, "opponent": pbp_opponent, "period": period_number}
 
                 #scrape shootout data
                 shootout_dict["event"] = "SHOOTOUT ATTEMPT"
@@ -544,86 +554,70 @@ def pbp(driver):   ###COMPLETE
                         shootout_dict["result"] = result.text
                 
                 shootout_attempts.append(shootout_dict)
-                print(f'{shootout_dict["event"]}  | {shootout_dict["team"]} #{shootout_dict["player_number"]} {shootout_dict["player_name"]} shootout attempt on #{shootout_dict["goalie_number"]} {shootout_dict["goalie_name"]}:   {shootout_dict["result"]}')
+                # print(f'{shootout_dict["event"]}  | {shootout_dict["team"]} #{shootout_dict["player_number"]} {shootout_dict["player_name"]} shootout attempt on #{shootout_dict["goalie_number"]} {shootout_dict["goalie_name"]}:   {shootout_dict["result"]}')
 
             #log any unaccounted for event types
             else:
                 print(f'Game #{game.game_id}, pbp_id #{pbp_id}: EVENT NOT ACCOUNTED FOR - {pbp_event_type}')
 
+    #get pins
+    pins = get_pins(driver, pbp_arr)
 
-    print("==========")
-
-    print(pbp_arr[0])
-
-    print("==========")
-
-    print(*pbp_arr)
-
-    # pins = get_pins(driver, pbp_arr)
-
-    
-
-
-    
-    # for element in pbp_arr:
-    #     print(element)
-
-			#print(pbp_event_type)
-    # elif pbp_event_type == "PENALTY":
-
-            # pbp_plus_players = pbp_event_row.find_elements_by_xpath("div[@ng-show='pmbutton.expanded']//tr[@ng-repeat='pmp in pbp.details.plus_players']")
-
-            # #print(len(pbp_plus_players))
-            # for player in pbp_plus_players:
-            # 			pbp_plus_number = player.find_element_by_xpath("td/span[contains(@ng-bind,'pmp.jerseyNumber')]").text.replace("#","")
-            # 			pbp_plus_player = player.find_element_by_xpath("td/a[contains(@ng-bind,'pmp.lastName')]").text
-            # 			print(f"#{pbp_plus_number} {pbp_plus_player}")
-
-            # print(player.text)
-            # if len(pbp_assists) == 1:
-        # 		pbp_goal_str
-
-            # print(len(pbp_assists))
-
-            # for assist in pbp_assists:
-            # 		pbp_assist_number = pbp_event_details.find_elements_by_xpath("span[contains(@ng-bind,'assist.jerseyNumber')]").text.replace("#","")
-            # 		print(f"#{pbp_assist_number}")
-
-            # print(f"{pbp_side} | {pbp_team} | {pbp_event_type} by #{pbp_shooter_number} {pbp_shooter} ({pbp_goal_count}) at {pbp_event_time} from ")
-
+    #return full arrays
     return goals, shots, goalie_changes, penalties, onice_events, shootout_attempts, pins
 
 def get_pins(driver, pbp_arr):   ###COMPLETE
     pins = []
     rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
     found_pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
-    i = 1
+    # i = 1
 
     # goal_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team, "time": pbp_event_time, "period": period_name}
 
-    if len(found_pins) == len(pbp_arr):
-        print("Arrays are equal")
+    if len(found_pins) != len(pbp_arr):
+        print("ERROR, number of pins not equal to number of array entries")# error
+        # print("Arrays are equal")
+    
+    for pin, pbp_dict in zip(found_pins, pbp_arr):
+        #declaration
+        pin_dict = dict()
+        pin_dict.update(pbp_dict)
 
-    for pin, data in zip(found_pins, pbp_arr):
-        pin_dict = {"game_id": game_id, "team": "FUCK", "time": data[5], "period": data[4]}
-        pin_dict["event_id"] = 1 ####TBD
+        #get elements
         pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
-        pin_dict["result"] = pin.text
-
-        #player info
-        pin_dict["player_number"] = data[0]
-        pin_dict["player_name"] = data[1]
-        pin_dict["goalie_number"] = data[2]
-        pin_dict["goalie_name"] = data[3]
-
-        #pin locations
-        event_loc = pin.get_attribute("style")
         pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
         pin_dict["left_position"] = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+        
+        #####
+        ##### check found_pin data against pbp_arr data
+        #####
 
-        print(f'#{pin_dict["pin_id"]} (id={pin_dict["pin_id"]}) | {pin.get_attribute("id")} @ top: {pin_dict["top_position"]}, left: {pin_dict["left_position"]} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({pin_dict["result"]})')
-
+        #append dict to return array
         pins.append(pin_dict)
+
+
+
+        # print(pin_dict)
+    # for pin, pbp_data in zip(found_pins, pbp_arr):
+    #     # pin_dict = {"game_id": game.game_id, "pbp_id": pbp_data["pbp_id"], "team": pbp_data["team"], "side": pbp_data["side"], "opponent": pbp_data["opponent"], "period": pbp_data["period"], "time": pbp_data["time"]}#pin_dict = {"game_id": game_id, "team": "FUCK", "time": data[5], "period": data[4]}
+    #     # pin_dict["event_id"] = 1 ####TBD
+    #     pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
+    #     pin_dict["result"] = pin.text
+
+    #     #player info
+    #     pin_dict["player_number"] = pbp_data[0]
+    #     pin_dict["player_name"] = pbp_data[1]
+    #     pin_dict["goalie_number"] = pbp_data[2]
+    #     pin_dict["goalie_name"] = pbp_data[3]
+
+    #     #pin locations
+    #     # event_loc = pin.get_attribute("style")
+    #     pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
+    #     pin_dict["left_position"] = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
+
+    #     print(f'#{pin_dict["pin_id"]} (id={pin_dict["pin_id"]}) | {pin.get_attribute("id")} @ top: {pin_dict["top_position"]}, left: {pin_dict["left_position"]} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({pin_dict["result"]})')
+
+    #     pins.append(pin_dict)
     
     return pins
 
