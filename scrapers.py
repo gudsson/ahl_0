@@ -8,6 +8,12 @@ from datetime import datetime
 import pandas as pd
 import copy
 
+
+
+
+
+
+
 game_id = ''
 home_team = ''
 away_team = ''
@@ -18,14 +24,13 @@ class Game():
         self.home_team = home_team
         self.away_team = away_team
 
-class Shot(Game):
-    def __init__(self, game, event):
-        self.__dict__ = copy.deepcopy(game.__dict__)
-        # super().__init__(game_id, home_team, away_team)
-        self.event = event
+# class Shot(Game):
+#     def __init__(self, game, event):
+#         self.__dict__ = copy.deepcopy(game.__dict__)
+#         self.event = event
 
-    def __repr__(self):
-        return str(self.game_id) + ": " + str(self.event)
+#     def __repr__(self):
+#         return str(self.game_id) + ": " + str(self.event)
 
     # def __str__(self):
     #     return "From str method of Test: a is %s, b is %s" % (self.a, self.b)
@@ -89,32 +94,6 @@ def get_driver(id):
 
 def get_summary(driver):
     return driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-
-def get_scoreline(line, side):
-    #declarations
-    player = dict()
-
-    #get elements
-    td = line.find_elements_by_xpath("td")
-
-    #dump scrapings into dict
-    player["game_id"] = game.game_id
-    player["team"] = getattr(game, str(side + "_team"))
-    player["side"] = side
-    player["opponent"] = game.away_team if side == game.home_team else game.home_team
-    player["jersey_number"] = td[0].text
-    player["letter"] = td[1].text
-    player["name"] = td[2].text.split(", ",1)[1] + " " + td[2].text.split(", ",1)[0]
-    player["player_id"] = td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
-    player["position"] = td[3].text
-    player["goals"] = td[4].text
-    player["assists"] = td[5].text
-    player["pims"] = td[6].text
-    player["shots"] = td[7].text
-    player["plus_minus"] = td[8].text
-    
-    #return dict
-    return player
 
 def game_data(driver):
     #declarations
@@ -307,6 +286,33 @@ def coaches(driver):
     return coaches
 
 def player_scorelines(driver):
+    
+    def get_scoreline(line, side):
+        #declarations
+        player = dict()
+
+        #get elements
+        td = line.find_elements_by_xpath("td")
+
+        #dump scrapings into dict
+        player["game_id"] = game.game_id
+        player["team"] = getattr(game, str(side + "_team"))
+        player["side"] = side
+        player["opponent"] = game.away_team if side == game.home_team else game.home_team
+        player["jersey_number"] = td[0].text
+        player["letter"] = td[1].text
+        player["name"] = td[2].text.split(", ",1)[1] + " " + td[2].text.split(", ",1)[0]
+        player["player_id"] = td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+        player["position"] = td[3].text
+        player["goals"] = td[4].text
+        player["assists"] = td[5].text
+        player["pims"] = td[6].text
+        player["shots"] = td[7].text
+        player["plus_minus"] = td[8].text
+        
+        #return dict
+        return player
+
     #declarations
     players = []
     away_player_lines = []
@@ -323,6 +329,7 @@ def player_scorelines(driver):
 
     for line in home_player_lines:
         players.append(get_scoreline(line, "home"))
+
 
     #return array of dicts
     return players
