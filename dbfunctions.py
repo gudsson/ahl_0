@@ -44,7 +44,7 @@ def connect():
         meta = MetaData()
         Base.metadata.create_all(engine)
 
-        return engine, session, meta
+        return Base, engine, session, meta
 
 class Missing_Game(Base):
         __tablename__ = 'missing_games'
@@ -631,7 +631,8 @@ def get_last_game_in_db(session, meta):
         # for _res in query.all():
         #         print(_res)
 
-        print(query.first()[0])
+        # print(query.first()[0])
+        return query.first()[0]
 
 def get_last_meeting(session, meta):
         
@@ -642,6 +643,9 @@ def get_last_meeting(session, meta):
 
         print(query.first()[0])
 
+def drop_all_tables(Base, engine):
+        
+        Base.metadata.drop_all(bind=engine)
 
 # def create_table(engine, meta):
         

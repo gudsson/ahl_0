@@ -58,3 +58,4 @@
 2020-06-15 22:58:43,910:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
 2020-06-15 22:59:00,002:ERROR:__main__:Game #1020558 - cannot pull data despite game being final
 2020-06-15 23:01:08,346:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 23:11:13,558:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558

@@ -72,8 +72,18 @@ class Game():
 
 # time.sleep(5)
 # saved_driver = driver
+def initialize_driver():
+    try:
+        options = Options()
+        options.headless = True
 
-def get_driver(id):
+        driver = webdriver.Firefox(options=options)
+        
+        return driver
+    except:
+        logger.error('could not initialize firefox driver')
+
+def get_driver(id, driver):
 
     global game
     game.game_id = id
@@ -81,10 +91,10 @@ def get_driver(id):
     urlpage = 'https://theahl.com/stats/game-center/' + str(id)
     logger.info(f'Pulling AHL Game #{id} from: {urlpage}')
 
-    options = Options()
-    options.headless = True
+    # options = Options()
+    # options.headless = True
 
-    driver = webdriver.Firefox(options=options)
+    # driver = webdriver.Firefox(options=options)
     driver.get(urlpage)
 
     return driver

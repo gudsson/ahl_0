@@ -8,6 +8,7 @@ import pandas as pd
 import time
 from datetime import datetime
 import logging
+import sys
 
 def scrape_stats():
     # get ref data
@@ -120,7 +121,7 @@ logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
 #connect to db
-engine, session, meta = db.connect()
+Base, engine, session, meta = db.connect()
 
 #get last game
 game_id = 1020558
@@ -130,7 +131,22 @@ game_id = 1020558
 #1020558 final example
 
 #load next game on gamecenter via firefox
-driver = scrape.get_driver(game_id)
+driver = scrape.initialize_driver()
+
+#get last scraped game
+try:    #try getting most recent scraped game
+    previous_game = db.get_last_game_in_db(session, meta)
+except: #no games found in database, assume first AHL game with pins
+    previous_game = 1017122
+
+print(previous_game)
+
+##Drop all tables (if needed)
+# db.drop_all_tables(Base, engine)
+
+exit()
+
+driver = scrape.get_driver(game_id, driver)
 
 # try to pull game data
 for attempt in range(2):
