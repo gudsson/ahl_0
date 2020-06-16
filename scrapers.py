@@ -93,42 +93,56 @@ def get_summary(driver):
     return driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
 def game_data(driver):
-    #declarations
-    global game
-    game_info = dict()
-    arena = dict()
 
-    #get various elements
-    matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
-    scores = matchup_container.find_elements_by_xpath("//div[@class='ht-gc-score-container']")
-    date = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text.split(", ", 1)
+    def get_game_data(matchup_container):
+        #declarations
+        global game
+        game_info = dict()
+        arena = dict()
+        # combined_dict = dict()
+        game_data = []
+        
+        #get various elements
+        scores = matchup_container.find_elements_by_xpath("//div[@class='ht-gc-score-container']")
+        date = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-game-date')]").text.split(", ", 1)
 
-    #add scraping to dict
-    game_info["game_id"] = game.game_id
-    game_info["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
-    game_info["date"] = date[1]
-    game_info["season"] = game_info["date"].split(",")[1].strip()
-    game_info["dow"] = date[0]
-    game_info["status"] = matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text
-    game_info["away_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text
-    game_info["away_score"] = scores[0].text
-    game_info["home_score"] = scores[1].text
-    game_info["home_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text
+        #add scraping to dict
+        game_info["game_id"] = game.game_id
+        game_info["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
+        game_info["date"] = date[1]
+        game_info["season"] = game_info["date"].split(",")[1].strip()
+        game_info["dow"] = date[0]
+        game_info["status"] = matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text
+        game_info["away_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text
+        game_info["away_score"] = scores[0].text
+        game_info["home_score"] = scores[1].text
+        game_info["home_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text
 
-    #Gets season based on date.  Assumes season will always end before September 1 
-    game_date = datetime.strptime(game_info["date"],"%B %d, %Y")
-    game_info["season"] = game_info["season"] + str(int(game_info["season"])+1) if game_date.month > 8 else str(int(game_info["season"])-1) + game_info["season"]
+        #Gets season based on date.  Assumes season will always end before September 1 
+        game_date = datetime.strptime(game_info["date"],"%B %d, %Y")
+        game_info["season"] = game_info["season"] + str(int(game_info["season"])+1) if game_date.month > 8 else str(int(game_info["season"])-1) + game_info["season"]
+        
+        #add arena to game_info dict
+        arena = arena_data(driver)
+        game_info.update(arena)
 
-    #add arena to returned dict
-    arena = arena_data(driver)
-    game_data = {**game_info, **arena}
+        #append all game data to return array
+        game_data.append(game_info)
 
-    #update class instance 'game'
-    game.home_team = game_info["home_team"]
-    game.away_team = game_info["away_team"]
+        #update class instance 'game'
+        game.home_team = game_info["home_team"]
+        game.away_team = game_info["away_team"]
 
-    #return dict
-    return game_data
+        print(len(game_data))
+        print(*game_data)
+        #return array
+        return game_data
+
+    try:
+        container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
+        return get_game_data(container)
+    except:
+        raise ValueError('Cannot find game data')
 
 def arena_data(driver):
     #declarations

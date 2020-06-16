@@ -1,2 +1,60 @@
-2020-06-15 20:17:04,180:INFO:__main__:Hello
-2020-06-15 20:17:04,254:INFO:scrapers:Pulling AHL Game #1020531 from: https://theahl.com/stats/game-center/1020531
+2020-06-15 21:22:59,172:INFO:scrapers:Pulling AHL Game #1020822 from: https://theahl.com/stats/game-center/1020822
+2020-06-15 21:23:14,773:WARNING:__main__:Game #1020822 - game data not found...waiting 10 seconds before retrying
+2020-06-15 21:23:24,777:ERROR:__main__:Game #1020822 - ERROR IN LOADING DATA
+2020-06-15 21:26:13,901:INFO:scrapers:Pulling AHL Game #1020822 from: https://theahl.com/stats/game-center/1020822
+2020-06-15 21:26:28,372:WARNING:__main__:Game #1020822 - game data not found...waiting 10 seconds before retrying
+2020-06-15 21:26:38,376:ERROR:__main__:Game #1020822 - ERROR IN LOADING DATA
+2020-06-15 22:24:55,510:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:25:13,129:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:25:23,278:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:27:12,720:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:27:30,448:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:27:40,616:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:29:16,956:INFO:__main__:Pulling AHL Game #1020531 from: https://theahl.com/stats/game-center/1020531
+2020-06-15 22:29:41,955:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:29:59,694:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:30:09,836:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:31:54,164:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:32:11,295:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:32:21,443:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:33:10,701:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:33:34,612:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:33:44,741:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:35:04,480:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:35:22,523:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:35:32,658:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:36:30,413:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:36:45,029:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:36:55,164:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:38:33,180:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:38:50,233:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:39:00,372:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:40:00,243:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:40:16,399:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:40:26,530:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:41:31,147:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:41:50,859:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:42:01,005:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:42:34,103:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:42:52,276:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:43:02,414:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:45:13,301:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:45:32,303:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:45:42,454:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:46:36,678:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:46:55,107:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:47:05,239:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:47:56,262:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:48:12,738:WARNING:__main__:Game #1020558 - game data not found...waiting 10 seconds before retrying
+2020-06-15 22:48:22,878:ERROR:__main__:Game #1020558 - ERROR IN LOADING DATA
+2020-06-15 22:50:32,825:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:50:48,190:ERROR:__main__:Game #1020558 - cannot pull data despite game being final
+2020-06-15 22:51:40,085:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:51:56,828:ERROR:__main__:Game #1020558 - cannot pull data despite game being final
+2020-06-15 22:53:40,106:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:53:56,576:ERROR:__main__:Game #1020558 - cannot pull data despite game being final
+2020-06-15 22:54:53,035:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:55:09,951:ERROR:__main__:Game #1020558 - cannot pull data despite game being final
+2020-06-15 22:58:43,910:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558
+2020-06-15 22:59:00,002:ERROR:__main__:Game #1020558 - cannot pull data despite game being final
+2020-06-15 23:01:08,346:INFO:scrapers:Pulling AHL Game #1020558 from: https://theahl.com/stats/game-center/1020558

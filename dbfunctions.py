@@ -46,6 +46,20 @@ def connect():
 
         return engine, session, meta
 
+class Missing_Game(Base):
+        __tablename__ = 'missing_games'
+
+        id = Column(Integer, primary_key = True)
+        game_id = Column(Integer)
+        status = Column(String(length=20))
+        time_queried = Column(Time)
+
+        def __init__(self, game_id, status, time_queried):
+                self.game_id = game_id
+                self.status = status
+                self.time_queried = time_queried
+
+
 class Game(Base):
         __tablename__ = 'games'
 
