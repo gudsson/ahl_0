@@ -1,23 +1,22 @@
 # import libraries
 import urllib.request
-# from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 import time
 from datetime import datetime
 import pandas as pd
 import copy
+import logging
 
+#error logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+file_handler = logging.FileHandler('main.log')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
-
-
-
-
-
-game_id = ''
-home_team = ''
-away_team = ''
-
+#define game class
 class Game():
     def __init__(self, game_id=None, home_team=None, away_team=None):
         self.game_id = game_id
@@ -75,14 +74,12 @@ class Game():
 # saved_driver = driver
 
 def get_driver(id):
-    global game_id ####Delete at end
-    game_id = id ####Delete at end
 
     global game
     game.game_id = id
 
     urlpage = 'https://theahl.com/stats/game-center/' + str(id)
-    print(f'Pulling AHL Game #{id} from: {urlpage}')
+    logger.info(f'Pulling AHL Game #{id} from: {urlpage}')
 
     options = Options()
     options.headless = True
@@ -125,10 +122,6 @@ def game_data(driver):
     #add arena to returned dict
     arena = arena_data(driver)
     game_data = {**game_info, **arena}
-
-    global home_team, away_team ####Delete at end
-    home_team = game_info["home_team"]####Delete at end
-    away_team = game_info["away_team"]####Delete at end
 
     #update class instance 'game'
     game.home_team = game_info["home_team"]
@@ -480,7 +473,7 @@ def pbp(driver):   ###COMPLETE
                         onice_dict["side"] = pbp_side
                     else:
                         onice_dict["plus_minus"] = -1
-                        onice_dict["team"] = game.away_team if pbp_team == game.home_team else home_team
+                        onice_dict["team"] = game.away_team if pbp_team == game.home_team else game.home_team
                         onice_dict["side"] = "away" if pbp_team == game.home_team else "home"
 
                     #get individual players via rows
@@ -694,7 +687,7 @@ def preview_stats(driver):
             top_scorer["player"] = top_details[0].text
             top_scorer["statline"] = top_details[1].text
             top_scorers.append(top_scorer)   
-        team = home_team
+        team = game.home_team
     ##### /top scorers #####
 
     ##### recent games #####
@@ -778,5 +771,5 @@ if __name__ == "__main__":
     # e = Event(g, "Hello")
     # print(repr(e))
     drive = get_driver(1020531)
-    pbp(drive)
+    # pbp(drive)
     # print(*game_data)

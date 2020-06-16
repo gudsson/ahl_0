@@ -5,6 +5,17 @@ import psycopg2
 from sqlalchemy import create_engine, Table, Column, Integer, String, Boolean, Float, Time, Date, MetaData, select, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import logging
+
+
+#error logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+file_handler = logging.FileHandler('main.log')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
 
 # connect to the db
 # conn = psycopg2.connect(
