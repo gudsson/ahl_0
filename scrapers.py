@@ -8,70 +8,25 @@ import pandas as pd
 import copy
 import logging
 
-#error logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
-file_handler = logging.FileHandler('main.log')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-
 #define game class
 class Game():
-    def __init__(self, game_id=None, home_team=None, away_team=None):
+    def __init__(self, game_id, home_team=None, away_team=None):
         self.game_id = game_id
         self.home_team = home_team
         self.away_team = away_team
 
-# class Shot(Game):
-#     def __init__(self, game, event):
-#         self.__dict__ = copy.deepcopy(game.__dict__)
-#         self.event = event
+#get error logger
+def get_logger():
+    log = logging.getLogger(__name__)
+    log.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+    file_handler = logging.FileHandler('main.log')
+    file_handler.setFormatter(formatter)
+    log.addHandler(file_handler)
 
-#     def __repr__(self):
-#         return str(self.game_id) + ": " + str(self.event)
+    return log
 
-    # def __str__(self):
-    #     return "From str method of Test: a is %s, b is %s" % (self.a, self.b)
-
-# specify the url
-# gamenumber = 1020544
-# urlpage = 'https://theahl.com/stats/game-center/' + str(gamenumber)
-# print(urlpage)
-
-# options = Options()
-# options.headless = True
-
-
-
-# get data from webpage
-# driver = webdriver.Firefox(options=options)
-# driver.get(urlpage)
-# game_tables = driver.find_element_by_xpath("//div[@class='ht-gc-game-details']/div[@ng-class='gcDetailTable' and @class='ht-gc-game-detail']/table[@class='ht-table ht-table-no-overflow']")
-
-# matchup_container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
-# summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
-
-# rink = driver.find_element_by_xpath("//div[@ng-class='rinkContainer']")
-# pbp = driver.find_elements_by_xpath(
-#     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]/div[contains(@ng-show,'ht_')]")
-# pbp_periods = driver.find_elements_by_xpath(
-#     "//div[contains(@ng-show,'ht_') and contains(@ng-repeat,'PlayByPlayPeriodBreakdown')]")
-
-
-# execute script to scroll down the page
-# driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-# sleep for 10s
-
-
-# pull highest-level web elements
-
-
-
-
-
-# time.sleep(5)
-# saved_driver = driver
+#initialize headless firefox driver
 def initialize_driver():
     try:
         options = Options()
@@ -83,25 +38,24 @@ def initialize_driver():
     except:
         logger.error('could not initialize firefox driver')
 
+#navigate to new game page
 def get_driver(id, driver):
 
     global game
-    game.game_id = id
+    game = Game(id)
 
     urlpage = 'https://theahl.com/stats/game-center/' + str(id)
     logger.info(f'Pulling AHL Game #{id} from: {urlpage}')
 
-    # options = Options()
-    # options.headless = True
-
-    # driver = webdriver.Firefox(options=options)
     driver.get(urlpage)
 
     return driver
 
+#get main element in gamecenter
 def get_summary(driver):
     return driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
+#get game data
 def game_data(driver):
 
     def get_game_data(matchup_container):
@@ -154,6 +108,7 @@ def game_data(driver):
     except:
         raise ValueError('Cannot find game data')
 
+#get arena data
 def arena_data(driver):
     #declarations
     arena_data = dict()
@@ -171,6 +126,7 @@ def arena_data(driver):
     #return
     return arena_data
 
+#get referee data
 def referee_data(driver):
     #declarations
     game_officials = []
@@ -192,6 +148,7 @@ def referee_data(driver):
     #return array of dicts
     return game_officials
 
+#get game boxscore
 def boxscore(driver):
     #declarations
     goal_periods = []
@@ -232,6 +189,7 @@ def boxscore(driver):
     #return array of dicts
     return scoring_summary
 
+#get penalty summary
 def penalty_summary(driver):
     #declarations
     penalty_summary = []
@@ -254,6 +212,7 @@ def penalty_summary(driver):
     #return array of dicts
     return penalty_summary
 
+#get three stars
 def three_stars(driver):
     #declarations
     stars = []
@@ -276,6 +235,7 @@ def three_stars(driver):
     #return array of dicts
     return stars
 
+#get coaches
 def coaches(driver):
     #declarations
     coaches = []
@@ -302,6 +262,7 @@ def coaches(driver):
     #return dict of arrays
     return coaches
 
+#get player scorelines
 def player_scorelines(driver):
     
     def get_scoreline(line, side):
@@ -351,7 +312,8 @@ def player_scorelines(driver):
     #return array of dicts
     return players
 
-def pbp(driver):   ###COMPLETE
+#get game play-by-play
+def pbp(driver):
     #declarations
     pbp_periods, pbp_events, pbp_arr = [], [], []
     pbp_assists = [] #pbp_assists, pbp_assist_line = [], []
@@ -590,13 +552,11 @@ def pbp(driver):   ###COMPLETE
     #return full arrays
     return goals, shots, goalie_changes, penalties, onice_events, shootout_attempts, pins
 
-def get_pins(driver, pbp_arr):   ###COMPLETE
+#get game's shot location pins
+def get_pins(driver, pbp_arr):
     pins = []
     rink = driver.find_element_by_xpath("//div[@id='ht-icerink']")
     found_pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
-    # i = 1
-
-    # goal_dict = {"game_id": game_id, "event": pbp_event_type, "team": pbp_team, "time": pbp_event_time, "period": period_name}
 
     if len(found_pins) != len(pbp_arr):
         print("ERROR, number of pins not equal to number of array entries")# error
@@ -618,33 +578,10 @@ def get_pins(driver, pbp_arr):   ###COMPLETE
 
         #append dict to return array
         pins.append(pin_dict)
-
-
-
-        # print(pin_dict)
-    # for pin, pbp_data in zip(found_pins, pbp_arr):
-    #     # pin_dict = {"game_id": game.game_id, "pbp_id": pbp_data["pbp_id"], "team": pbp_data["team"], "side": pbp_data["side"], "opponent": pbp_data["opponent"], "period": pbp_data["period"], "time": pbp_data["time"]}#pin_dict = {"game_id": game_id, "team": "FUCK", "time": data[5], "period": data[4]}
-    #     # pin_dict["event_id"] = 1 ####TBD
-    #     pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
-    #     pin_dict["result"] = pin.text
-
-    #     #player info
-    #     pin_dict["player_number"] = pbp_data[0]
-    #     pin_dict["player_name"] = pbp_data[1]
-    #     pin_dict["goalie_number"] = pbp_data[2]
-    #     pin_dict["goalie_name"] = pbp_data[3]
-
-    #     #pin locations
-    #     # event_loc = pin.get_attribute("style")
-    #     pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
-    #     pin_dict["left_position"] = pin.get_attribute("style").split("%; left: ")[1].split("%;")[0]
-
-    #     print(f'#{pin_dict["pin_id"]} (id={pin_dict["pin_id"]}) | {pin.get_attribute("id")} @ top: {pin_dict["top_position"]}, left: {pin_dict["left_position"]} | {data[0]} {data[1]} on {data[2]} {data[3]} at {data[5]} of Period {data[4]} ({pin_dict["result"]})')
-
-    #     pins.append(pin_dict)
     
     return pins
 
+#get previous stats for current matchup
 def preview_stats(driver):
     #declarations
     tables = []
@@ -743,57 +680,9 @@ def preview_stats(driver):
     ###Return Data
     return top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings
 
-def nothing():
-
-    pass
-
-def save_to_pandas():
-    # # save to pandas dataframe
-    # df = pd.DataFrame(data)
-    # print(df)
-    pass
-
-def write_to_csv():
-    # # write to csv
-    # path = 'C:\\Users\\Gudsson\\Documents\\Programming\\AHL Scrape\\'
-    # df.to_csv(path + 'asdaYogurtLink.csv')
-    pass
-
-# start = time.time()
-
-####PRINT OUTS###
-game = Game()
-# game_data = []
-# game_data = game_data(driver)
-# game_data = arena_data(driver)
-# game_data = referee_data(driver)
-# game_data = boxscore(driver)
-# game_data = penalty_summary(driver)
-# game_data = three_stars(driver)
-# game_data = coaches(driver)
-# game_data = player_scorelines(driver)
-# preview_stats(driver)
-# pins(driver)  
-#pbp(driver)
-
-# print(*game_data)
-# for item in game_data:
-#     print(*item)
-
-# end = time.time()
-
-# print(end - start)
-
-###/PRINT OUTS###
-
-# dr = get_driver(1020540)
-
-# pbp(dr)
+#initialize global values
+logger = get_logger()
+game = ''
 
 if __name__ == "__main__":
-    # g = Game(101, "Toronto","Utica")
-    # e = Event(g, "Hello")
-    # print(repr(e))
-    drive = get_driver(1020531)
-    # pbp(drive)
-    # print(*game_data)
+    pass

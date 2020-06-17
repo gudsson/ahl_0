@@ -636,12 +636,14 @@ def get_last_game_in_db(session, meta):
 
 def get_last_meeting(session, meta):
         
-        query = session.query(func.max(Previous_Meeting.game_id))
-
+        q1 = session.query(func.max(Game.game_id))
+        q2 = session.query(func.max(Missing_Game.game_id))
+        last_game = [int(q1.first()[0]), int(q2.first()[0])]
         # for _res in query.all():
         #         print(_res)
 
-        print(query.first()[0])
+        # print(query.first()[0])
+        return max(last_game)
 
 def drop_all_tables(Base, engine):
         
