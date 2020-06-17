@@ -208,8 +208,6 @@ while game_id <= (game_id + 10):#1020767:
             #loop through games (should only be one game)
             for game in games:
 
-                session.add
-
                 if game['status'].lower() == 'postponed' or game['status'].lower() == 'final':
                     print(game['status'])
 
@@ -237,10 +235,14 @@ while game_id <= (game_id + 10):#1020767:
                 break
         finally:
             #commit whatever you have to db
+            commits = len(session)
             session.commit()
 
+            #log out that game was completed
+            logger.info(f'Scraping of Game #{game_id} complete.  {commits} rows added to database.')
+
             #increment game_id
-            game_id += game_id
+            game_id += 1
 
 # quit everything
 session.close()
