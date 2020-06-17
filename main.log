@@ -20,3 +20,29 @@
 2020-06-16 22:10:18,285:INFO:__main__:Pulling data for Game #1017127
 2020-06-16 22:10:37,101:INFO:__main__:Scraping of Game #1017127 complete.  Adding 322 new rows to database.
 2020-06-16 22:10:37,218:INFO:__main__:Exiting program.
+2020-06-16 22:18:58,510:INFO:__main__:Opening Firefox...
+2020-06-16 22:19:10,793:INFO:__main__:Starting scrape sequence at Game #1017125
+2020-06-16 22:19:10,793:INFO:scrapers:Pulling AHL Game #1017125 from: https://theahl.com/stats/game-center/1017125
+2020-06-16 22:19:26,044:INFO:__main__:Pulling data for Game #1017125
+2020-06-16 22:19:38,724:INFO:__main__:Scraping of Game #1017125 complete.  Adding 222 new rows to database.
+2020-06-16 22:19:38,819:INFO:scrapers:Pulling AHL Game #1017126 from: https://theahl.com/stats/game-center/1017126
+2020-06-16 22:19:49,766:INFO:__main__:Pulling data for Game #1017126
+2020-06-16 22:20:06,240:ERROR:__main__:Game #1017126 - cannot pull data despite game being final: see https://theahl.com/stats/game-center/1017126
+2020-06-16 22:20:06,241:INFO:__main__:Scraping of Game #1017126 complete.  Adding 271 new rows to database.
+2020-06-16 22:20:06,337:INFO:scrapers:Pulling AHL Game #1017127 from: https://theahl.com/stats/game-center/1017127
+2020-06-16 22:20:17,107:INFO:__main__:Pulling data for Game #1017127
+2020-06-16 22:20:35,917:INFO:__main__:Scraping of Game #1017127 complete.  Adding 322 new rows to database.
+2020-06-16 22:20:36,014:INFO:__main__:Exiting program.
+2020-06-16 22:24:16,235:INFO:__main__:Opening Firefox...
+2020-06-16 22:24:28,965:INFO:__main__:Starting scrape sequence at Game #1017126
+2020-06-16 22:24:28,966:INFO:scrapers:Pulling AHL Game #1017126 from: https://theahl.com/stats/game-center/1017126
+2020-06-16 22:24:44,014:INFO:__main__:Pulling data for Game #1017126
+2020-06-16 22:24:59,688:ERROR:__main__:Game #1017126 - cannot pull data despite game being final: see https://theahl.com/stats/game-center/1017126
+2020-06-16 22:24:59,689:INFO:__main__:Scraping of Game #1017126 complete.  Adding 271 new rows to database.
+2020-06-16 22:24:59,801:INFO:__main__:Exiting program.
+2020-06-16 22:27:28,417:INFO:__main__:Opening Firefox...
+2020-06-16 22:27:41,701:INFO:__main__:Starting scrape sequence at Game #1017126
+2020-06-16 22:27:41,701:INFO:scrapers:Pulling AHL Game #1017126 from: https://theahl.com/stats/game-center/1017126
+2020-06-16 22:27:56,128:INFO:__main__:Pulling data for Game #1017126
+2020-06-16 22:28:11,779:INFO:__main__:Scraping of Game #1017126 complete.  Adding 273 new rows to database.
+2020-06-16 22:28:11,885:INFO:__main__:Exiting program.

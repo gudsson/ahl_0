@@ -358,11 +358,13 @@ def pbp(driver):
                 shot_dict["event"] = pbp_event_type
                 shot_dict["player_number"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'shooter.jerseyNumber')]").text.replace("#", "")
                 shot_dict["player_name"] = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'shooter.lastName')]").text
-                shot_dict["goalie_number"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
-                shot_dict["goalie_name"] = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'goalie.lastName')]").text
-                # shot_dict["result"] = ""
                 
-
+                try: #handle empty net goals
+                    shot_dict["goalie_number"] = pbp_event_details.find_element_by_xpath("div/span[contains(@ng-bind,'goalie.jerseyNumber')]").text.replace("#", "")
+                    shot_dict["goalie_name"] = pbp_event_details.find_element_by_xpath("div/a/span[contains(@ng-bind,'goalie.lastName')]").text
+                except:
+                    shot_dict["goalie_name"] = "Empty Net"
+            
                 try:
                     #if shot is a goal
                     shot_dict["result"] = pbp_event_details.find_element_by_xpath("div/span[@ng-if='pbp.details.isGoal']").text

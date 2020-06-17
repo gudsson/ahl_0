@@ -374,13 +374,13 @@ class Shot(Base):
         opponent = Column(String(length=35))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
-        goalie_number = Column(String(length=2))
+        goalie_number = Column(String(length=2), default=None)
         goalie_name = Column(String(length=50))
         time = Column(Time)
         period = Column(String(length=4))
         result = Column(String(length=4), default="")
 
-        def __init__(self, game_id, pbp_id, event, team, side, opponent, player_number, player_name, goalie_number, goalie_name, time, period,  result=""):
+        def __init__(self, game_id, pbp_id, event, team, side, opponent, player_number, player_name, goalie_name, time, period, goalie_number=None, result=""):
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.event = event
@@ -563,13 +563,13 @@ class Pin(Base):
         left_position = Column(Float)
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
-        goalie_number = Column(String(length=2))
+        goalie_number = Column(String(length=2), default=None)
         goalie_name = Column(String(length=50))
         time = Column(Time)
         period = Column(String(length=3))
         result = Column(String(length=4), default="")
  
-        def __init__(self, game_id, pbp_id, pin_id, event, team, side, opponent, top_position, left_position, player_number, player_name, goalie_number, goalie_name, time, period, result=""):  
+        def __init__(self, game_id, pbp_id, pin_id, event, team, side, opponent, top_position, left_position, player_number, player_name, goalie_name, time, period, goalie_number=None, result=""):  
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.pin_id = pin_id
