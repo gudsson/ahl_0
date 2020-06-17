@@ -16,23 +16,8 @@ file_handler = logging.FileHandler('main.log')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-
-# connect to the db
-# conn = psycopg2.connect(
-#         host = "localhost",
-#         database = "AHLdb",
-#         user="postgres",
-#         password="Olafur84!"
-# )
-
-# Base = declarative_base()
-
-# engine = create_engine(
-#     "postgresql+psycopg2://postgres:Olafur84!@localhost/AHLdb",
-#     executemany_mode='batch')
 Base = declarative_base()
 
-# class Games(Base):
 def connect():
         
         engine = create_engine(
@@ -621,9 +606,6 @@ class Pin(Base):
         #         self.period = period
 
 
-# create a cursor
-# c = conn.cursor()
-
 def get_last_game_in_db(session, meta):
         
         query = session.query(func.max(Game.game_id))
@@ -649,117 +631,7 @@ def drop_all_tables(Base, engine):
         
         Base.metadata.drop_all(bind=engine)
 
-# def create_table(engine, meta):
-        
-
-#         # c.execute("CREATE TABLE TEAMS (id int, location varchar(255), team_name varchar(255))")
-
-#         # conn.commit()
-
-#         new_table = Table(
-#                 'officials', meta, 
-#                 Column('id', Integer, primary_key = True),
-#                 Column('game_id', Integer),
-
-#         )
-
-
-#         #         test_table = Table(
-#         #         'games', meta, 
-#         #         Column('id', Integer, primary_key = True),
-#         #         Column('game_id', Integer),
-#         #         Column('game_number', Integer),
-#         #         Column('dow', String),
-#         #         Column('date', Date),
-#         #         Column('status', String),
-#         #         Column('away_team', String),
-#         #         Column('away_score', Integer), 
-#         #         Column('home_score', Integer), 
-#         #         Column('home_team', String), 
-#         #         Column('venue', String), 
-#         #         Column('attendance', Integer), 
-#         #         Column('start_time', String), 
-#         #         Column('end_time', String),
-#         #         Column('duration', Time), 
-#         # )
-
-#         meta.create_all(engine)
-
-# create_table(engine, meta)
-
-# create_table(engine)
-
-
-# Session = sessionmaker(bind=engine)
-# session = Session()
-# meta = MetaData()
-# Base.metadata.create_all(engine)
-
-
-# previous_mtg = Previous_Meeting(game_id=69, away_team='Toronto Marlies', away_score=5, home_team='Utica Comets', home_score=4, date='March 26, 2020')
-
-# # get_last_meeting(session, meta)
-
-# session.add(previous_mtg)
-
-
-# # print(session.new)
-
-# session.commit()
-# # # Create 
-# # doctor_strange = Film(title="Doctor Strange", director="Scott Derrickson", year="2016")  
-# # session.add(doctor_strange)  
-# # session.commit()
-
-# # # Read
-# # films = session.query(Film)  
-# # for film in films:  
-# #     print(film.title)
-
-# # # Update
-# # doctor_strange.title = "Some2016Film"  
-# # session.commit()
-
-# # # Delete
-# # session.delete(doctor_strange)  
-# # session.commit()  
-
-
-
-
-
-# # game = Game(game_id=7682145, game_number=989, dow="Tuesday", date="March 10, 2020", status="Final", away_team="San Jose Barracuda", away_score="7", home_score="4", home_team="Stockton Heat", venue="Stockton Arena", attendance=1639, start_time="7:01 pm", end_time="9:16 pm")
-# # session.add(game)
-# # session.commit()
-
-# session.close()
-# engine.dispose()
-
-# c.execute("select * from Teams")
-
-# c.commit()
-
-# rows = c.fetchall()
-
-# for r in rows:
-#     print(f"id {r[0]} location {r[1]} name {r[2]}")
-
-# c.execute('''SELECT * FROM public."TEAMS_test"''')
-
-# c.fetchall()
-
-# c.execute("""SELECT table_name FROM information_schema.tables
-#        WHERE table_schema = 'public'""")
-# for table in c.fetchall():
-#     print(table)
-
-
-
-# close the cursor
-# c.close()
-
-# # close the connection
-# conn.close()
-
 # if __name__ == "__main__":
-#     print("hello World")
+#     print("All tables in database have been dropped.")
+#     Base, engine, session, meta = connect()
+#     drop_all_tables(Base, engine)

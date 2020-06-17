@@ -194,7 +194,7 @@ except: #no games found in database, assume first AHL game with pins
 logger.info(f'Starting scrape sequence at Game #{game_id}')
 
 #loop through games
-while game_id <= (game_id + 10):#1020767:
+while game_id <= 1017122:#1020767:
 
     #navigate to game page via selenium
     driver = scrape.get_driver(game_id, driver)
@@ -207,10 +207,7 @@ while game_id <= (game_id + 10):#1020767:
             
             #loop through games (should only be one game)
             for game in games:
-
                 if game['status'].lower() == 'postponed' or game['status'].lower() == 'final':
-                    print(game['status'])
-
                     if game['status'].lower() == 'final':
                         try:
                             scrape_stats()
@@ -235,16 +232,18 @@ while game_id <= (game_id + 10):#1020767:
                 break
         finally:
             #commit whatever you have to db
-            commits = len(session)
+            commits = len(session.new)
+            logger.info(f'Scraping of Game #{game_id} complete.  Adding {commits} new rows to database.')
             session.commit()
 
             #log out that game was completed
-            logger.info(f'Scraping of Game #{game_id} complete.  {commits} rows added to database.')
+            
 
             #increment game_id
             game_id += 1
 
 # quit everything
+logger.info(f'Exiting program.')
 session.close()
 engine.dispose()
 driver.quit()

@@ -97,8 +97,6 @@ def game_data(driver):
         game.home_team = game_info["home_team"]
         game.away_team = game_info["away_team"]
 
-        print(len(game_data))
-        print(*game_data)
         #return array
         return game_data
 
@@ -559,8 +557,8 @@ def get_pins(driver, pbp_arr):
     found_pins = rink.find_elements_by_xpath("div[contains(@id,'ht_pin_')]")
 
     if len(found_pins) != len(pbp_arr):
-        print("ERROR, number of pins not equal to number of array entries")# error
-        # print("Arrays are equal")
+        logger.error(f'Number of pins ({len(found_pins)} not equal to number of play-by-play events ({len(pbp_arr)})')
+        raise
     
     for pin, pbp_dict in zip(found_pins, pbp_arr):
         #declaration
