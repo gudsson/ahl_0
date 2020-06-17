@@ -20,6 +20,7 @@ def scrape_stats():
             session.add(db.Official(**ref_data))
     except:
         logger.error(f'could not pull referees')
+        raise
 
     # get boxscore by period
     try:
@@ -29,6 +30,7 @@ def scrape_stats():
             session.add(db.Boxscore(**boxscore_data))
     except:
         logger.error(f'could not pull boxscore')
+        raise
 
     #get penalty summary by team
     try:
@@ -37,6 +39,7 @@ def scrape_stats():
             session.add(db.Penalty_Summary(**summary))
     except:
         logger.error(f'could not pull penalty summary')
+        raise
 
     #get three stars
     try:
@@ -45,6 +48,7 @@ def scrape_stats():
             session.add(db.Star(**star))
     except:
         logger.error(f'could not pull three stars')
+        raise
 
     #get coaches
     try:
@@ -53,6 +57,7 @@ def scrape_stats():
             session.add(db.Coach(**coach))
     except:
         logger.error(f'could not pull coaches')
+        raise
 
     # get individual scorelines
     try:
@@ -61,6 +66,7 @@ def scrape_stats():
             session.add(db.Player_Scoreline(**player_scoreline))
     except:
         logger.error(f'could not pull player scoreline')
+        raise
 
 
     ###get all preview stats
@@ -68,6 +74,7 @@ def scrape_stats():
         top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
     except:
         logger.error(f'could not pull preview stats')
+        raise
 
     #get top scorers
     try:
@@ -75,6 +82,7 @@ def scrape_stats():
             session.add(db.Top_Scorer(**top_scorer))
     except:
         logger.error(f'could not pull preview stats')
+        raise
 
     #get recent games
     try:
@@ -82,6 +90,7 @@ def scrape_stats():
             session.add(db.Recent_Game(**recent_game))
     except:
         logger.error(f'could not pull recent games')
+        raise
 
     #get matchup stats
     try:
@@ -89,6 +98,7 @@ def scrape_stats():
             session.add(db.Matchup_Statline(**matchup_statline))
     except:
         logger.error(f'could not pull matchup stats')
+        raise
 
     #get head2head stats
     try:
@@ -96,6 +106,7 @@ def scrape_stats():
             session.add(db.Head2Head_Statline(**head2head_statline))
     except:
         logger.error(f'could not pull head-to-head stats')
+        raise
 
     #get previous meetings
     try:
@@ -103,12 +114,14 @@ def scrape_stats():
             session.add(db.Previous_Meeting(**previous_meeting))
     except:
         logger.error(f'could not pull previous meetings')
+        raise
 
     #get all pbp data
     try:
         goals, shots, goalie_changes, penalties, onice_events, shootout_attempts, pins = scrape.pbp(driver)
     except:
         logger.error(f'could not pull pbp data')
+        raise
 
     #get goalie changes
     try:
@@ -116,6 +129,7 @@ def scrape_stats():
             session.add(db.Goalie_Change(**goalie_change))
     except:
         logger.error(f'could not pull goalie changes')
+        raise
 
     #get shots
     try:
@@ -123,6 +137,7 @@ def scrape_stats():
             session.add(db.Shot(**shot))
     except:
         logger.error(f'could not pull shots')
+        raise
 
     #get penalties
     try:
@@ -130,6 +145,7 @@ def scrape_stats():
             session.add(db.Penalty(**penalty))
     except:
         logger.error(f'could not pull penalties')
+        raise
 
     #get goals
     try:
@@ -137,6 +153,7 @@ def scrape_stats():
             session.add(db.Goal(**goal))
     except:
         logger.error(f'could not pull goals')
+        raise
 
     #get onice_events
     try:
@@ -144,6 +161,7 @@ def scrape_stats():
             session.add(db.Onice_Event(**onice_event))
     except:
         logger.error(f'could not pull plus-minus events')
+        raise
 
     #get shootout_attempts
     try:
@@ -151,6 +169,7 @@ def scrape_stats():
             session.add(db.Shootout_Attempt(**shootout_attempt))
     except:
         logger.error(f'could not pull shootout attempts')
+        raise
 
     #get pins
     try:
@@ -158,6 +177,7 @@ def scrape_stats():
             session.add(db.Pin(**pin))
     except:
         logger.error(f'could not pull pins')
+        raise
 
 def error_logging():
     #error logging
@@ -194,17 +214,29 @@ except: #no games found in database, assume first AHL game with pins
 logger.info(f'Starting scrape sequence at Game #{game_id}')
 
 #loop through games
-while game_id <= 1017122:#1020767:
+while game_id <= 1017127:#1020767:
 
     #navigate to game page via selenium
     driver = scrape.get_driver(game_id, driver)
+    time.sleep(10)
 
     # try to pull game data
     for attempt in range(2):
         try:
             #get game data
             games = scrape.game_data(driver)
-            
+            logger.info(f'Pulling data for Game #{game_id}')
+
+        except:
+            if attempt == 0:    #try again if first pull attempt fails
+                logger.warning(f'Game #{game_id} - game data not found...waiting 10 seconds before retrying')
+                time.sleep(10)
+            else:               #second try failed, log failure and add game to missing game list
+                logger.error(f'Game #{game_id} - ERROR IN LOADING DATA')
+                missing_game = db.Missing_Game(game_id, "did not load", datetime.now())
+                session.add(missing_game)
+                break
+        else:
             #loop through games (should only be one game)
             for game in games:
                 if game['status'].lower() == 'postponed' or game['status'].lower() == 'final':
@@ -220,27 +252,15 @@ while game_id <= 1017122:#1020767:
                     logger.error(f"Game #{game_id} - game state = {game['status']}")
                     missing_game = db.Missing_Game(game_id, game['status'].lower(), datetime.now())
                     session.add(missing_game)
-            break
-        except:
-            if attempt == 0:    #try again
-                logger.warning(f'Game #{game_id} - game data not found...waiting 10 seconds before retrying')
-                time.sleep(10)
-            else:               #second try failed, log failure and add game to missing game list
-                logger.error(f'Game #{game_id} - ERROR IN LOADING DATA')
-                missing_game = db.Missing_Game(game_id, "did not load", datetime.now())
-                session.add(missing_game)
-                break
-        finally:
-            #commit whatever you have to db
             commits = len(session.new)
             logger.info(f'Scraping of Game #{game_id} complete.  Adding {commits} new rows to database.')
-            session.commit()
+            break
+        
+    #commit whatever you have to db
+    session.commit()
 
-            #log out that game was completed
-            
-
-            #increment game_id
-            game_id += 1
+    #increment game_id
+    game_id += 1
 
 # quit everything
 logger.info(f'Exiting program.')

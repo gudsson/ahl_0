@@ -408,7 +408,7 @@ class Penalty(Base):
         opponent = Column(String(length=35))
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
-        penalty = Column(String(length=50))
+        penalty = Column(String(length=100))
         pim = Column(String(length=2))
         pp = Column(String(length=2))
         time = Column(Time)
@@ -631,7 +631,7 @@ def drop_all_tables(Base, engine):
         
         Base.metadata.drop_all(bind=engine)
 
-# if __name__ == "__main__":
-#     print("All tables in database have been dropped.")
-#     Base, engine, session, meta = connect()
-#     drop_all_tables(Base, engine)
+if __name__ == "__main__":
+    print("All tables in database have been dropped.")
+    Base, engine, session, meta = connect()
+    drop_all_tables(Base, engine)

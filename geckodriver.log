@@ -5136,8 +5136,10 @@ A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
 JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
 1592366489884	Marionette	INFO	Listening on port 61739
 1592366490229	Marionette	WARN	TLS certificate errors will be ignored for this session
-1592367049876	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilenXObY1"
-*** You are running in headless mode.
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 17232, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+1592368929725	Marionette	INFO	Stopped listening on port 61739
+.
 1592367050581	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1592367052321	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1592367052321	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -5146,18 +5148,33 @@ JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't fin
 JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
 1592367054890	Marionette	INFO	Listening on port 62171
 1592367055108	Marionette	WARN	TLS certificate errors will be ignored for this session
-1592367196579	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilew6Z2TW"
-*** You are running in headless mode.
-1592367197267	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
-1592367199209	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
-1592367199209	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
-1592367199209	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
-1592367199209	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
-JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 12772, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x370045,name=PContent::Msg_NotifyProcessPriorityChanged) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x37006D,name=PContent::Msg_SuspendInputEventQueue) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x37006B,name=PContent::Msg_FlushInputEventQueue) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x37006C,name=PContent::Msg_ResumeInputEventQueue) Channel error: cannot send/recv
+
+
+###!!! [Parent][MessageChannel] Error: (msgtype=0x37004D,name=PContent::Msg_Shutdown) Channel error: cannot send/recv
+
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 12772, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+1592368927223	Marionette	INFO	Stopped listening on port 62171
+urce://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
 1592367202258	Marionette	INFO	Listening on port 62282
 1592367202306	Marionette	WARN	TLS certificate errors will be ignored for this session
-1592367489827	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilejFr3wt"
-*** You are running in headless mode.
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 16648, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+1592368924181	Marionette	INFO	Stopped listening on port 62282
+.
 1592367490498	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1592367492017	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1592367492018	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -5169,3 +5186,64 @@ console.error: "Could not write session state file " (new Error("_initWorker cal
 1592367497153	Marionette	WARN	TLS certificate errors will be ignored for this session
 1592367591317	Marionette	INFO	Stopped listening on port 62444
 [Parent 14976, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+1592367940186	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilegf24H6"
+*** You are running in headless mode.
+1592367942122	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1592367944124	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1592367944125	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1592367944125	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1592367944125	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1592367946644	Marionette	INFO	Listening on port 62872
+1592367947012	Marionette	WARN	TLS certificate errors will be ignored for this session
+1592367971392	Marionette	INFO	Stopped listening on port 62872
+1592368139182	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilesjiBjz"
+*** You are running in headless mode.
+1592368139674	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1592368141787	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1592368141787	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1592368141787	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1592368141787	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1592368144657	Marionette	INFO	Listening on port 63029
+1592368144898	Marionette	WARN	TLS certificate errors will be ignored for this session
+1592368312794	Marionette	INFO	Stopped listening on port 63029
+[Parent 10552, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+1592368487535	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofileW451yj"
+*** You are running in headless mode.
+1592368490418	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1592368492072	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1592368492072	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1592368492072	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1592368492072	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1592368494827	Marionette	INFO	Listening on port 63230
+1592368494870	Marionette	WARN	TLS certificate errors will be ignored for this session
+1592368787053	Marionette	INFO	Stopped listening on port 63230
+1592368825488	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofiledcCCN7"
+*** You are running in headless mode.
+1592368826745	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1592368830973	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1592368830973	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1592368830973	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1592368830973	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.error: "Could not write session state file " (new Error("_initWorker called too early! Please read the session file from disk first.", "resource:///modules/sessionstore/SessionFile.jsm", 375)) "_initWorker/<@resource:///modules/sessionstore/SessionFile.jsm:375:15\n_initWorker@resource:///modules/sessionstore/SessionFile.jsm:368:12\n_postToWorker@resource:///modules/sessionstore/SessionFile.jsm:410:16\nwrite@resource:///modules/sessionstore/SessionFile.jsm:448:24\nwrite@resource:///modules/sessionstore/SessionFile.jsm:75:32\n_writeState@resource:///modules/sessionstore/SessionSaver.jsm:360:24\n_saveState@resource:///modules/sessionstore/SessionSaver.jsm:294:17\n_saveStateAsync@resource:///modules/sessionstore/SessionSaver.jsm:344:10\nsaveStateAsyncWhenIdle@resource:///modules/sessionstore/SessionSaver.jsm:191:14\ncallback@resource://gre/modules/Timer.jsm:127:16\n"
+1592368835994	Marionette	INFO	Listening on port 63408
+1592368836018	Marionette	WARN	TLS certificate errors will be ignored for this session
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 18064, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
+JavaScript error: , line 0: AbortError: A request was aborted, for example through a call to IDBTransaction.abort.
+1592368910187	Marionette	INFO	Stopped listening on port 63408
+1592369235242	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofileJ9Fvx5"
+*** You are running in headless mode.
+1592369236107	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1592369237718	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1592369237718	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1592369237718	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1592369237718	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1592369239801	Marionette	INFO	Listening on port 63550
+1592369239962	Marionette	WARN	TLS certificate errors will be ignored for this session
+1592369409472	Marionette	INFO	Stopped listening on port 63550
+JavaScript error: resource://gre/modules/IndexedDB.jsm, line 370: UnknownError: IDBDatabase.transaction: Can't start IndexedDB transaction during shutdown
