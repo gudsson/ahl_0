@@ -1,0 +1,22 @@
+2020-06-16 22:07:41,648:INFO:__main__:Opening Firefox...
+2020-06-16 22:07:54,724:INFO:__main__:Starting scrape sequence at Game #1017122
+2020-06-16 22:07:54,724:INFO:scrapers:Pulling AHL Game #1017122 from: https://theahl.com/stats/game-center/1017122
+2020-06-16 22:08:13,112:INFO:__main__:Pulling data for Game #1017122
+2020-06-16 22:08:25,066:INFO:__main__:Scraping of Game #1017122 complete.  Adding 215 new rows to database.
+2020-06-16 22:08:25,181:INFO:scrapers:Pulling AHL Game #1017123 from: https://theahl.com/stats/game-center/1017123
+2020-06-16 22:08:36,329:INFO:__main__:Pulling data for Game #1017123
+2020-06-16 22:08:50,414:INFO:__main__:Scraping of Game #1017123 complete.  Adding 258 new rows to database.
+2020-06-16 22:08:50,516:INFO:scrapers:Pulling AHL Game #1017124 from: https://theahl.com/stats/game-center/1017124
+2020-06-16 22:09:01,358:INFO:__main__:Pulling data for Game #1017124
+2020-06-16 22:09:17,652:INFO:__main__:Scraping of Game #1017124 complete.  Adding 283 new rows to database.
+2020-06-16 22:09:17,742:INFO:scrapers:Pulling AHL Game #1017125 from: https://theahl.com/stats/game-center/1017125
+2020-06-16 22:09:28,507:INFO:__main__:Pulling data for Game #1017125
+2020-06-16 22:09:40,942:INFO:__main__:Scraping of Game #1017125 complete.  Adding 222 new rows to database.
+2020-06-16 22:09:41,043:INFO:scrapers:Pulling AHL Game #1017126 from: https://theahl.com/stats/game-center/1017126
+2020-06-16 22:09:51,778:INFO:__main__:Pulling data for Game #1017126
+2020-06-16 22:10:06,067:ERROR:__main__:Game #1017126 - cannot pull data despite game being final
+2020-06-16 22:10:06,068:INFO:__main__:Scraping of Game #1017126 complete.  Adding 60 new rows to database.
+2020-06-16 22:10:06,143:INFO:scrapers:Pulling AHL Game #1017127 from: https://theahl.com/stats/game-center/1017127
+2020-06-16 22:10:18,285:INFO:__main__:Pulling data for Game #1017127
+2020-06-16 22:10:37,101:INFO:__main__:Scraping of Game #1017127 complete.  Adding 322 new rows to database.
+2020-06-16 22:10:37,218:INFO:__main__:Exiting program.

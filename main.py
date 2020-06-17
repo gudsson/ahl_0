@@ -8,176 +8,101 @@ import pandas as pd
 import time
 from datetime import datetime
 import logging
-import sys
+import sys, traceback
 
 def scrape_stats():
-    # get ref data
     try:
+        # get ref data
         referees = scrape.referee_data(driver)
         for ref in referees:
             ref_data = dict()
             ref_data = ref
             session.add(db.Official(**ref_data))
-    except:
-        logger.error(f'could not pull referees')
-        raise
 
-    # get boxscore by period
-    try:
+        # get boxscore by period
         boxscores = scrape.boxscore(driver)
         for boxscore in boxscores:
             boxscore_data = {"period": boxscore, **boxscores[boxscore]}
             session.add(db.Boxscore(**boxscore_data))
-    except:
-        logger.error(f'could not pull boxscore')
-        raise
 
-    #get penalty summary by team
-    try:
+        #get penalty summary by team
         penalty_summaries = scrape.penalty_summary(driver)
         for summary in penalty_summaries:
             session.add(db.Penalty_Summary(**summary))
-    except:
-        logger.error(f'could not pull penalty summary')
-        raise
 
-    #get three stars
-    try:
+        #get three stars
         stars = scrape.three_stars(driver)
         for star in stars:
             session.add(db.Star(**star))
-    except:
-        logger.error(f'could not pull three stars')
-        raise
 
-    #get coaches
-    try:
+        #get coaches
         coaches = scrape.coaches(driver)
         for coach in coaches:
             session.add(db.Coach(**coach))
-    except:
-        logger.error(f'could not pull coaches')
-        raise
 
-    # get individual scorelines
-    try:
+        # get individual scorelines
         player_scorlines = scrape.player_scorelines(driver)
         for player_scoreline in player_scorlines:
             session.add(db.Player_Scoreline(**player_scoreline))
-    except:
-        logger.error(f'could not pull player scoreline')
-        raise
 
-
-    ###get all preview stats
-    try:
+        ###get all preview stats
         top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings = scrape.preview_stats(driver)
-    except:
-        logger.error(f'could not pull preview stats')
-        raise
 
-    #get top scorers
-    try:
+        #get top scorers
         for top_scorer in top_scorers:
             session.add(db.Top_Scorer(**top_scorer))
-    except:
-        logger.error(f'could not pull preview stats')
-        raise
 
-    #get recent games
-    try:
+        #get recent games
         for recent_game in recent_games:
             session.add(db.Recent_Game(**recent_game))
-    except:
-        logger.error(f'could not pull recent games')
-        raise
 
-    #get matchup stats
-    try:
+        #get matchup stats
         for matchup_statline in matchup_statlines:
             session.add(db.Matchup_Statline(**matchup_statline))
-    except:
-        logger.error(f'could not pull matchup stats')
-        raise
 
-    #get head2head stats
-    try:
+        #get head2head stats
         for head2head_statline in head2head_statlines:
             session.add(db.Head2Head_Statline(**head2head_statline))
-    except:
-        logger.error(f'could not pull head-to-head stats')
-        raise
 
-    #get previous meetings
-    try:
+        #get previous meetings
         for previous_meeting in previous_meetings:
             session.add(db.Previous_Meeting(**previous_meeting))
-    except:
-        logger.error(f'could not pull previous meetings')
-        raise
 
-    #get all pbp data
-    try:
+        #get all pbp data
         goals, shots, goalie_changes, penalties, onice_events, shootout_attempts, pins = scrape.pbp(driver)
-    except:
-        logger.error(f'could not pull pbp data')
-        raise
 
-    #get goalie changes
-    try:
+
+        #get goalie changes
         for goalie_change in goalie_changes:
             session.add(db.Goalie_Change(**goalie_change))
-    except:
-        logger.error(f'could not pull goalie changes')
-        raise
 
-    #get shots
-    try:
+        #get shots
         for shot in shots:
             session.add(db.Shot(**shot))
-    except:
-        logger.error(f'could not pull shots')
-        raise
 
-    #get penalties
-    try:
+        #get penalties
         for penalty in penalties:
             session.add(db.Penalty(**penalty))
-    except:
-        logger.error(f'could not pull penalties')
-        raise
 
-    #get goals
-    try:
+        #get goals
         for goal in goals:
             session.add(db.Goal(**goal))
-    except:
-        logger.error(f'could not pull goals')
-        raise
 
-    #get onice_events
-    try:
+        #get onice_events
         for onice_event in onice_events:
             session.add(db.Onice_Event(**onice_event))
-    except:
-        logger.error(f'could not pull plus-minus events')
-        raise
 
-    #get shootout_attempts
-    try:
+        #get shootout_attempts
         for shootout_attempt in shootout_attempts:
             session.add(db.Shootout_Attempt(**shootout_attempt))
-    except:
-        logger.error(f'could not pull shootout attempts')
-        raise
 
-    #get pins
-    try:
+        #get pins
         for pin in pins:
             session.add(db.Pin(**pin))
     except:
-        logger.error(f'could not pull pins')
+        traceback.print_exc()
         raise
+
 
 def error_logging():
     #error logging
@@ -245,7 +170,7 @@ while game_id <= 1017127:#1020767:
                             scrape_stats()
                             session.add(db.Game(**game))
                         except:
-                            logger.error(f'Game #{game_id} - cannot pull data despite game being final')
+                            logger.error(f'Game #{game_id} - cannot pull data despite game being final: see https://theahl.com/stats/game-center/{game_id}')
                             missing_game = db.Missing_Game(game_id, game['status'].lower(), datetime.now())
                             session.add(missing_game)
                 else:   #else game in progress?
