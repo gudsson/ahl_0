@@ -135,11 +135,11 @@ Base, engine, session, meta = db.connect()
 try:    #try getting most recent scraped game
     game_id = db.get_last_game_in_db(session, meta) + 1
 except: #no games found in database, assume first AHL game with pins
-    game_id = 1017132#1017132 #see 1020571 for example of a postponed game; 1020558 for sample of typical final game
+    game_id = 1017122#see 1020571 for example of a postponed game; 1020558 for sample of typical final game
 logger.info(f'Starting scrape sequence at Game #{game_id}')
 
 #loop through games
-while game_id <= 1017142:#1020767:
+while game_id <= 1020767:
 
     #navigate to game page via selenium
     driver = scrape.get_driver(game_id, driver)
@@ -164,8 +164,8 @@ while game_id <= 1017142:#1020767:
         else:
             #loop through games (should only be one game)
             for game in games:
-                if game['status'].lower() == 'postponed' or game['status'].lower() == 'final':
-                    if game['status'].lower() == 'final':
+                if game['status'].lower() == 'postponed' or 'final' in game['status'].lower():
+                    if 'final' in game['status'].lower():
                         try:
                             scrape_stats()
                             session.add(db.Game(**game))
