@@ -169,17 +169,20 @@ while game_id <= 1020767:
                 if game['status'].lower() == 'postponed' or 'final' in game['status'].lower():
                     if 'final' in game['status'].lower():
                         try:
-                            scrape_stats()
                             session.add(db.Game(**game))
+                            scrape_stats()
                         except:
                             logger.error(f'Game #{game_id} - cannot pull data despite game being final: see https://theahl.com/stats/game-center/{game_id}')
                             missing_game = db.Missing_Game(game_id, game['status'].lower(), datetime.now())
+                            session.expunge_all()
                             session.add(missing_game)
                             break
                 else:   #else game in progress?
                     logger.error(f"Game #{game_id} - game state = {game['status']}")
                     missing_game = db.Missing_Game(game_id, game['status'].lower(), datetime.now())
+                    session.expunge_all()
                     session.add(missing_game)
+                    break
             commits = len(session.new)
             logger.info(f'Scraping of Game #{game_id} complete.  Adding {commits} new rows to database.')
             break
