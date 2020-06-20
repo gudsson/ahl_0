@@ -182,8 +182,11 @@ while game_id <= 1020767:
             logger.info(f'Scraping of Game #{game_id} complete.  Adding {commits} new rows to database.')
             break
         
-    #commit whatever you have to db
-    session.commit()
+    #try committing whatever you have to db
+    try:
+        session.commit()
+    except:
+        pass
 
     #increment game_id
     game_id += 1
