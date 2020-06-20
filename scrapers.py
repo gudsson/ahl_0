@@ -560,7 +560,7 @@ def get_pins(driver, pbp_arr):
 
     if len(found_pins) != len(pbp_arr):
         logger.error(f'Number of pins ({len(found_pins)} not equal to number of play-by-play events ({len(pbp_arr)})')
-        raise
+        raise ValueError('Number of pins ({len(found_pins)} not equal to number of play-by-play events ({len(pbp_arr)})')
     
     for pin, pbp_dict in zip(found_pins, pbp_arr):
         #declaration

@@ -1,3 +1,5 @@
+# pylint: disable=no-member
+
 import psycopg2
 from sqlalchemy import create_engine, Table, Column, Integer, String, Float, Time, Date, MetaData, select, func
 from sqlalchemy.ext.declarative import declarative_base
@@ -135,7 +137,7 @@ Base, engine, session, meta = db.connect()
 try:    #try getting most recent scraped game
     game_id = db.get_last_game_in_db(session, meta) + 1
 except: #no games found in database, assume first AHL game with pins
-    game_id = 1017122#see 1020571 for example of a postponed game; 1020558 for sample of typical final game
+    game_id = 1017122 #see 1020571 for example of a postponed game; 1020558 for sample of typical final game
 logger.info(f'Starting scrape sequence at Game #{game_id}')
 
 #loop through games
