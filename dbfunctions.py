@@ -260,7 +260,7 @@ class Matchup_Statline(Base):
         season_record = Column(String(length=15))
         last_10_games = Column(String(length=15))
         streak = Column(String(length=15))
-        last_game = Column(String(length=35))
+        last_game = Column(String(length=75))
         home_record = Column(String(length=15))
         away_record = Column(String(length=15))
         goals_for = Column(Integer)

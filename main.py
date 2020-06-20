@@ -186,7 +186,16 @@ while game_id <= 1020767:
     try:
         session.commit()
     except:
-        pass
+        logger.error("DB commit failed")
+        traceback.print_exc()
+        session.expunge_all()
+        missing_game = db.Missing_Game(game_id, game['status'].lower(), datetime.now())
+        session.add(missing_game)
+        try:
+            session.commit()
+        except:
+            logger.error(game_id + ' could not be added to missing games table')
+        raise
 
     #increment game_id
     game_id += 1
