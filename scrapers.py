@@ -7,13 +7,43 @@ from datetime import datetime
 import pandas as pd
 import copy
 import logging
+import constants as C
+
+#define game id to scrape
+class GameID(object):
+    def __init__(self):
+        self._game_id = None
+
+        @property
+        def game_id(self):
+            print(self._game_id)
+            return self._game_id
+
+        @game_id.setter
+        def game_id(self, value):
+            print("1")
+            if value < C.MIN_GAME or value > C.MAX_GAME:
+                print("2")
+                raise ValueError(f'Game {value} out of range [{C.MIN_GAME, C.MAX_GAME}]')
+            else:
+                print(f'game_id set to : {value}')
+                self._game_id = value
+
+        @game_id.deleter
+        def game_id(self):
+            print(f'game_id {self._game_id} deleted')
+            del self._game_id
+
 
 #define game class
 class Game():
-    def __init__(self, game_id, home_team=None, away_team=None):
-        self.game_id = game_id
-        self.home_team = home_team
-        self.away_team = away_team
+    def __init__(self, game_id=None, home_team=None, away_team=None, key_tup=None):
+        if key_tup is None:
+            self.game_id = game_id
+            self.home_team = home_team
+            self.away_team = away_team
+        else:
+            self.game_id, self.home_team, self.away_team = key_tup
 
 #get error logger
 def get_logger():
@@ -699,13 +729,28 @@ logger = get_logger()
 game = ''
 
 if __name__ == "__main__":
-    driver = initialize_driver()
-    driver = get_driver(1020820, driver)
+    obj = GameID()
+    try:
+        obj.game_id = 1020823
+    except:
+        print("Error")
 
-    summary = get_summary(driver)
+    if obj.game_id < C.MIN_GAME or obj.game_id > C.MAX_GAME:
+        print("error")
 
-    game_data = game_data(driver)
+    print(obj.game_id)
+    print(C.MAX_GAME)
+    # del obj.game_id
+    # print(obj.game_id)
 
-    print(game_data)
+
+    # driver = initialize_driver()
+    # driver = get_driver(1020820, driver)
+
+    # summary = get_summary(driver)
+
+    # game_data = game_data(driver)
+
+    # print(game_data)
     
     # pass
