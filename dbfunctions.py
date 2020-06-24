@@ -52,6 +52,7 @@ class Game(Base):
         game_id = Column(Integer)
         game_number = Column(String(length=4))
         season = Column(Integer)
+        game_type = Column(String(length=20))
         date = Column(Date)
         dow = Column(String(length=9))
         status = Column(String(length=10))
@@ -65,10 +66,11 @@ class Game(Base):
         end_time = Column(String(length=8))
         duration = Column(Time)
         
-        def __init__(self, game_id, game_number, season, date, dow, status, away_team, away_score, home_score, home_team, venue, attendance, start_time, end_time, duration): 
+        def __init__(self, game_id, game_number, season, game_type, date, dow, status, away_team, away_score, home_score, home_team, venue, attendance, start_time, end_time, duration): 
                 self.game_id = game_id
                 self.game_number = game_number
                 self.season = season
+                self.game_type = game_type
                 self.date = date
                 self.dow = dow
                 self.status = status
@@ -632,6 +634,7 @@ def drop_all_tables(Base, engine):
         Base.metadata.drop_all(bind=engine)
 
 if __name__ == "__main__":
-    print("All tables in database have been dropped.")
-    Base, engine, session, meta = connect()
-    drop_all_tables(Base, engine)
+#     print("All tables in database have been dropped.")
+#     Base, engine, session, meta = connect()
+#     drop_all_tables(Base, engine)
+        print(get_last_game_in_db)

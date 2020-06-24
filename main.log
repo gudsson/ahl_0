@@ -2969,3 +2969,9 @@
 2020-06-20 10:23:42,844:INFO:__main__:Scraping of Game #1018081 complete.  Adding 259 new rows to database.
 2020-06-20 10:23:42,954:INFO:scrapers:Pulling AHL Game #1018082 from: https://theahl.com/stats/game-center/1018082
 2020-06-20 10:23:56,749:INFO:__main__:Pulling data for Game #1018082
+2020-06-23 20:00:39,461:INFO:__main__:Pulling AHL Game #1019579 from: https://theahl.com/stats/game-center/1019579
+2020-06-23 20:10:21,441:INFO:__main__:Pulling AHL Game #1019579 from: https://theahl.com/stats/game-center/1019579
+2020-06-23 20:11:25,013:INFO:__main__:Pulling AHL Game #1019579 from: https://theahl.com/stats/game-center/1019579
+2020-06-23 20:13:21,279:INFO:__main__:Pulling AHL Game #1019579 from: https://theahl.com/stats/game-center/1019579
+2020-06-23 20:14:49,914:INFO:__main__:Pulling AHL Game #1020810 from: https://theahl.com/stats/game-center/1020810
+2020-06-23 20:16:42,438:INFO:__main__:Pulling AHL Game #1020820 from: https://theahl.com/stats/game-center/1020820

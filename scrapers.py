@@ -73,8 +73,11 @@ def game_data(driver):
         #add scraping to dict
         game_info["game_id"] = game.game_id
         game_info["game_number"] = matchup_container.find_element_by_xpath("//*[@class='ht-game-number']").text.split("#: ")[1]
+        
+        #establish date
         game_info["date"] = date[1]
-        game_info["season"] = game_info["date"].split(",")[1].strip()
+        game_date = datetime.strptime(game_info["date"],"%B %d, %Y")
+
         game_info["dow"] = date[0]
         game_info["status"] = matchup_container.find_element_by_xpath("//*[contains(@ng-bind,'gameSummary.details.status')]").text
         game_info["away_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-visiting-team')]").text
@@ -82,8 +85,19 @@ def game_data(driver):
         game_info["home_score"] = scores[1].text
         game_info["home_team"] = matchup_container.find_element_by_xpath("//*[contains(@class,'ht-gc-home-team')]").text
 
-        #Gets season based on date.  Assumes season will always end before September 1 
-        game_date = datetime.strptime(game_info["date"],"%B %d, %Y")
+        #Gets game_type
+        if game_date.month == 9:
+            game_info["game_type"] = "Pre-Season"
+        elif 4 <= game_date.month <= 7:
+            if int(game_info["game_number"]) <= 7:
+                game_info["game_type"] = "Playoff"
+        elif "All-Star" in game_info["home_team"] or "All-Star" in game_info["away_team"]:
+            game_info["game_type"] = "All-Star"
+        else:
+            game_info["game_type"] = "Regular"
+
+        #Gets season based on date.  Assumes season will always end before September 1
+        game_info["season"] = game_info["date"].split(",")[1].strip()
         game_info["season"] = game_info["season"] + str(int(game_info["season"])+1) if game_date.month > 8 else str(int(game_info["season"])-1) + game_info["season"]
         
         #add arena to game_info dict
@@ -685,4 +699,13 @@ logger = get_logger()
 game = ''
 
 if __name__ == "__main__":
-    pass
+    driver = initialize_driver()
+    driver = get_driver(1020820, driver)
+
+    summary = get_summary(driver)
+
+    game_data = game_data(driver)
+
+    print(game_data)
+    
+    # pass
