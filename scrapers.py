@@ -14,25 +14,32 @@ class GameID(object):
     def __init__(self):
         self._game_id = None
 
-        @property
-        def game_id(self):
-            print(self._game_id)
-            return self._game_id
+    @property
+    def game_id(self):
+        print(self._game_id)
+        return self._game_id
 
-        @game_id.setter
-        def game_id(self, value):
-            print("1")
-            if value < C.MIN_GAME or value > C.MAX_GAME:
-                print("2")
-                raise ValueError(f'Game {value} out of range [{C.MIN_GAME, C.MAX_GAME}]')
-            else:
-                print(f'game_id set to : {value}')
-                self._game_id = value
+    @game_id.setter
+    def game_id(self, value):
+        if value < C.MIN_GAME or value > C.MAX_GAME:
+            raise ValueError(f'Game {value} out of range [{C.MIN_GAME, C.MAX_GAME}]')
+        else:
+            print(f'game_id set to : {value}')
+            self._game_id = int(value)
 
-        @game_id.deleter
-        def game_id(self):
-            print(f'game_id {self._game_id} deleted')
-            del self._game_id
+    @game_id.deleter
+    def game_id(self):
+        print(f'game_id {self._game_id} deleted')
+        del self._game_id
+
+#define game states
+class GameStates(object):
+    def __init__(self):
+        self._home_team = None
+        self._away_team = None
+        self._home_manpower = 5
+        self._away_manpower = 5
+        self._
 
 
 #define game class
@@ -730,16 +737,8 @@ game = ''
 
 if __name__ == "__main__":
     obj = GameID()
-    try:
-        obj.game_id = 1020823
-    except:
-        print("Error")
 
-    if obj.game_id < C.MIN_GAME or obj.game_id > C.MAX_GAME:
-        print("error")
-
-    print(obj.game_id)
-    print(C.MAX_GAME)
+    obj.game_id = 1020822
     # del obj.game_id
     # print(obj.game_id)
 
