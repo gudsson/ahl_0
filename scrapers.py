@@ -32,15 +32,42 @@ class GameID(object):
         print(f'game_id {self._game_id} deleted')
         del self._game_id
 
-#define game states
+#define game state
 class GameStates(object):
-    def __init__(self):
-        self._home_team = None
-        self._away_team = None
-        self._home_manpower = 5
-        self._away_manpower = 5
-        self._
+    def __init__(self, manpower = {"home": 5, "away": 5}):
+        self._teams = {"home": None, "away": None}
 
+    @property
+    def home_team(self):
+        print(f'home team: {self._teams["home"]}')
+        return self._teams["home"]
+
+    @home_team.setter
+    def home_team(self, value):
+        print(f'home team set to {value}')
+        self._teams["home"] = value
+
+    @home_team.deleter
+    def home_team(self):
+        print(f'home team cleared')
+        self._teams["home"] = None
+
+    @property
+    def away_team(self):
+        print(f'away team: {self._teams["away"]}')
+        return self._teams["away"]
+
+    @away_team.setter
+    def away_team(self, value):
+        print(f'away team set to {value}')
+        self._teams["away"] = value
+
+    @away_team.deleter
+    def away_team(self):
+        print(f'away team cleared')
+        self._teams["away"] = None
+
+    
 
 #define game class
 class Game():
@@ -736,9 +763,18 @@ logger = get_logger()
 game = ''
 
 if __name__ == "__main__":
-    obj = GameID()
+    states = GameStates()
+    states.home_team = "Toronto"
+    print(states.home_team)
+    del states.home_team
+    print(states.home_team)
+    
+    
+    
+    
+    # obj = GameID()
 
-    obj.game_id = 1020822
+    # obj.game_id = 1020822
     # del obj.game_id
     # print(obj.game_id)
 
