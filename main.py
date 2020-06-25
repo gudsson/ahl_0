@@ -171,6 +171,7 @@ while game_id <= 1020767:
                         try:
                             session.add(db.Game(**game))
                             scrape_stats()
+
                         except:
                             logger.error(f'Game #{game_id} - cannot pull data despite game being final: see https://theahl.com/stats/game-center/{game_id}')
                             missing_game = db.Missing_Game(game_id, game['status'].lower(), datetime.now())
