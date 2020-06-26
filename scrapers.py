@@ -90,6 +90,8 @@ def get_logger():
 
     return log
 
+
+
 #initialize headless firefox driver
 def initialize_driver():
     try:
@@ -97,7 +99,7 @@ def initialize_driver():
         options.headless = True
 
         driver = webdriver.Firefox(options=options)
-        
+        print("initialized driver")
         return driver
     except:
         logger.error('could not initialize firefox driver')
@@ -645,6 +647,9 @@ def get_pins(driver, pbp_arr):
         pin_dict = dict()
         pin_dict.update(pbp_dict)
 
+        print(f'pin: {pin.text}')
+        print(pbp_dict)
+
         #get elements
         pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index
         pin_dict["top_position"] = pin.get_attribute("style").split("%; left: ")[0].split("top:")[1]
@@ -763,15 +768,14 @@ logger = get_logger()
 game = ''
 
 if __name__ == "__main__":
-    states = GameStates()
-    states.home_team = "Toronto"
-    print(states.home_team)
-    del states.home_team
-    print(states.home_team)
-    
-    
-    
-    
+    # states = GameStates()
+    # states.home_team = "Toronto"
+    # print(states.home_team)
+    # del states.home_team
+    # print(states.home_team)
+    game = Game(10101010)
+    print(game.game_id)
+
     # obj = GameID()
 
     # obj.game_id = 1020822

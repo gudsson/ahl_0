@@ -3302,3 +3302,19 @@
 2020-06-24 23:42:23,363:INFO:__main__:Scraping of Game #1017225 complete.  Adding 282 new rows to database.
 2020-06-24 23:42:23,464:INFO:scrapers:Pulling AHL Game #1017226 from: https://theahl.com/stats/game-center/1017226
 2020-06-24 23:42:35,186:INFO:__main__:Pulling data for Game #1017226
+2020-06-25 20:18:45,421:INFO:__main__:Opening Firefox...
+2020-06-25 20:19:25,280:INFO:__main__:Starting scrape sequence at Game #1017221
+2020-06-25 20:19:25,280:INFO:scrapers:Pulling AHL Game #1017221 from: https://theahl.com/stats/game-center/1017221
+2020-06-25 20:19:44,319:INFO:__main__:Pulling data for Game #1017221
+2020-06-25 20:20:01,524:ERROR:scrapers:Number of pins (70 not equal to number of play-by-play events (71)
+2020-06-25 20:20:01,538:ERROR:__main__:Game #1017221 - cannot pull data despite game being final: see https://theahl.com/stats/game-center/1017221
+2020-06-25 20:20:01,540:INFO:__main__:Scraping of Game #1017221 complete.  Adding 1 new rows to database.
+2020-06-25 20:20:01,854:INFO:__main__:Exiting program.
+2020-06-25 20:26:48,961:INFO:__main__:Opening Firefox...
+2020-06-25 20:27:00,160:INFO:__main__:Starting scrape sequence at Game #1019754
+2020-06-25 20:27:00,160:INFO:scrapers:Pulling AHL Game #1019754 from: https://theahl.com/stats/game-center/1019754
+2020-06-25 20:27:21,908:INFO:__main__:Pulling data for Game #1019754
+2020-06-25 20:27:33,984:ERROR:scrapers:Number of pins (56 not equal to number of play-by-play events (57)
+2020-06-25 20:27:33,987:ERROR:__main__:Game #1019754 - cannot pull data despite game being final: see https://theahl.com/stats/game-center/1019754
+2020-06-25 20:27:33,997:INFO:__main__:Scraping of Game #1019754 complete.  Adding 1 new rows to database.
+2020-06-25 20:27:34,003:INFO:__main__:Exiting program.
