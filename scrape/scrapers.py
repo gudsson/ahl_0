@@ -8,7 +8,6 @@ def game_data(game_id, driver):
         #declarations
         game_info = dict()
         arena = dict()
-        # combined_dict = dict()
         game_data = []
         
         #get various elements
@@ -52,19 +51,14 @@ def game_data(game_id, driver):
         #append all game data to return array
         game_data.append(game_info)
 
-        # #update class instance 'game'
-        # game.home_team = game_info["home_team"]
-        # game.away_team = game_info["away_team"]
-
         #return array
         return game_data
-    container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
-    return get_game_data(container)
-    # try:
-        # container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
-        # return get_game_data(container)
-    # except:
-    #     raise ValueError('Cannot find game data')
+
+    try:
+        container = driver.find_element_by_xpath("//div[@class='ht-gc-header-row']")
+        return get_game_data(container)
+    except:
+        raise ValueError('Cannot find game data')
 
 #extract arena data
 def arena_data(driver):
