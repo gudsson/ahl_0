@@ -12,11 +12,10 @@ class Loader(object):
 def raw_page(game_id, wait=10):
     domain = 'https://theahl.com/stats/game-center/'
     url = domain + str(game_id)
-    # print(url)
     driver.get(url)
-    # sleep(wait)
-    # print(report.title)
-    return driver
+    summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
+    
+    return driver, summary_container
 
 class ScrapeReport(object):
     #scrapes GameCenter
