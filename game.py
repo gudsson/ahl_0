@@ -1,14 +1,15 @@
 import constants as C
 import scrapers
+from scrape.report import ScrapeReport, raw_page
 
-class GameID(object):
-    def __init__(self, id=0):
-        self.game_id = id
-        # self._game_id = id
+# from driver import driver
+
+class Game(object):
+    def __init__(self, game_id=0):
+        self.game_id = game_id
 
     @property
     def game_id(self):
-        # print(self._game_id)
         return self._game_id
 
     @game_id.setter
@@ -16,13 +17,32 @@ class GameID(object):
         if value < C.MIN_GAME or value > C.MAX_GAME:
             raise ValueError(f'Game {value} out of range [{C.MIN_GAME, C.MAX_GAME}]')
         else:
-            print(f'game_id set to: {value}')
+            # print(f'game_id set to: {value}')
             self._game_id = int(value)
+            self._report = raw_page(self._game_id)
+            self._summary_container = self._report.find_element_by_xpath("//div[@class='ht-summary-container']")
 
-class Game(object):
-    def __init__(self, game_id = None, stats = {}):
-        self.game_id = game_id.game_id if hasattr(game_id, 'game_id') else 69
+    @property
+    def report(self):
+        return self._report
 
+    @property
+    def summary_container(self):
+        return self._summary_container
+
+    # @report.setter
+    # def report(self, value):
+    #     # if self._report is None:
+    #     #     rep = Scraper()
+    #     # # game_id = value
+    #     self._report = scrape_report(self.game_id)
+
+    
+
+# class Game(object):
+#     def __init__(self, game_id = None, raw_report = None):
+#         self._game_id = game_id#.game_id if hasattr(game_id, 'game_id') else None
+#         self.raw_report = Scraper.raw_report(game_id.game_id)
 
     # @property
     # def game_id(self):
@@ -81,3 +101,6 @@ class GameStates(object):
 #             self.away_team = away_team
 #         else:
 #             self.game_id, self.home_team, self.away_team = key_tup
+
+# if __name__ == "__main__":
+#     driver.quit()

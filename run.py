@@ -1,12 +1,20 @@
-from game import GameID, Game, GameStates
-from scrape.report import Scraper
+from game import Game, GameStates
+# from scrape.report import Scraper
+from selenium import webdriver
 import scrapers
 
 #get game id
-game_id = GameID(1017122)
+game = Game(1017122)
+print(game.game_id)
 
-game = Game(game_id)
+report = game.report
+print(report.title)
+# print(game_id.game_id)
 
+# game = Game(game_id)
 
+report.quit()
 
 # print(game.game_id)
+# if __name__ == "__main__":
+#     print("hello")
