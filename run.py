@@ -16,7 +16,7 @@ print(game.game_id)
 report = game.report
 print(report.title)
 
-for item in game.matchup_statlines:
+for item in game.head2head_statlines:
     print(item)
 
 
