@@ -16,6 +16,9 @@ print(game.game_id)
 report = game.report
 print(report.title)
 
+for coach in game.coaches:
+    print(coach)
+
 # print(game.game_data)
 # print(game.officials)
 

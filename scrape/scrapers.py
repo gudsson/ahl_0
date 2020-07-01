@@ -185,3 +185,30 @@ def three_stars(game, driver):
     
     #return array of dicts
     return stars
+
+#get coaches
+def coaches(game, driver):
+    #declarations
+    coaches = []
+    away_coach_lines = []
+    home_coach_lines = []
+
+
+    #get elements
+    summary = get_summary(driver)
+    away_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
+    home_coach_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']//tr[contains(@ng-repeat,'homeTeam.coaches')]")
+
+    #dump scrapings into dict, append to array
+    for line in away_coach_lines:
+        coach_role = line.text.split(": ")[0]
+        coach_name = line.text.split(": ")[1]
+        coaches.append({"game_id": game.game_id, "team": game.teams["away"], "side": "away", "role": coach_role, "name": coach_name})
+
+    for line in home_coach_lines:
+        coach_role = line.text.split(": ")[0]
+        coach_name = line.text.split(": ")[1]
+        coaches.append({"game_id": game.game_id, "team": game.teams["home"], "side": "home", "role": coach_role, "name": coach_name})
+
+    #return dict of arrays
+    return coaches
