@@ -10,14 +10,14 @@ print(game.game_id)
 report = game.report
 print(report.title)
 
-print(game.data)
-print(game.teams["home"])
-print(game.teams["away"])
+print(game.game_data)
+# print(game.officials)
+# print(game.teams["home"])
+# print(game.teams["away"])
 # print(game_id.game_id)
 
 # game = Game(game_id)
 
-report.quit()
 
 # print(game.game_id)
 # if __name__ == "__main__":

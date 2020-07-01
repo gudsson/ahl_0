@@ -1,14 +1,15 @@
 import constants as C
 import scrapers
 from scrape.report import ScrapeReport, raw_page
-from scrape.scrapers import game_data
+from scrape.scrapers import game_data, referee_data
 # from func import *
 
 # from driver import driver
 
 class Game(object):
-    def __init__(self, game_id=0):#, data=None):
+    def __init__(self, game_id=0, data_queried = []):#, data=None):
         self.game_id = game_id
+        self.data_queried = data_queried
         # self.data = dict()
 
     @property
@@ -23,8 +24,14 @@ class Game(object):
             # print(f'game_id set to: {value}')
             self._game_id = int(value)
             self._report, self._summary_container = raw_page(self._game_id)
-            self._data = game_data(self._game_id, self._report)[0]
-            self._teams = { "home": self._data["home_team"], "away": self._data["away_team"] }
+            self._game_data = game_data(self._game_id, self._report)[0]
+            self._teams = { "home": self._game_data["home_team"], "away": self._game_data["away_team"] }
+
+            # if not self.data_queried: #data queried array is empty, load all
+            #     self.load_all()
+            # else:
+            #     pass
+                #load individually (eventually...)
 
     @property
     def report(self):
@@ -35,12 +42,24 @@ class Game(object):
         return self._summary_container
     
     @property
-    def data(self):
-        return self._data
+    def game_data(self):
+        return self._game_data
 
     @property
     def teams(self):
         return self._teams
+
+    @property
+    def officials(self):
+        return self._officials
+    
+    def load_all(self):
+        self._officials = referee_data(self._report)
+
+    # @officials.setter
+    # def officials(self):
+    #     self._officials = referee_data(self._report)
+
 
     # @data.setter
     # def data(self, value):

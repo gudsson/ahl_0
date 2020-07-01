@@ -13,6 +13,7 @@ def raw_page(game_id, wait=10):
     domain = 'https://theahl.com/stats/game-center/'
     url = domain + str(game_id)
     driver.get(url)
+    sleep(10)
     summary_container = driver.find_element_by_xpath("//div[@class='ht-summary-container']")
     
     return driver, summary_container

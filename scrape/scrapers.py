@@ -77,3 +77,25 @@ def arena_data(driver):
 
     #return
     return arena_data
+
+#get referee data
+def referee_data(driver):
+    #declarations
+    game_officials = []
+    officials = []
+
+    #get elements
+    summary = get_summary(driver)
+    officials = summary.find_elements_by_xpath("//tr[contains(@ng-repeat,'gameSummary.referees') or contains(@ng-repeat,'gameSummary.linesmen')]")
+
+    #loop through officials and add scrapings to dict
+    for official in officials:
+        officials_dict = {"game_id": game.game_id}
+        official_data = official.find_elements_by_xpath("td")
+        officials_dict["role"] = official_data[0].text
+        officials_dict["name"] = official_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
+        officials_dict["number"] = official_data[1].find_element_by_xpath("span[contains(@ng-show,'jerseyNumber')]/span").text
+        game_officials.append(officials_dict)
+
+    #return array of dicts
+    return game_officials

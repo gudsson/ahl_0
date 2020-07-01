@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+import atexit
 
 def initialize_driver():
     try:
@@ -12,4 +13,8 @@ def initialize_driver():
     except:
         raise RuntimeError("Could not initialize firefox driver")
 
+#initialize headless firefox driver
 driver = initialize_driver()
+
+#close driver on program exit
+atexit.register(lambda: driver.quit())
