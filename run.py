@@ -3,6 +3,12 @@ from game import Game, GameStates
 from selenium import webdriver
 import scrapers
 
+###
+###TO-DO: penalties, DB link
+###
+
+
+
 #get game id
 game = Game(1017122)
 print(game.game_id)
@@ -13,7 +19,7 @@ print(report.title)
 # print(game.game_data)
 # print(game.officials)
 
-
+# print(game.three_stars)
 
 
 

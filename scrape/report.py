@@ -4,10 +4,10 @@ from selenium.webdriver.firefox.options import Options
 from driver import driver
 from time import sleep
 
-class Loader(object):
-    def __init__(self, game_id, report_type=''):
-        self.game_key = game_key
-        self.report_type = report_type
+# class Loader(object):
+#     def __init__(self, game_id, report_type=''):
+#         self.game_id = game_id
+#         self.report_type = report_type
 
 def raw_page(game_id, wait=10):
     domain = 'https://theahl.com/stats/game-center/'

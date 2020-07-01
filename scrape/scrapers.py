@@ -79,7 +79,7 @@ def arena_data(driver):
     return arena_data
 
 #get referee data
-def referee_data(game_id, driver):
+def referee_data(game, driver):
     #declarations
     game_officials = []
     officials = []
@@ -90,7 +90,7 @@ def referee_data(game_id, driver):
 
     #loop through officials and add scrapings to dict
     for official in officials:
-        officials_dict = {"game_id": game_id}
+        officials_dict = {"game_id": game.game_id}
         official_data = official.find_elements_by_xpath("td")
         officials_dict["role"] = official_data[0].text
         officials_dict["name"] = official_data[1].find_element_by_xpath("span[contains(@ng-show,'hide_official_names')]").text
@@ -100,7 +100,7 @@ def referee_data(game_id, driver):
     #return array of dicts
     return game_officials
 
-def boxscore(game_id, driver):
+def boxscore(game, driver):
     #declarations
     goal_periods = []
     shot_periods = []
@@ -125,10 +125,10 @@ def boxscore(game_id, driver):
 
     #dump scrapings into dicts
     for period, agoals, hgoals in zip(goal_periods, away_goals, home_goals):
-        goal_summary[period.text] = {"game_id": game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
+        goal_summary[period.text] = {"game_id": game.game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
 
     for period, ashots, hshots in zip(shot_periods, away_shots, home_shots):
-        shot_summary[period.text] = {"game_id": game_id, "home_shots": hshots.text, "away_shots": ashots.text}
+        shot_summary[period.text] = {"game_id": game.game_id, "home_shots": hshots.text, "away_shots": ashots.text}
 
     for summary in goal_summary:
         scoring_summary[summary] = goal_summary[summary]
@@ -162,3 +162,26 @@ def penalty_summary(game, driver):
 
     #return array of dicts
     return penalty_summary
+
+#get three stars
+def three_stars(game, driver):
+    #declarations
+    stars = []
+    star_containers = []
+
+    #get elements
+    summary = get_summary(driver)
+    star_containers = summary.find_elements_by_xpath("//div[@class='ht-three-stars']/div/div[@class='ht-star-container']")
+
+    #dump scrapings into dict, add dict to array
+    for star in star_containers:
+        star_number = star.find_element_by_xpath("div[@class='ht-star-number']").text
+        star_rawname = star.find_element_by_xpath("div[@class='ht-star-name']").text.split(" (#")
+        star_name = star_rawname[0]
+        star_jersey = star_rawname[1].replace(")","")
+        star_team = star.find_element_by_xpath("div[@class='ht-star-team']").text
+        star_side = "away" if star_team == game.teams["away"] else game.teams["home"]
+        stars.append({"game_id": game.game_id, "team": star_team, "side": star_side, "star_number": star_number, "name": star_name, "jersey_number": star_jersey})
+    
+    #return array of dicts
+    return stars
