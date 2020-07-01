@@ -10,8 +10,11 @@ print(game.game_id)
 report = game.report
 print(report.title)
 
-print(game.game_data)
+# print(game.game_data)
 # print(game.officials)
+
+for official in game.officials:
+    print(official)
 # print(game.teams["home"])
 # print(game.teams["away"])
 # print(game_id.game_id)

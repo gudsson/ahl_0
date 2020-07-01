@@ -8,8 +8,8 @@ from scrape.scrapers import game_data, referee_data
 
 class Game(object):
     def __init__(self, game_id=0, data_queried = []):#, data=None):
-        self.game_id = game_id
         self.data_queried = data_queried
+        self.game_id = game_id
         # self.data = dict()
 
     @property
@@ -27,11 +27,15 @@ class Game(object):
             self._game_data = game_data(self._game_id, self._report)[0]
             self._teams = { "home": self._game_data["home_team"], "away": self._game_data["away_team"] }
 
-            # if not self.data_queried: #data queried array is empty, load all
-            #     self.load_all()
-            # else:
-            #     pass
-                #load individually (eventually...)
+            if not self.data_queried: #data queried array is empty, load all
+                self.load_all()
+            else:
+                pass
+                # load individually (eventually...)
+
+    # @property
+    # def data_queried(self):
+    #     return self._data_queried
 
     @property
     def report(self):
@@ -54,7 +58,7 @@ class Game(object):
         return self._officials
     
     def load_all(self):
-        self._officials = referee_data(self._report)
+        self._officials = referee_data(self._game_id, self._report)
 
     # @officials.setter
     # def officials(self):
