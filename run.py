@@ -4,7 +4,7 @@ from selenium import webdriver
 import scrapers
 
 ###
-###TO-DO: penalties, DB link
+###TO-DO: penalties, DB link, penalty shots
 ###
 
 
@@ -16,8 +16,8 @@ print(game.game_id)
 report = game.report
 print(report.title)
 
-for coach in game.coaches:
-    print(coach)
+for scoreline in game.player_scorelines:
+    print(scoreline)
 
 # print(game.game_data)
 # print(game.officials)

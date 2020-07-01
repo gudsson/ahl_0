@@ -212,3 +212,51 @@ def coaches(game, driver):
 
     #return dict of arrays
     return coaches
+
+def player_scorelines(game, driver):
+    
+    def get_scoreline(line, side):
+        #declarations
+        player = dict()
+
+        #get elements
+        td = line.find_elements_by_xpath("td")
+
+        #dump scrapings into dict
+        player["game_id"] = game.game_id
+        player["team"] = game.teams[side] #getattr(game, str(side + "_team"))
+        player["side"] = side
+        player["opponent"] = game.teams["away"] if side == game.teams["home"] else game.teams["home"]
+        player["jersey_number"] = td[0].text
+        player["letter"] = td[1].text
+        player["name"] = td[2].text.split(", ",1)[1] + " " + td[2].text.split(", ",1)[0]
+        player["player_id"] = td[2].find_element_by_xpath("a").get_attribute('href').split('/player/')[1].split('/')[0]
+        player["position"] = td[3].text
+        player["goals"] = td[4].text
+        player["assists"] = td[5].text
+        player["pims"] = td[6].text
+        player["shots"] = td[7].text
+        player["plus_minus"] = td[8].text
+        
+        #return dict
+        return player
+
+    #declarations
+    players = []
+    away_player_lines = []
+    home_player_lines = []
+    
+    #get elements
+    summary = get_summary(driver)
+    away_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'visitingTeam.skaters')]") #find_elements_by_xpath("//div[@ng-class='sumTableHalfLeft']//tr[contains(@ng-repeat,'visitingTeam.coaches')]")
+    home_player_lines = summary.find_elements_by_xpath("//div[@ng-class='sumTableHalfRight']/div[@ng-class='sumTableMobile']//tr[contains(@ng-repeat,'homeTeam.skaters')]")
+
+    #dump player data into dict, append to player array
+    for line in away_player_lines:
+        players.append(get_scoreline(line, "away"))
+
+    for line in home_player_lines:
+        players.append(get_scoreline(line, "home"))
+
+    #return array of dicts
+    return players
