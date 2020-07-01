@@ -99,3 +99,66 @@ def referee_data(game_id, driver):
 
     #return array of dicts
     return game_officials
+
+def boxscore(game_id, driver):
+    #declarations
+    goal_periods = []
+    shot_periods = []
+    away_goals = []
+    away_shots = []
+    home_goals = []
+    home_shots = []
+    goal_summary = dict()
+    shot_summary = dict()
+    scoring_summary = dict()
+
+    #scrape elements
+    summary = get_summary(driver)
+    goal_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'scoreSummaryHeadings')]") #Goals by Period (last period is total)
+    shot_periods = summary.find_elements_by_xpath("//tr/th[contains(@ng-repeat,'shotSummaryHeadings')]") #Shots by Period (last period is total)
+
+    away_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingScoreSummary')]")
+    away_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'visitingShotSummary')]")
+
+    home_goals = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeScoreSummary')]")
+    home_shots = summary.find_elements_by_xpath("//tr/td[contains(@ng-repeat,'homeShotSummary')]")
+
+    #dump scrapings into dicts
+    for period, agoals, hgoals in zip(goal_periods, away_goals, home_goals):
+        goal_summary[period.text] = {"game_id": game_id, "away_goals": agoals.text, "home_goals": hgoals.text}
+
+    for period, ashots, hshots in zip(shot_periods, away_shots, home_shots):
+        shot_summary[period.text] = {"game_id": game_id, "home_shots": hshots.text, "away_shots": ashots.text}
+
+    for summary in goal_summary:
+        scoring_summary[summary] = goal_summary[summary]
+        try:
+            scoring_summary[summary].update(shot_summary[summary]) #if nothing to update, shootout with no shot data
+        except:
+            scoring_summary[summary].update({"home_shots": 0, "away_shots": 0}) #insert shot data for shootout
+
+    #return array of dicts
+    return scoring_summary
+
+#get penalty summary
+def penalty_summary(game, driver):
+    #declarations
+    penalty_summary = []
+    away_pp = []
+    away_penalties = []
+    home_pp = []
+    home_penalties = []
+
+    #get elements
+    summary = get_summary(driver)
+    away_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get away PP fraction string and split
+    home_pp = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.powerPlayGoals')]").text.replace(" ","").split("/",1) #get home PP fraction string and split
+    away_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.visitingTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get away PP fraction string and split
+    home_penalties = summary.find_element_by_xpath("//tr/td/span[contains(@ng-bind,'gameSummary.homeTeam.stats.penaltyMinuteCount')]").text.split(" min / ",1) #get home PP fraction string and split
+    
+    #build return array
+    penalty_summary.append({"game_id": game.game_id, "team": game.teams["away"], "side": "away", "pp_goals": away_pp[0], "pp_opps": away_pp[1], "pims": away_penalties[0], "infracs": away_penalties[1].split(" ",1)[0]})
+    penalty_summary.append({"game_id": game.game_id, "team": game.teams["home"], "side": "home", "pp_goals": home_pp[0], "pp_opps": home_pp[1], "pims": home_penalties[0], "infracs": home_penalties[1].split(" ",1)[0]})
+
+    #return array of dicts
+    return penalty_summary

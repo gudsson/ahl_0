@@ -13,8 +13,24 @@ print(report.title)
 # print(game.game_data)
 # print(game.officials)
 
-for official in game.officials:
-    print(official)
+
+
+
+
+
+
+
+#####
+#####How does retreiving boxscore work?
+# print(game.boxscore)  #
+#####
+
+
+
+
+
+
+
 # print(game.teams["home"])
 # print(game.teams["away"])
 # print(game_id.game_id)

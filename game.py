@@ -1,7 +1,7 @@
 import constants as C
 import scrapers
 from scrape.report import ScrapeReport, raw_page
-from scrape.scrapers import game_data, referee_data
+from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary
 # from func import *
 
 # from driver import driver
@@ -56,9 +56,23 @@ class Game(object):
     @property
     def officials(self):
         return self._officials
+
+    @property
+    def boxscore(self):
+        return self._boxscore
+
+    @property
+    def penalty_summary(self):
+        return self._penalty_summary
+
+    @property
+    def teams(self):
+        return self._teams
     
     def load_all(self):
         self._officials = referee_data(self._game_id, self._report)
+        self._boxscore = boxscore(self._game_id, self._report)
+        self._penalty_summary = penalty_summary(self, self._report)
 
     # @officials.setter
     # def officials(self):
