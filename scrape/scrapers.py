@@ -260,3 +260,97 @@ def player_scorelines(game, driver):
 
     #return array of dicts
     return players
+
+#get previous stats for current matchup
+def preview_stats(game, driver):
+    #declarations
+    tables = []
+    head2head_statlines, h2h_rows = [], [] # h2h_stats = [] #h2h
+    previous_meeting_rows, previous_meetings = [], [] #previous meetings
+    top_scorer_tables, top_scorer_rows, top_scorers = [], [], [] #top scorers
+    recent_game_tables, recent_games = [], [] #recent games
+    matchup_statlines = [] #matchup stats
+    
+    #get elements
+    tables = driver.find_elements_by_xpath("//div[@ng-if='PreviewDataLoaded']/div/div[contains(@ng-class,'sumTableHalf')]/div[@ng-class='sumTableMobile']/table/tbody")
+    h2h_rows = tables[0].find_elements_by_xpath("tr") #h2h
+    previous_meeting_rows = tables[1].find_elements_by_xpath("tr[@class='ng-scope']") #previous meetings
+    top_scorer_tables = tables[2].find_elements_by_xpath("//table[@class='ht-table-data']/tbody") #top scorers
+    recent_game_tables = tables[3].find_elements_by_xpath("//td[@class='ht-table-last-5']") #recent games
+    matchup_table = driver.find_element_by_xpath("//div[@ng-if='PreviewDataLoaded']/div[@ng-class='sumTableContainter']/div[@ng-class='sumTableMobile']//tbody") #matchup stats
+
+    #get head-to-head stats
+    h2h_away = {"game_id": game.game_id, "team": game.teams["away"], "versus": game.teams["home"]}
+    h2h_home = {"game_id": game.game_id, "team": game.teams["home"], "versus": game.teams["away"]}
+
+    h2h_away[h2h_rows[0].text.lower().replace(" ","_")] = h2h_rows[1].find_elements_by_xpath("td")[1].text #previous season
+    h2h_home[h2h_rows[0].text.lower().replace(" ","_")] = h2h_rows[1].find_elements_by_xpath("td")[3].text
+
+    h2h_away[h2h_rows[2].text.lower().replace(" ","_")] = h2h_rows[3].find_elements_by_xpath("td")[1].text #current season
+    h2h_home[h2h_rows[2].text.lower().replace(" ","_")] = h2h_rows[3].find_elements_by_xpath("td")[3].text
+
+    h2h_away[h2h_rows[4].text.lower().replace(" ","_")] = h2h_rows[5].find_elements_by_xpath("td")[1].text #last 5 seasons
+    h2h_home[h2h_rows[4].text.lower().replace(" ","_")] = h2h_rows[5].find_elements_by_xpath("td")[3].text
+
+    #append h2h stats to array
+    head2head_statlines.append(h2h_away)
+    head2head_statlines.append(h2h_home)
+    ##### /h2h #####
+
+    #get previous meetings
+    for row in previous_meeting_rows:
+        td = row.find_elements_by_xpath("td")
+
+        previous_away_team = td[0].find_element_by_xpath("a/img").get_attribute("title")
+        score = td[1].text.split(":")
+        away_score = score[0]
+        previous_home_team = td[2].find_element_by_xpath("a/img").get_attribute("title")
+        home_score = score[1]
+        date = td[3].text
+        previous_meetings.append({"game_id": game.game_id, "away_team": previous_away_team, "away_score": away_score, "home_team": previous_home_team, "home_score": home_score, "date": date})
+    ##### /previous meetings #####
+    
+    #get top scorers coming into game
+    team = game.teams["away"]
+    for table in top_scorer_tables:
+        top_scorer_rows = table.find_elements_by_xpath("tr")
+
+        for row in top_scorer_rows:
+            top_details = []
+            top_details = row.find_elements_by_xpath("td/a/div[@class='ht-top-details']/div")
+            top_scorer = dict()
+            top_scorer["game_id"] = game.game_id
+            top_scorer["team"] = team
+            top_scorer["side"] = "away" if team == game.teams["away"] else "home"
+            top_scorer["player"] = top_details[0].text
+            top_scorer["statline"] = top_details[1].text
+            top_scorers.append(top_scorer)   
+        team = game.teams["home"]
+    ##### /top scorers #####
+
+    #scrape recent games
+    for row in recent_game_tables[0].find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games in ::gameCP.visitingTeam')]/td"):
+        recent_games.append({"game_id": game.game_id, "team": game.teams["away"], "side": "away", "game_info": row.text})
+
+    for row in recent_game_tables[0].find_elements_by_xpath("//tr[contains(@ng-repeat,'last5games in ::gameCP.homeTeam')]/td"):
+        recent_games.append({"game_id": game.game_id, "team": game.teams["home"], "side": "home", "game_info": row.text})
+    ##### /recent games #####
+
+    #scrape Matchup Stats
+    matchup_away = {"game_id": game.game_id, "team": game.teams["away"], "side": "away"}
+    matchup_home = {"game_id": game.game_id, "team": game.teams["home"], "side": "home"}
+    
+    for row in matchup_table.find_elements_by_xpath("tr"):
+        tds = []
+        tds = row.find_elements_by_xpath("td")
+        
+        matchup_away[tds[0].text.lower().replace(" ","_").replace("(","").replace(")","")] = tds[1].text
+        matchup_home[tds[0].text.lower().replace(" ","_").replace("(","").replace(")","")] = tds[2].text
+    
+    #append dicts
+    matchup_statlines.append(matchup_away)
+    matchup_statlines.append(matchup_home)
+    ##### /matchup stats #####
+
+    ###Return Data
+    return top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings
