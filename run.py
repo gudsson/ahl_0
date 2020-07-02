@@ -4,20 +4,27 @@ from selenium import webdriver
 import scrapers
 
 ###
-###TO-DO: penalties, DB link, penalty shots, empty preview stats early in season
+###TO-DO: penalties, DB link, empty preview stats early in season, add exceptions as necessary
 ###
 
 
 
 #get game id
-game = Game(1017222) #empty game at beginning of season: 1017122
+game = Game(1019754) #empty game at beginning of season: 1017122
 print(game.game_id)
 
 report = game.report
 print(report.title)
 
-for item in game.previous_meetings:
+for item in game.goals:
     print(item)
+
+print("====")
+
+for item in game.shots:
+    print(item)
+
+    # self._goals, self._shots, self._goalie_changes, self._penalties, self._onice_events, self._shootout_attempts
 
 
 # self._top_scorers, self._recent_games, self._matchup_statlines, self._head2head_statlines, self._previous_meetings

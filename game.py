@@ -1,7 +1,7 @@
 import constants as C
 import scrapers
 from scrape.report import ScrapeReport, raw_page
-from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, three_stars, coaches, player_scorelines, preview_stats
+from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, three_stars, coaches, player_scorelines, preview_stats, pbp
 # from func import *
 
 # from driver import driver
@@ -97,6 +97,34 @@ class Game(object):
     def previous_meetings(self):
         return self._previous_meetings
 
+    @property
+    def goals(self):
+        return self._goals
+
+    @property
+    def shots(self):
+        return self._shots
+
+    @property
+    def goalie_changes(self):
+        return self._goalie_changes
+
+    @property
+    def penalties(self):
+        return self._penalties
+
+    @property
+    def onice_events(self):
+        return self._onice_events
+
+    @property
+    def shootout_attempts(self):
+        return self._shootout_attempts
+
+    @property
+    def pins(self):
+        return self._pins
+
     # @property
     def load_all(self):
         self._officials = referee_data(self, self._report)
@@ -106,6 +134,7 @@ class Game(object):
         self._coaches = coaches(self, self._report)
         self._player_scorelines = player_scorelines(self, self._report)
         self._top_scorers, self._recent_games, self._matchup_statlines, self._head2head_statlines, self._previous_meetings = preview_stats(self, self._report)
+        self._goals, self._shots, self._goalie_changes, self._penalties, self._onice_events, self._shootout_attempts, self._pins = pbp(self, self._report)
 
     # @officials.setter
     # def officials(self):
