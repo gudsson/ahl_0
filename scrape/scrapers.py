@@ -588,7 +588,7 @@ def pbp(game, driver):
 
             #log any unaccounted for event types
             else:
-                print(f'Game #{game.game_id}, pbp_id #{pbp_id}: EVENT NOT ACCOUNTED FOR - {pbp_event_type}')
+                raise RuntimeError(f'Game #{game.game_id}, pbp_id #{pbp_id}: EVENT NOT ACCOUNTED FOR - {pbp_event_type}')
 
     #get pins
     pins = get_pins(driver, pbp_arr)
@@ -611,8 +611,8 @@ def get_pins(driver, pbp_arr):
         pin_dict = dict()
         pin_dict.update(pbp_dict)
 
-        print(f'pin: {pin.text}')
-        print(pbp_dict)
+        # print(f'pin: {pin.text}')
+        # print(pbp_dict)
 
         #get elements
         pin_dict["pin_id"] = pin.get_attribute("id").split("ht_pin_")[1] #get index

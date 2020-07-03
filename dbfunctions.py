@@ -6,7 +6,8 @@ from sqlalchemy import create_engine, Table, Column, Integer, String, Boolean, F
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import logging
-
+import atexit
+import sys
 
 #error logging
 logger = logging.getLogger(__name__)
@@ -44,6 +45,9 @@ class Missing_Game(Base):
                 self.status = status
                 self.time_queried = time_queried
 
+# class Game_Data():
+#         def _init__(self):
+#                 print("hello")
 
 class Game(Base):
         __tablename__ = 'games'
@@ -160,7 +164,7 @@ class Coach(Base):
                 self.name = name
 
 
-class Penalty_Summary(Base):
+class Penalty_Statline(Base):
         __tablename__ = 'penalty_summaries'
 
         id = Column(Integer, primary_key = True)
@@ -398,7 +402,7 @@ class Shot(Base):
                 self.result = result
 
 
-class Penalty(Base):
+class Penalty_Call(Base):
         __tablename__ = 'penalties'
 
         id = Column(Integer, primary_key = True)
@@ -608,6 +612,32 @@ class Pin(Base):
         #         self.period = period
 
 
+def db_commit(game):
+        thismodule = sys.modules[__name__]
+
+        for key in vars(game):
+                if isinstance(vars(game)[key], list) and key[:1] == "_":
+                        # # print(getattr(game,key[1:]))
+                        # print(globals())
+                        # full_key = [ "dbfunctions.", key[1:].replace("_"," ").title().replace(" ","_")]
+                        # full_key = ''.join(full_key)
+                        # print(globals())
+                        # globals()[full_key]()
+                        # test = getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])
+
+                        # for shootout_attempt in shootout_attempts:
+                        #         session.add(db.Shootout_Attempt(**shootout_attempt))
+
+                        for item in vars(game)[key]:
+                                print(vars(game)[key])
+                                print(item)
+                                print(key[1:].replace("_"," ").title().replace(" ","_")[:-1])
+
+                                session.add(getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])(**item))
+
+                        # session.add(getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])(**getattr(game,key[1:])))# session.add(vars()[full_key](**getattr(game,key[1:])))
+        session.commit()
+
 def get_last_game_in_db(session, meta):
         
         query = session.query(func.max(Game.game_id))
@@ -633,8 +663,16 @@ def drop_all_tables(Base, engine):
         
         Base.metadata.drop_all(bind=engine)
 
+#run when module is loaded
+Base, engine, session, meta = connect()
+atexit.register(lambda: session.close())
+atexit.register(lambda: engine.dispose())
+
+#run if module is main
 if __name__ == "__main__":
-#     print("All tables in database have been dropped.")
-#     Base, engine, session, meta = connect()
-#     drop_all_tables(Base, engine)
-        print(get_last_game_in_db)
+        Base, engine, session, meta = connect()
+        drop_all_tables(Base, engine)
+        print("All tables in database have been dropped.")
+        # print(vars()['Game_Data']())
+        # print(vars()['game_data'.replace("_"," ").title().replace(" ","_")]())
+        # print(get_last_game_in_db)

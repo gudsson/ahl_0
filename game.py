@@ -2,6 +2,7 @@ import constants as C
 import scrapers
 from scrape.report import ScrapeReport, raw_page
 from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, three_stars, coaches, player_scorelines, preview_stats, pbp
+from dbfunctions import db_commit
 # from func import *
 
 # from driver import driver
@@ -23,14 +24,16 @@ class Game(object):
         else:
             # print(f'game_id set to: {value}')
             self._game_id = int(value)
-            self._report, self._summary_container = raw_page(self._game_id)
-            self._game_data = game_data(self._game_id, self._report)[0]
-            self._teams = { "home": self._game_data["home_team"], "away": self._game_data["away_team"] }
+            self._report = raw_page(self._game_id)
+            self._games = game_data(self._game_id, self._report)
+            self._teams = { "home": self._games[0]["home_team"], "away": self._games[0]["away_team"] }
 
             if not self.data_queried: #data queried array is empty, load all
                 self.load_all()
             else:
                 pass
+
+            db_commit(self)
                 # load individually (eventually...)
 
     # @property
@@ -41,13 +44,13 @@ class Game(object):
     def report(self):
         return self._report
 
-    @property
-    def summary_container(self):
-        return self._summary_container
+    # @property
+    # def summary_container(self):
+    #     return self._summary_container
     
     @property
-    def game_data(self):
-        return self._game_data
+    def games(self):
+        return self._games
 
     @property
     def teams(self):
@@ -58,16 +61,16 @@ class Game(object):
         return self._officials
 
     @property
-    def boxscore(self):
-        return self._boxscore
+    def boxscores(self):
+        return self._boxscores
 
     @property
-    def penalty_summary(self):
-        return self._penalty_summary
+    def penalty_statlines(self):
+        return self._penalty_statlines
 
     @property
-    def three_stars(self):
-        return self._three_stars
+    def stars(self):
+        return self._stars
 
     @property
     def coaches(self):
@@ -110,8 +113,8 @@ class Game(object):
         return self._goalie_changes
 
     @property
-    def penalties(self):
-        return self._penalties
+    def penalty_calls(self):
+        return self._penalty_calls
 
     @property
     def onice_events(self):
@@ -128,13 +131,17 @@ class Game(object):
     # @property
     def load_all(self):
         self._officials = referee_data(self, self._report)
-        self._boxscore = boxscore(self, self._report)
-        self._penalty_summary = penalty_summary(self, self._report)
-        self._three_stars = three_stars(self, self._report)
-        self._coaches = coaches(self, self._report)
-        self._player_scorelines = player_scorelines(self, self._report)
-        self._top_scorers, self._recent_games, self._matchup_statlines, self._head2head_statlines, self._previous_meetings = preview_stats(self, self._report)
-        self._goals, self._shots, self._goalie_changes, self._penalties, self._onice_events, self._shootout_attempts, self._pins = pbp(self, self._report)
+        # self._boxscores = boxscore(self, self._report)
+        # self._penalty_statlines = penalty_summary(self, self._report)
+        # self._stars = three_stars(self, self._report)
+        # self._coaches = coaches(self, self._report)
+        # self._player_scorelines = player_scorelines(self, self._report)
+        # self._top_scorers, self._recent_games, self._matchup_statlines, self._head2head_statlines, self._previous_meetings = preview_stats(self, self._report)
+        # self._goals, self._shots, self._goalie_changes, self._penalty_calls, self._onice_events, self._shootout_attempts, self._pins = pbp(self, self._report)
+
+
+
+
 
     # @officials.setter
     # def officials(self):

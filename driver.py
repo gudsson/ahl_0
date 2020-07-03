@@ -18,3 +18,4 @@ driver = initialize_driver()
 
 #close driver on program exit
 atexit.register(lambda: driver.quit())
+atexit.register(lambda: print(f'Exiting program.'))
