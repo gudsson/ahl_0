@@ -4,7 +4,7 @@ from selenium import webdriver
 import scrapers
 
 ###
-###TO-DO: penalties, DB link, empty preview stats early in season, add exceptions as necessary, account for missing games based on original main.py code
+###TO-DO: penalties, DB link (works, but check all stat pulls), empty preview stats early in season, add exceptions as necessary, account for missing games based on original main.py code
 ###
 
 
