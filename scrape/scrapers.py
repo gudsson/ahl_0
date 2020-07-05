@@ -1,5 +1,8 @@
 from datetime import datetime
-from func import get_summary
+
+#get summary container
+def get_summary(driver):
+    return driver.find_element_by_xpath("//div[@class='ht-summary-container']")
 
 #extract game data
 def game_data(game_id, driver):
@@ -218,6 +221,7 @@ def coaches(game, driver):
     #return dict of arrays
     return coaches
 
+#get player scorelines
 def player_scorelines(game, driver):
     
     def get_scoreline(line, side):
@@ -360,6 +364,7 @@ def preview_stats(game, driver):
     ###Return Data
     return top_scorers, recent_games, matchup_statlines, head2head_statlines, previous_meetings
 
+#get play-by-play
 def pbp(game, driver):
     #declarations
     pbp_periods, pbp_events, pbp_arr = [], [], []

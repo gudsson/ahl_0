@@ -1,17 +1,15 @@
 import constants as C
-import scrapers
-from scrape.report import ScrapeReport, raw_page
+from scrape.report import raw_page
 from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, three_stars, coaches, player_scorelines, preview_stats, pbp
 from dbfunctions import db_commit
-# from func import *
+from time import sleep
+from datetime import datetime
 
-# from driver import driver
-
+# individual game class
 class Game(object):
     def __init__(self, game_id=0, data_queried = []):#, data=None):
         self.data_queried = data_queried
         self.game_id = game_id
-        # self.data = dict()
 
     @property
     def game_id(self):
@@ -22,34 +20,39 @@ class Game(object):
         if value < C.MIN_GAME or value > C.MAX_GAME:
             raise ValueError(f'Game {value} out of range [{C.MIN_GAME, C.MAX_GAME}]')
         else:
-            # print(f'game_id set to: {value}')
             self._game_id = int(value)
-            self._report = raw_page(self._game_id)
-            self._games = game_data(self._game_id, self._report)
-            self._teams = { "home": self._games[0]["home_team"], "away": self._games[0]["away_team"] }
+            for attempt in range(2):
+                try:
+                    self._report = raw_page(self._game_id)
+                    self._games = game_data(self._game_id, self._report)
+                    self._teams = { "home": self._games[0]["home_team"], "away": self._games[0]["away_team"] }
 
-            if not self.data_queried: #data queried array is empty, load all
-                self.load_all()
-            else:
-                for report_type in data_queried:
-                    getattr(Game, self.report_type) #check if works
-            
+                    if not self.data_queried: #data queried array is empty, load all
+                        try:
+                            self.load_all()
+                        except:
+                            raise ValueError(f'Game #{self._game_id} - could not load data despite game beging final')
+                            self._missing_games = [{ "game_id": self._game_id,  "status": self._games["status"], "time_queried": datetime.now()}]
+
+                    else:
+                        for report_type in data_queried:
+                            getattr(Game, self.report_type) #check if works
+                    break
+
+                except:
+                    if attempt == 0:
+                        sleep(10)
+                    else:
+                        raise ValueError(f'Game #{self._game_id} - could not load data, added to missing games table')
+                        self._missing_games = [{ "game_id": self._game_id,  "status": "did not load", "time_queried": datetime.now()}]
+                        
             #commit returned data to db
             db_commit(self)
-                # load individually (eventually...)
-
-    # @property
-    # def data_queried(self):
-    #     return self._data_queried
 
     @property
     def report(self):
         return self._report
 
-    # @property
-    # def summary_container(self):
-    #     return self._summary_container
-    
     @property
     def games(self):
         return self._games
@@ -266,24 +269,6 @@ class Game(object):
     #     # # game_id = value
     #     self._report = scrape_report(self.game_id)
 
-    
-
-# class Game(object):
-#     def __init__(self, game_id = None, raw_report = None):
-#         self._game_id = game_id#.game_id if hasattr(game_id, 'game_id') else None
-#         self.raw_report = Scraper.raw_report(game_id.game_id)
-
-    # @property
-    # def game_id(self):
-    #     return self._game_id
-    
-    # @game_id.setter
-    # def game_id(self, value):
-    #     print(f'game_id set to: {value}')
-    #     self._game_id = value
-    #     return self._game_id
-
-
 #define game state
 class GameStates(object):
     def __init__(self, manpower = {"home": 5, "away": 5}):
@@ -318,18 +303,3 @@ class GameStates(object):
     def away_team(self):
         print(f'away team cleared')
         self._teams["away"] = None
-
-    
-
-#define game class
-# class Game():
-#     def __init__(self, game_id=None, home_team=None, away_team=None, key_tup=None):
-#         if key_tup is None:
-#             self.game_id = game_id
-#             self.home_team = home_team
-#             self.away_team = away_team
-#         else:
-#             self.game_id, self.home_team, self.away_team = key_tup
-
-# if __name__ == "__main__":
-#     driver.quit()

@@ -5,10 +5,10 @@ import atexit
 def initialize_driver():
     try:
         options = Options()
-        options.headless = False#True
+        options.headless = True
 
         driver = webdriver.Firefox(options=options)
-        print("Initialized driver")
+        print("initialized driver")
         return driver
     except:
         raise RuntimeError("Could not initialize firefox driver")

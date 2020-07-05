@@ -1,21 +1,9 @@
-# import scrapers
-# from sqlalchemy import create_engine
-
 import psycopg2
 from sqlalchemy import create_engine, Table, Column, Integer, String, Boolean, Float, Time, Date, MetaData, select, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import logging
 import atexit
 import sys
-
-#error logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
-file_handler = logging.FileHandler('main.log')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
 
 Base = declarative_base()
 
@@ -45,9 +33,6 @@ class Missing_Game(Base):
                 self.status = status
                 self.time_queried = time_queried
 
-# class Game_Data():
-#         def _init__(self):
-#                 print("hello")
 
 class Game(Base):
         __tablename__ = 'games'
@@ -615,52 +600,28 @@ class Pin(Base):
 def db_commit(game):
         thismodule = sys.modules[__name__]
 
-        for key in vars(game):
-                if isinstance(vars(game)[key], list) and key[:1] == "_":
-                        # # print(getattr(game,key[1:]))
-                        # print(globals())
-                        # full_key = [ "dbfunctions.", key[1:].replace("_"," ").title().replace(" ","_")]
-                        # full_key = ''.join(full_key)
-                        # print(globals())
-                        # globals()[full_key]()
-                        # test = getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])
-
-                        # for shootout_attempt in shootout_attempts:
-                        #         session.add(db.Shootout_Attempt(**shootout_attempt))
-                        # )
-
-
-                        for item in vars(game)[key]:
-                                tbl_name = key[1:].replace("_"," ").title().replace(" ","_")[:-1] if key != "_coaches" else "Coach"
-                                # print(tbl_name)
-                                # print(item)
-                                session.add(getattr(thismodule, tbl_name)(**item))
-
-                        # session.add(getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])(**getattr(game,key[1:])))# session.add(vars()[full_key](**getattr(game,key[1:])))
+        if "_missing_games" in vars(game):
+                for game in game._missing_games:
+                        session.add(getattr(thismodule, "missing_games")(**game))
+        else:
+                for key in vars(game):
+                        if isinstance(vars(game)[key], list) and key[:1] == "_":
+                                for item in vars(game)[key]:
+                                        tbl_name = key[1:].replace("_"," ").title().replace(" ","_")[:-1] if key != "_coaches" else "Coach"
+                                        session.add(getattr(thismodule, tbl_name)(**item))
+        print(f'Game #{vars(game)["_game_id"]}: committing {len(session.new)} rows to database.')
         session.commit()
 
-def get_last_game_in_db(session, meta):
+def get_last_game_in_db():#session, meta):
         
-        query = session.query(func.max(Game.game_id))
+        query1 = session.query(func.max(Game.game_id))
+        query2 = session.query(func.max(Missing_Game.game_id))
 
-        # for _res in query.all():
-        #         print(_res)
+        last_game = max(int(query1.first()[0] or 0), int(query2.first()[0] or 0))
 
-        # print(query.first()[0])
-        return query.first()[0]
+        return last_game
 
-def get_last_meeting(session, meta):
-        
-        q1 = session.query(func.max(Game.game_id))
-        q2 = session.query(func.max(Missing_Game.game_id))
-        last_game = [int(q1.first()[0]), int(q2.first()[0])]
-        # for _res in query.all():
-        #         print(_res)
-
-        # print(query.first()[0])
-        return max(last_game)
-
-def drop_all_tables(Base, engine):
+def drop_all_tables():
         
         Base.metadata.drop_all(bind=engine)
 
@@ -671,9 +632,7 @@ atexit.register(lambda: engine.dispose())
 
 #run if module is main
 if __name__ == "__main__":
-        Base, engine, session, meta = connect()
-        drop_all_tables(Base, engine)
+        # Base, engine, session, meta = connect()
+        # print(get_last_game_in_db())
+        drop_all_tables()
         print("All tables in database have been dropped.")
-        # print(vars()['Game_Data']())
-        # print(vars()['game_data'.replace("_"," ").title().replace(" ","_")]())
-        # print(get_last_game_in_db)
