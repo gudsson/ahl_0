@@ -627,13 +627,14 @@ def db_commit(game):
 
                         # for shootout_attempt in shootout_attempts:
                         #         session.add(db.Shootout_Attempt(**shootout_attempt))
+                        # )
+
 
                         for item in vars(game)[key]:
-                                print(vars(game)[key])
-                                print(item)
-                                print(key[1:].replace("_"," ").title().replace(" ","_")[:-1])
-
-                                session.add(getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])(**item))
+                                tbl_name = key[1:].replace("_"," ").title().replace(" ","_")[:-1] if key != "_coaches" else "Coach"
+                                # print(tbl_name)
+                                # print(item)
+                                session.add(getattr(thismodule, tbl_name)(**item))
 
                         # session.add(getattr(thismodule, key[1:].replace("_"," ").title().replace(" ","_")[:-1])(**getattr(game,key[1:])))# session.add(vars()[full_key](**getattr(game,key[1:])))
         session.commit()

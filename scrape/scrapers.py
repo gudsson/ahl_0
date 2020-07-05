@@ -110,7 +110,8 @@ def boxscore(game, driver):
     home_shots = []
     goal_summary = dict()
     shot_summary = dict()
-    scoring_summary = dict()
+    scoring_dict = dict()
+    scoring_summary = []
 
     #scrape elements
     summary = get_summary(driver)
@@ -131,11 +132,15 @@ def boxscore(game, driver):
         shot_summary[period.text] = {"game_id": game.game_id, "home_shots": hshots.text, "away_shots": ashots.text}
 
     for summary in goal_summary:
-        scoring_summary[summary] = goal_summary[summary]
+        scoring_dict[summary] = goal_summary[summary]
         try:
-            scoring_summary[summary].update(shot_summary[summary]) #if nothing to update, shootout with no shot data
+            scoring_dict[summary].update(shot_summary[summary]) #if nothing to update, shootout with no shot data
         except:
-            scoring_summary[summary].update({"home_shots": 0, "away_shots": 0}) #insert shot data for shootout
+            scoring_dict[summary].update({"home_shots": 0, "away_shots": 0}) #insert shot data for shootout
+ 
+    for period in scoring_dict:
+        scoring_dict[period]["period"] = period #add period to scoring summary
+        scoring_summary.append(scoring_dict[period])
 
     #return array of dicts
     return scoring_summary
@@ -180,7 +185,7 @@ def three_stars(game, driver):
         star_name = star_rawname[0]
         star_jersey = star_rawname[1].replace(")","")
         star_team = star.find_element_by_xpath("div[@class='ht-star-team']").text
-        star_side = "away" if star_team == game.teams["away"] else game.teams["home"]
+        star_side = "away" if star_team == game.teams["away"] else "home"
         stars.append({"game_id": game.game_id, "team": star_team, "side": star_side, "star_number": star_number, "name": star_name, "jersey_number": star_jersey})
     
     #return array of dicts

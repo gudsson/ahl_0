@@ -10,11 +10,12 @@ import scrapers
 
 
 #get game id
-game = Game(1019754) #empty game at beginning of season: 1017122
+game = Game(1019755) #empty game at beginning of season: 1017122
 print(game.game_id)
 
 report = game.report
 print(report.title)
+# print(game.__dict__)
 
 # for item in game.goals:
 #     print(item)

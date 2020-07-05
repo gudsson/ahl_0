@@ -31,8 +31,10 @@ class Game(object):
             if not self.data_queried: #data queried array is empty, load all
                 self.load_all()
             else:
-                pass
-
+                for report_type in data_queried:
+                    getattr(Game, self.report_type) #check if works
+            
+            #commit returned data to db
             db_commit(self)
                 # load individually (eventually...)
 
@@ -128,9 +130,41 @@ class Game(object):
     def pins(self):
         return self._pins
 
+    def officials(self):
+        self._officials = referee_data(self, self._report)
+    
+    def boxscores(self):
+        self._boxscores = boxscore(self, self._report)
+
+    def penalty_statlines(self):
+        self._penalty_statlines = penalty_summary(self, self._report)
+
+    def stars(self):
+        self._stars = three_stars(self, self._report)
+
+    def coaches(self):
+        self._coaches = coaches(self, self._report)
+
+    def player_scorelines(self):
+        self._player_scorelines = player_scorelines(self, self._report)
+
+    def preview_stats(self):
+        self._top_scorers, self._recent_games, self._matchup_statlines, self._head2head_statlines, self._previous_meetings = preview_stats(self, self._report)
+
+    def pbp(self):
+        self._goals, self._shots, self._goalie_changes, self._penalty_calls, self._onice_events, self._shootout_attempts, self._pins = pbp(self, self._report)
+
     # @property
     def load_all(self):
-        self._officials = referee_data(self, self._report)
+        self.officials()
+        self.boxscores()
+        self.penalty_statlines()
+        self.stars()
+        self.coaches()
+        self.player_scorelines()
+        self.preview_stats()
+        self.pbp()
+        # self._officials = referee_data(self, self._report)
         # self._boxscores = boxscore(self, self._report)
         # self._penalty_statlines = penalty_summary(self, self._report)
         # self._stars = three_stars(self, self._report)
