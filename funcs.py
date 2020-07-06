@@ -2,6 +2,7 @@ import gameClasses as gC
 import constants as C
 import dbfunctions
 import logging
+from datetime import datetime, timedelta
 
 def error_logging(name):
     #error logging
@@ -32,3 +33,12 @@ def scrape_all():
 
     for i in range(starting_game, finishing_game):
         game = gC.Game(i)
+
+def per_overflow(time, period):
+    if time > datetime.strptime('20:00', C.FMT): # if penalty expires after the end of the period, move expiry to beginning of next period.
+        time = time - timedelta(minutes=20)
+        period += 1 #pass
+    
+    time = (time).strftime(C.FMT) #convert time to string
+    
+    return time, period
