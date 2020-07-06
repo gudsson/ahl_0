@@ -632,7 +632,6 @@ atexit.register(lambda: engine.dispose())
 
 #run if module is main
 if __name__ == "__main__":
-        # Base, engine, session, meta = connect()
-        # print(get_last_game_in_db())
-        drop_all_tables()
-        print("All tables in database have been dropped.")
+        pass
+        # drop_all_tables()
+        # print("All tables in database have been dropped.")
