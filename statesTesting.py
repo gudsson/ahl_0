@@ -23,18 +23,58 @@ class GameStates(object):
     def add_penalty(self, value):
         print(value)
         print(f"active {value['team']} penalties: {len(self._active_penalties[value['team']]) + 1}")
-        if len(self._active_penalties[value['team']]) < 2:
-            self._manpower[value['team']] -= 1
-            value['expires_at'] = datetime.strptime(value['taken_at'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
+        # period_multiplier = -1 if (value["period_taken"] == 4 and value['game_type'] != 'Playoff') else 1 #if non-playoff OT
+        # If I'm in overtime and the team that DIDN'T take the penalty has fewer than 5 guys on the ice, check active penalties and add a guy
+        if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'):
+            opponent = "away" if value["team"] == "home" else "home"
+           
+            # check active penalties to see if you can reduce before adding penalty
+            self.overtime_reduction()
+            if self._manpower
 
+
+
+
+        if len(self._active_penalties[value['team']]) < 2: # if the team penalized already has the max number of penalties
+            if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'): #and it's OT in a non-playoff game
+                self._manpower[value['team']] -= 1
+            value['expires_at'] = datetime.strptime(value['taken_at'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
         else:
             penalty_number = len(self._active_penalties[value['team']])
             penalty_to_follow = penalty_number - 2
             value['expires_at'] = datetime.strptime(self._active_penalties[value['team']][penalty_to_follow]['expires_at'], C.FMT) + timedelta(minutes=value['pim'])
 
+
+        # if penalized team already has two or more active penalties, add to quere
+        if len(self._active_penalties[value['team']]) >= 2:
+            penalty_number = len(self._active_penalties[value['team']])
+            penalty_to_follow = penalty_number - 2
+            value['expires_at'] = datetime.strptime(self._active_penalties[value['team']][penalty_to_follow]['expires_at'], C.FMT) + timedelta(minutes=value['pim'])
+        else:
+            # If I'm in overtime and the team that DIDN'T take the penalty has fewer than 5 guys on the ice, check active penalties and add a guy
+            if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'):   
+                pass
+
+
+
+
+
+
         value['expires_at'], value['period_expires'] = per_overflow(value['expires_at'], value['period_taken'])
 
-        self._active_penalties[value['team']].append(value)
+        self._active_penalties[value['team']].append(value) #add penalty to team array
+
+    # def overtime_reduction(self):
+    #     pass
+
+    def overtime_reduction(self):
+        if self._manpower["home"] == self._manpower["away"]: #if even strength, go to 3v3
+            self._manpower["home"] = 3
+            self._manpower["away"] = 3
+        elif max(self._manpower.values()) == 5 and min(self._manpower.values()) == 4: #if 5 on 4, go down to 4 on 3
+            self._manpower[max(self._manpower, key=self._manpower.get)] = 4
+            self._manpower[min(self._manpower, key=self._manpower.get)] = 3
+
 
     def clear_expired(self, value):
         for team in self._active_penalties:
@@ -47,9 +87,6 @@ class GameStates(object):
                         self._manpower[team] += 1
 
                     self._active_penalties[team].remove(penalty)
-                    
-                    
-                    
 
     def event_check(self, value):
         # first, clear penalties on both teams that expired prior to the event
@@ -92,7 +129,7 @@ if __name__ == "__main__":
     #     for penalty in states.active_penalties[team]:
     #         print(penalty)
 
-    states.event_check({ 'event': 'GOAL', 'team': 'away', 'time': '18:03', 'period': 1})
+    states.event_check({ 'event': 'GOAL', 'team': 'away', 'time': '18:03', 'period': 1, 'game_type': 'Regular'})
 
     for team in states.active_penalties:
         for penalty in states.active_penalties[team]:

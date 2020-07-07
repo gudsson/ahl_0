@@ -23,7 +23,7 @@ def error_logging(name):
 
 def scrape_all():
     # get highest game from DB
-    starting_game = dbfunctions.get_last_game_in_db()
+    starting_game = dbfunctions.get_last_game_in_db() + 1
 
     # if no game returned from DB, start at first game with pins
     if starting_game < C.MIN_GAME:
