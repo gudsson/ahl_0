@@ -30,30 +30,29 @@ class GameStates(object):
            
             # check active penalties to see if you can reduce before adding penalty
             self.overtime_reduction()
-            if self._manpower
+
+            # if team penalty was taken against has room, add skater
+            if self._manpower[opponent] < 5:
+                self._manpower[opponent] += 1
+            else:
+                self.queue_penalty(value)
+                return
+        elif len(self._active_penalties[value['team']]) >= 2: # if the team penalized already has the max number of penalties
+            self.queue_penalty(value)
+            return
+        self._manpower[value['team']] -= 1
+        value['expires_at'] = datetime.strptime(value['taken_at'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
 
 
-
-
-        if len(self._active_penalties[value['team']]) < 2: # if the team penalized already has the max number of penalties
-            if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'): #and it's OT in a non-playoff game
-                self._manpower[value['team']] -= 1
-            value['expires_at'] = datetime.strptime(value['taken_at'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
-        else:
+        def queue_penalty(self, value):
             penalty_number = len(self._active_penalties[value['team']])
             penalty_to_follow = penalty_number - 2
             value['expires_at'] = datetime.strptime(self._active_penalties[value['team']][penalty_to_follow]['expires_at'], C.FMT) + timedelta(minutes=value['pim'])
-
-
-        # if penalized team already has two or more active penalties, add to quere
-        if len(self._active_penalties[value['team']]) >= 2:
-            penalty_number = len(self._active_penalties[value['team']])
-            penalty_to_follow = penalty_number - 2
-            value['expires_at'] = datetime.strptime(self._active_penalties[value['team']][penalty_to_follow]['expires_at'], C.FMT) + timedelta(minutes=value['pim'])
-        else:
-            # If I'm in overtime and the team that DIDN'T take the penalty has fewer than 5 guys on the ice, check active penalties and add a guy
-            if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'):   
-                pass
+            return
+        # else:
+        #     # If I'm in overtime and the team that DIDN'T take the penalty has fewer than 5 guys on the ice, check active penalties and add a guy
+        #     if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'):   
+        #         pass
 
 
 
@@ -63,7 +62,7 @@ class GameStates(object):
         value['expires_at'], value['period_expires'] = per_overflow(value['expires_at'], value['period_taken'])
 
         self._active_penalties[value['team']].append(value) #add penalty to team array
-
+        return
     # def overtime_reduction(self):
     #     pass
 
@@ -74,6 +73,7 @@ class GameStates(object):
         elif max(self._manpower.values()) == 5 and min(self._manpower.values()) == 4: #if 5 on 4, go down to 4 on 3
             self._manpower[max(self._manpower, key=self._manpower.get)] = 4
             self._manpower[min(self._manpower, key=self._manpower.get)] = 3
+        return
 
 
     def clear_expired(self, value):
@@ -87,6 +87,7 @@ class GameStates(object):
                         self._manpower[team] += 1
 
                     self._active_penalties[team].remove(penalty)
+        return
 
     def event_check(self, value):
         # first, clear penalties on both teams that expired prior to the event
@@ -117,6 +118,7 @@ class GameStates(object):
                     #         self._active_penalties[opponent][i]['expires_at'], self._active_penalties[opponent][i]['period_expires'] = per_overflow(datetime.strptime(self._active_penalties[opponent][penalty_to_follow]['expires_at'], C.FMT) + timedelta(minutes=value['pim'])
 
                 print(f'now {self._manpower}')
+        return
 
 if __name__ == "__main__":
     states = GameStates()
