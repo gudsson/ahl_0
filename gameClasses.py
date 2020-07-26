@@ -33,7 +33,7 @@ class Game(object):
                         try:
                             self.load_all()
                         except:
-                            raise ValueError(f'Game #{self._game_id} - could not load data despite game beging final')
+                            raise ValueError(f'Game #{self._game_id} - could not load data despite game being final')
                             self._missing_games = [{ "game_id": self._game_id,  "status": self._games["status"], "time_queried": datetime.now()}]
 
                     else:
