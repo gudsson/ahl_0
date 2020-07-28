@@ -10,7 +10,7 @@ Base = declarative_base()
 def connect():
         
         engine = create_engine(
-        "postgresql+psycopg2://postgres:root@localhost/AHLdb",
+        "postgresql+psycopg2://postgres:Olafur84!@localhost/AHLdb",
         executemany_mode='batch')
 
         Session = sessionmaker(bind=engine)

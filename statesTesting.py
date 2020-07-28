@@ -23,16 +23,16 @@ class GameStates(object):
 
     def add_penalty(self, value):
         # print(value)
-        print(f"active {value['team']} penalties before penalty: {len(self._active_penalties[value['team']])}")
+        #print(f"active {value['team']} penalties before penalty: {len(self._active_penalties[value['team']])}")
         # self.overtime_reduction(value)
         # period_multiplier = -1 if (value["period_taken"] == 4 and value['game_type'] != 'Playoff') else 1 #if non-playoff OT
         # If I'm in overtime and the team that DIDN'T take the penalty has fewer than 5 guys on the ice, check active penalties and add a guy
-        if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'):
+        if (value["period"] == 4 and value['game_type'] != 'Playoff'):
             opponent = "away" if value["team"] == "home" else "home"
-            print("OT id'd")
+            # print("OT id'd")
 
             # check active penalties to see if you can reduce before adding penalty
-            self.overtime_reduction(value)
+            # self.overtime_reduction(value) #eventually move this to event check - > OT
 
             # if team penalty was taken against has room, add skater
             if self._manpower[opponent] < 5:
@@ -46,15 +46,17 @@ class GameStates(object):
             self._manpower[value['team']] -= 1
 
         value['expires_at'] = datetime.strptime(value['taken_at'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
-        value['expires_at'], value['period_expires'] = per_overflow(value['expires_at'], value['period_taken']) #check if overflows to next period
+        value['expires_at'], value['period_expires'] = per_overflow(value['expires_at'], value['period']) #check if overflows to next period
        
-        print(value)
         self._active_penalties[value['team']].append(value) #add penalty to team array
 
         # check active penalties to see if you can reduce before adding penalty
-        self.overtime_reduction(value)
+        # self.overtime_reduction(value)
 
-        print(f"active {value['team']} penalties after penalty: {len(self._active_penalties[value['team']])}")
+        for team in self._active_penalties:
+            print(f"active {team} penalties after penalty:")
+            for penalty in self._active_penalties[team]:
+                print(f"     #{penalty['player_number']}: expires at {penalty['expires_at']} of period {penalty['period_expires']}")#{}{len(self._active_penalties[value['team']])}")
         print(f'current manpower: {self._manpower}')
         print("=====")
         return
@@ -68,7 +70,7 @@ class GameStates(object):
         return value
 
     def overtime_reduction(self, value):
-        if (value["period_taken"] == 4 and value['game_type'] != 'Playoff'):
+        if (value["period"] == 4 and value['game_type'] != 'Playoff'):
             if self._manpower["home"] == self._manpower["away"]: #if even strength, go to 3v3
                 self._manpower["home"] = 3
                 self._manpower["away"] = 3
@@ -104,16 +106,20 @@ class GameStates(object):
         team = value['team']
         opponent = 'away' if value['team'] == 'home' else 'home'
 
+        #
+        # If period start and overtime, call overtime reduction
+        #
+
         # game state event occurred at:
         print(f'event occurred at {self._manpower}, state certainty = {self._state_certainty}')
 
         # if in overtime, shots don't have known game state if penalties needed to be cleared
         if value["period"] == 4: #if in overtime
-            if max(self._manpower) > 3: #and not 3v3
+            if int(max(self._manpower.values())) > 3: #and not 3v3
                 if value['event'] == "SHOT": #if event is a shot, no stoppage, and non-3v3 game_states are now uncertain
                     self._state_certainty = False
                 else: #else stoppage, apply overtime reduction and state is again known with certainty
-                    self.overtime_reduction(self._manpower)
+                    self.overtime_reduction(value)
                     self._state_certainty = True
 
         # if goal
@@ -153,9 +159,9 @@ class GameStates(object):
 
 if __name__ == "__main__":
     states = GameStates()
-    states.add_penalty({ 'team': 'home', 'player_number': 27, 'pim': 2, 'taken_at': '19:59', 'period_taken': 3, 'game_type': 'Regular'})
-    states.add_penalty({ 'team': 'home', 'player_number': 28, 'pim': 2, 'taken_at': '00:01', 'period_taken': 4, 'game_type': 'Regular'})
-    states.add_penalty({ 'team': 'away', 'player_number': 29, 'pim': 2, 'taken_at': '00:02', 'period_taken': 4, 'game_type': 'Regular' })
+    states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 27, 'pim': 2, 'taken_at': '19:59', 'period': 3, 'game_type': 'Regular'})
+    states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 28, 'pim': 2, 'taken_at': '00:01', 'period': 4, 'game_type': 'Regular'})
+    states.event_check({ 'event': 'PENALTY', 'team': 'away', 'player_number': 29, 'pim': 2, 'taken_at': '00:02', 'period': 4, 'game_type': 'Regular' })
 
     # print(states.manpower)
     # for team in states.active_penalties:
@@ -164,6 +170,6 @@ if __name__ == "__main__":
     states.event_check({ 'event': 'SHOT', 'team': 'away', 'time': '1:01', 'period': 4, 'game_type': 'Regular'})
     states.event_check({ 'event': 'GOAL', 'team': 'away', 'time': '1:02', 'period': 4, 'game_type': 'Regular'})
 
-    for team in states.active_penalties:
-        for penalty in states.active_penalties[team]:
-            print(penalty)
+    # for team in states.active_penalties:
+    #     for penalty in states.active_penalties[team]:
+    #         print(penalty)
