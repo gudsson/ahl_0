@@ -45,7 +45,7 @@ class GameStates(object):
         else:
             self._manpower[value['team']] -= 1
 
-        value['expires_at'] = datetime.strptime(value['taken_at'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
+        value['expires_at'] = datetime.strptime(value['time'], C.FMT) + timedelta(minutes=value['pim']) #'dt.strptime('2:00', C.FMT)
         value['expires_at'], value['period_expires'] = per_overflow(value['expires_at'], value['period']) #check if overflows to next period
        
         self._active_penalties[value['team']].append(value) #add penalty to team array
@@ -82,6 +82,9 @@ class GameStates(object):
 
 
     def clear_expired(self, value):
+
+        penalty_ended = False
+
         for team in self._active_penalties:
             
             for penalty in self._active_penalties[team][:]:
@@ -90,23 +93,49 @@ class GameStates(object):
                     # print(f"penalty[expires_at]: {penalty['expires_at']}")
                     # print(f"value[time]: {value['time']}")
                     # print(penalty['expires_at'] <= value['time'])
+
+                    penalty_ended = True
+
                     if len(self._active_penalties[team]) <= 2:
                         self._manpower[team] += 1
 
                     self._active_penalties[team].remove(penalty)
-        return
+
+        return penalty_ended
 
     def event_check(self, value):
-        # first, clear penalties on both teams that expired prior to the event
-        print(f'penalties before clear: {self._active_penalties}')
-        self.clear_expired(value)
-        print(f'penalties after clear: {self._active_penalties}')
-
         # get teams
         team = value['team']
         opponent = 'away' if value['team'] == 'home' else 'home'
 
-        #
+        #introduce state certainty at some point
+
+        # first, clear penalties on both teams that expired prior to the event
+        # print(f'penalties before clear: {team} = {len(self._active_penalties[value[team]])} | {opponent} = {len(self._active_penalties[value[opponent]])}')
+        penalty_cleared = self.clear_expired(value)
+        print(penalty_cleared)
+        # print(f'penalties after clear: {team} = {len(self._active_penalties[value[team]])} | {opponent} = {len(self._active_penalties[value[opponent]])}')
+
+        #if event is a penalty, add to penalty array
+        if value['event'] == "PENALTY":
+            self.add_penalty(value)
+
+
+        #####IF REGULAR SEASON
+
+        # if in overtime, shots don't have known game state if penalties needed to be cleared
+        if value["period"] == 4: #if in overtime
+            if int(max(self._manpower.values())) > 3: #and not 3v3
+                if value['event'] == "SHOT" or value['event'] == "GOALIE CHANGE": #non-guaranteed stoppage, and non-3v3 game_states are now uncertain
+                    self._state_certainty = False
+                else: #else stoppage, apply overtime reduction and state is again known with certainty
+                    self.overtime_reduction(value)
+                    self._state_certainty = True
+        else: #now what?
+            pass
+
+
+
         # If period start and overtime, call overtime reduction
         #
 
@@ -139,7 +168,7 @@ class GameStates(object):
         # Next, if goal, wipe out opponent's next penalty (if it exists)
         if value['event'] == 'GOAL' and (self._manpower[team] > self._manpower[opponent]):
             print(f'goal scored at {self._manpower}')
-            del self._active_penalties[opponent][0]
+            self._active_penalties[opponent].pop(0) if self._active_penalties[opponent] else None 
             if len(self._active_penalties[opponent]) < 2:
                 self._manpower[opponent] += 1
             else: # Go through queue and move up penalties if need be
@@ -159,9 +188,9 @@ class GameStates(object):
 
 if __name__ == "__main__":
     states = GameStates()
-    states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 27, 'pim': 2, 'taken_at': '19:59', 'period': 3, 'game_type': 'Regular'})
-    states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 28, 'pim': 2, 'taken_at': '00:01', 'period': 4, 'game_type': 'Regular'})
-    states.event_check({ 'event': 'PENALTY', 'team': 'away', 'player_number': 29, 'pim': 2, 'taken_at': '00:02', 'period': 4, 'game_type': 'Regular' })
+    states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 27, 'pim': 2, 'time': '19:59', 'period': 3, 'game_type': 'Regular'})
+    states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 28, 'pim': 2, 'time': '00:01', 'period': 4, 'game_type': 'Regular'})
+    states.event_check({ 'event': 'PENALTY', 'team': 'away', 'player_number': 29, 'pim': 2, 'time': '00:02', 'period': 4, 'game_type': 'Regular' })
 
     # print(states.manpower)
     # for team in states.active_penalties:
@@ -169,7 +198,7 @@ if __name__ == "__main__":
     #         print(penalty)
     states.event_check({ 'event': 'SHOT', 'team': 'away', 'time': '1:01', 'period': 4, 'game_type': 'Regular'})
     states.event_check({ 'event': 'GOAL', 'team': 'away', 'time': '1:02', 'period': 4, 'game_type': 'Regular'})
-
+    states.event_check({ 'event': 'GOAL', 'team': 'away', 'time': '3:02', 'period': 4, 'game_type': 'Regular'}) 
     # for team in states.active_penalties:
     #     for penalty in states.active_penalties[team]:
     #         print(penalty)
