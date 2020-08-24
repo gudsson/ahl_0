@@ -116,13 +116,13 @@ class GameStates(object):
         print(penalty_cleared)
         # print(f'penalties after clear: {team} = {len(self._active_penalties[value[team]])} | {opponent} = {len(self._active_penalties[value[opponent]])}')
 
-        #if event is a penalty, add to penalty array
+        #if event is a penalty, add to updated penalty array
         if value['event'] == "PENALTY":
-            self.add_penalty(value)
+            self.add_penalty(value) #add penalty already reduces manpower
+        
 
 
         #####IF REGULAR SEASON
-
         # if in overtime, shots don't have known game state if penalties needed to be cleared
         if value["period"] == 4: #if in overtime
             if int(max(self._manpower.values())) > 3: #and not 3v3

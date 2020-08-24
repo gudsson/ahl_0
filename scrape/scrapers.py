@@ -376,14 +376,23 @@ def pbp(game, driver):
 
     #get elements
     pbp_periods = driver.find_elements_by_xpath("//div[@ng-repeat='gamePBP in PlayByPlayPeriodBreakdown track by $index']")
-    
+
+    #initialize starting period
+    current_period = '0' #all games assumed to start in the first period
+
     #loop through each period
     for period in pbp_periods:
-        period_number = period.get_attribute('ng-show').split("ht_")[1]
+        period_number = str(period.get_attribute('ng-show').split("ht_")[1])
         period_name = period.find_element_by_xpath("div[@ng-bind='gamePBP.longName']").text
 
         #get event elements
         pbp_events = period.find_elements_by_xpath("div[contains(@ng-show,'ht_')]")
+
+        if period_number != current_period:
+            if current_period != '0':
+                print(f'PERIOD END | {current_period}')
+            print(f'PERIOD START | {period_number}')
+            current_period = period_number
 
         #loop through events in period
         for event in pbp_events:
@@ -437,7 +446,7 @@ def pbp(game, driver):
                 #append dict to result array
                 shots.append(shot_dict)
                 # print(shot_dict)
-                # print(f'{shot_dict["event"]} | {shot_dict["side"]} | {shot_dict["team"]} | {shot_dict["event"]} by #{shot_dict["player_number"]} {shot_dict["player_name"]} on #{shot_dict["goalie_number"]} {shot_dict["goalie_name"]} at {shot_dict["time"]} {shot_dict["period"]}')
+                print(f'{shot_dict["event"]} | {shot_dict["side"]} | {shot_dict["team"]} | {shot_dict["event"]} by #{shot_dict["player_number"]} {shot_dict["player_name"]} on #{shot_dict["goalie_number"]} {shot_dict["goalie_name"]} at {shot_dict["time"]} {shot_dict["period"]}')
 
             # Pull Goal Info
             elif pbp_event_type == "GOAL":
@@ -472,6 +481,8 @@ def pbp(game, driver):
                             goal_dict["psg"] = True
 
                 pbp_goal_str = f'\n {goal_dict["team"]} {goal_dict["event"]} by #{goal_dict["player_number"]} {goal_dict["player_name"]} ({goal_dict["season_total"]}) {pbp_goal_type} at {goal_dict["time"]} of the {goal_dict["period"]} period'
+
+                print(pbp_goal_str)
 
             # Pull Assist Info
                 #get assist elements
@@ -548,7 +559,7 @@ def pbp(game, driver):
 
                 #append dict to return array
                 penalties.append(penalty_dict)
-                # print(f'PENALTY | #{penalty_dict["player_number"]} {penalty_dict["player_name"]} | {penalty_dict["penalty"]} | {penalty_dict["pim"]} ({penalty_dict["pp"]}) at {penalty_dict["time"]} of {penalty_dict["period"]} period')
+                print(f'PENALTY | #{penalty_dict["player_number"]} {penalty_dict["player_name"]} | {penalty_dict["penalty"]} | {penalty_dict["pim"]} ({penalty_dict["pp"]}) at {penalty_dict["time"]} of {penalty_dict["period"]} period')
 
             # Pull Goalie Change Info
             elif pbp_event_type == "GOALIE CHANGE":
@@ -570,7 +581,7 @@ def pbp(game, driver):
 
                     #append dict to return array
                     goalie_changes.append(goalie_dict)
-                    # print(f'GOALIE CHANGE | {pbp_side} #{goalie_dict["goalie_number"]} {goalie_dict["goalie_name"]} {goalie_dict["action"]} at {pbp_event_time}, {period_name} period.')
+                    print(f'GOALIE CHANGE | {pbp_side} #{goalie_dict["goalie_number"]} {goalie_dict["goalie_name"]} {goalie_dict["action"]} at {pbp_event_time}, {period_name} period.')
 
             elif pbp_event_type == " ":  # in shootout
                 #declaration
@@ -594,7 +605,7 @@ def pbp(game, driver):
                         shootout_dict["result"] = result.text
                 
                 shootout_attempts.append(shootout_dict)
-                # print(f'{shootout_dict["event"]}  | {shootout_dict["team"]} #{shootout_dict["player_number"]} {shootout_dict["player_name"]} shootout attempt on #{shootout_dict["goalie_number"]} {shootout_dict["goalie_name"]}:   {shootout_dict["result"]}')
+                print(f'{shootout_dict["event"]}  | {shootout_dict["team"]} #{shootout_dict["player_number"]} {shootout_dict["player_name"]} shootout attempt on #{shootout_dict["goalie_number"]} {shootout_dict["goalie_name"]}:   {shootout_dict["result"]}')
 
             #log any unaccounted for event types
             else:

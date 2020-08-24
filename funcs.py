@@ -21,6 +21,9 @@ def error_logging(name):
 
     return log
 
+def scrape_game(game_id):
+    game = gC.Game(game_id)
+
 def scrape_all():
     # get highest game from DB
     starting_game = dbfunctions.get_last_game_in_db() + 1
