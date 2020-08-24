@@ -104,9 +104,12 @@ class GameStates(object):
         return penalty_ended
 
     def event_check(self, value):
-        # get teams
-        team = value['team']
-        opponent = 'away' if value['team'] == 'home' else 'home'
+        # set team and time variables as needed
+        if "PERIOD" in value['event']:
+            value['time'] = '00:00'
+        else:
+            team = value['team']
+            opponent = 'away' if value['team'] == 'home' else 'home'
 
         #introduce state certainty at some point
 
@@ -119,52 +122,28 @@ class GameStates(object):
         #if event is a penalty, add to updated penalty array
         if value['event'] == "PENALTY":
             self.add_penalty(value) #add penalty already reduces manpower
-        
 
-
-        #####IF REGULAR SEASON
-        # if in overtime, shots don't have known game state if penalties needed to be cleared
-        if value["period"] == 4: #if in overtime
-            if int(max(self._manpower.values())) > 3: #and not 3v3
+        #####IF REGULAR SEASON game
+        if value['game_type'] == 'Regular' and value['period'] == 4:
+            if value['event'] == "PERIOD START": #if OT starting then reduce player count
+                print(f'OT Starting')
+                self.overtime_reduction(value)
+            elif int(max(self._manpower.values())) > 3: #and not 3v3
                 if value['event'] == "SHOT" or value['event'] == "GOALIE CHANGE": #non-guaranteed stoppage, and non-3v3 game_states are now uncertain
                     self._state_certainty = False
                 else: #else stoppage, apply overtime reduction and state is again known with certainty
                     self.overtime_reduction(value)
                     self._state_certainty = True
-        else: #now what?
-            pass
+        elif value['event'] == 'GOAL' and (self._manpower[team] > self._manpower[opponent]): #else, if goal, wipe out opponent's next penalty (if it exists)
+            print(f'goal scored at {self._manpower}')
+            self._active_penalties[opponent].pop(0) if self._active_penalties[opponent] else None 
+            if len(self._active_penalties[opponent]) < 2:
+                self._manpower[opponent] += 1
+            else: # Go through queue and move up penalties if need be
+                # deal with first queued penalty
+                self._active_penalties[opponent][1]['expires_at'] = datetime.strptime(value['time'], C.FMT) + timedelta(minutes=self._active_penalties[opponent][1]['pim'])
+                self._active_penalties[opponent][1]['expires_at'], self._active_penalties[opponent][1]['period_expires'] = per_overflow(self._active_penalties[opponent][1]['expires_at'], value['period'])
 
-
-
-        # If period start and overtime, call overtime reduction
-        #
-
-        # game state event occurred at:
-        print(f'event occurred at {self._manpower}, state certainty = {self._state_certainty}')
-
-        # if in overtime, shots don't have known game state if penalties needed to be cleared
-        if value["period"] == 4: #if in overtime
-            if int(max(self._manpower.values())) > 3: #and not 3v3
-                if value['event'] == "SHOT": #if event is a shot, no stoppage, and non-3v3 game_states are now uncertain
-                    self._state_certainty = False
-                else: #else stoppage, apply overtime reduction and state is again known with certainty
-                    self.overtime_reduction(value)
-                    self._state_certainty = True
-
-        # if goal
-        #   a) game state can be cross-checked with +/-
-
-
-        # return game state
-        print(f'event occurred at {self._manpower}')
-
-        #
-        #
-        #
-        #
-        #
-        #
-        #still have to do for overtime!!!!!
         # Next, if goal, wipe out opponent's next penalty (if it exists)
         if value['event'] == 'GOAL' and (self._manpower[team] > self._manpower[opponent]):
             print(f'goal scored at {self._manpower}')
@@ -172,23 +151,18 @@ class GameStates(object):
             if len(self._active_penalties[opponent]) < 2:
                 self._manpower[opponent] += 1
             else: # Go through queue and move up penalties if need be
-
                 # deal with first queued penalty
                 self._active_penalties[opponent][1]['expires_at'] = datetime.strptime(value['time'], C.FMT) + timedelta(minutes=self._active_penalties[opponent][1]['pim'])
                 self._active_penalties[opponent][1]['expires_at'], self._active_penalties[opponent][1]['period_expires'] = per_overflow(self._active_penalties[opponent][1]['expires_at'], value['period'])
-
-                ##### I don't think I have to move any others up, only one penalty is affected at a time
-                # if len(self._active_penalties[opponent]) > 2: #if there are still queued penalties, loop through and reduce their expiry time
-                #     for i in range(2, len(self._active_penalties[opponent])):
-                #         penalty_number = i
-                #         penalty_to_follow = penalty_number - 2
-                #         self._active_penalties[opponent][i]['expires_at'], self._active_penalties[opponent][i]['period_expires'] = per_overflow(datetime.strptime(self._active_penalties[opponent][penalty_to_follow]['expires_at'], C.FMT) + timedelta(minutes=value['pim'])
-            print(f'now {self._manpower}')
         return
+
+        # print(f"{value['event']} | new manpower: {self._manpower}")
 
 if __name__ == "__main__":
     states = GameStates()
     states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 27, 'pim': 2, 'time': '19:59', 'period': 3, 'game_type': 'Regular'})
+    states.event_check({ 'event': 'PERIOD END', 'period': 3, 'game_type': 'Regular'})
+    states.event_check({ 'event': 'PERIOD START', 'period': 4, 'game_type': 'Regular'})
     states.event_check({ 'event': 'PENALTY', 'team': 'home', 'player_number': 28, 'pim': 2, 'time': '00:01', 'period': 4, 'game_type': 'Regular'})
     states.event_check({ 'event': 'PENALTY', 'team': 'away', 'player_number': 29, 'pim': 2, 'time': '00:02', 'period': 4, 'game_type': 'Regular' })
 

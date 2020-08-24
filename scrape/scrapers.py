@@ -378,18 +378,20 @@ def pbp(game, driver):
     pbp_periods = driver.find_elements_by_xpath("//div[@ng-repeat='gamePBP in PlayByPlayPeriodBreakdown track by $index']")
 
     #initialize starting period
-    current_period = '0' #all games assumed to start in the first period
+    current_period = 0 #all games assumed to start in the first period
 
     #loop through each period
     for period in pbp_periods:
-        period_number = str(period.get_attribute('ng-show').split("ht_")[1])
+        period_number = period.get_attribute('ng-show').split("ht_")[1]
+        period_number = (period_number, 4)[period_number == "OT"]
+
         period_name = period.find_element_by_xpath("div[@ng-bind='gamePBP.longName']").text
 
         #get event elements
         pbp_events = period.find_elements_by_xpath("div[contains(@ng-show,'ht_')]")
 
         if period_number != current_period:
-            if current_period != '0':
+            if current_period != 0:
                 print(f'PERIOD END | {current_period}')
             print(f'PERIOD START | {period_number}')
             current_period = period_number
