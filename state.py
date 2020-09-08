@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import constants as C
 
 #define game state
-class GameState2(object):
+class GameState(object):
     def __init__(self, manpower = {"home": 5, "away": 5}):
         self._manpower = manpower
         self._active_penalties = { "home": [], "away": [] }
@@ -17,7 +17,7 @@ class GameState2(object):
     def manpower(self, value):
         self._manpower = value
 
-# class GameState(object):
+# class GameState2(object):
 #     def __init__(self, manpower = {"home": 5, "away": 5}):
 #         self._manpower = manpower
 #         self._active_penalties = { "home": [], "away": [] }

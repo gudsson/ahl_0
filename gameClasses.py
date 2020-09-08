@@ -4,20 +4,47 @@ from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, 
 from dbfunctions import db_commit
 from time import sleep
 from datetime import datetime
-from state import GameState2
+from state import GameState
+
+# class GameState(object):
+#     def __init__(self, manpower = {"home": 5, "away": 5}):
+#         self._manpower = manpower
+#         self._active_penalties = { "home": [], "away": [] }
+#         self._state_certainty = True
+
 
 # individual game class
 class Game2(object):
-    def __init__(self, game_id=0, data_queried = []):#, data=None):
+    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5}):#, data=None):
         self.data_queried = data_queried
         self.game_id = game_id
-        self.state = GameState2()
+        self._manpower = manpower
+        self._state_certainty = True
+        # self.state = GameState()
+
+    @property
+    def manpower(self):
+        return self._manpower
+
+    @manpower.setter
+    def manpower(self, value):
+        self._manpower = value
+    # @state.setter
+    # def state(self, value):
+    #     self._state["home"] = value["home"]
+    #     self._state["away"] = value["away"]
+
+    # @property
+    # def state(self):
+    #     return self._state
+
 
 class Game(object):
-    def __init__(self, game_id=0, data_queried = []):#, data=None):
+    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5}):#, data=None):
         self.data_queried = data_queried
         self.game_id = game_id
-        self.state = GameState2()
+        self._manpower = manpower
+        self._state_certainty = True
 
     @property
     def game_id(self):
@@ -35,7 +62,7 @@ class Game(object):
                     self._games = game_data(self._game_id, self._report)
                     self._teams = { "home": self._games[0]["home_team"], "away": self._games[0]["away_team"] }
 
-                    self._states = GameStates()
+                    # self._states = GameStates()
 
                     if not self.data_queried: #data queried array is empty, load all
                         try:
@@ -58,10 +85,6 @@ class Game(object):
                         
             #commit returned data to db
             db_commit(self)
-
-    @property
-    def state(self):
-        return self._state
 
     @property
     def report(self):
@@ -187,17 +210,17 @@ class Game(object):
 
 
 #define game state
-class GameStates(object):
-    def __init__(self, manpower = {"home": 5, "away": 5}):
-        self._manpower = manpower
+# class GameStates(object):
+#     def __init__(self, manpower = {"home": 5, "away": 5}):
+#         self._manpower = manpower
 
-    @property
-    def manpower(self):
-        return self._manpower
+#     @property
+#     def manpower(self):
+#         return self._manpower
 
-    @manpower.setter
-    def manpower(self, value):
-        self._manpower = value
+#     @manpower.setter
+#     def manpower(self, value):
+#         self._manpower = value
 
 if __name__ == "__main__":
     pass

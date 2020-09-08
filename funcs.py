@@ -23,6 +23,7 @@ def error_logging(name):
 
 def scrape_game(game_id):
     game = gC.Game(game_id)
+    return game
 
 def scrape_game2(game_id):
     game = gC.Game2(game_id)
