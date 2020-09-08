@@ -363,6 +363,9 @@ class Shot(Base):
         team = Column(String(length=35))
         side = Column(String(length=4))
         opponent = Column(String(length=35))
+        team_manpower = Column(Integer)
+        opponent_manpower = Column(Integer)
+        state_certainty = Column(Boolean, default=True)
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
         goalie_number = Column(String(length=2), default=None)
@@ -371,13 +374,16 @@ class Shot(Base):
         period = Column(String(length=4))
         result = Column(String(length=4), default="")
 
-        def __init__(self, game_id, pbp_id, event, team, side, opponent, player_number, player_name, goalie_name, time, period, goalie_number=None, result=""):
+        def __init__(self, game_id, pbp_id, event, team, side, opponent, team_manpower, opponent_manpower, state_certainty, player_number, player_name, goalie_name, time, period, goalie_number=None, result=""):
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
                 self.side = side
                 self.opponent = opponent
+                self.team_manpower = team_manpower
+                self.opponent_manpower = opponent_manpower
+                self.state_certainty = state_certainty
                 self.player_number = player_number
                 self.player_name = player_name
                 self.goalie_number = goalie_number
@@ -397,6 +403,8 @@ class Penalty_Call(Base):
         team = Column(String(length=35))
         side = Column(String(length=4))
         opponent = Column(String(length=35))
+        team_manpower = Column(Integer)
+        opponent_manpower = Column(Integer)
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
         penalty = Column(String(length=100))
@@ -405,13 +413,15 @@ class Penalty_Call(Base):
         time = Column(Time)
         period = Column(String(length=3))
 
-        def __init__(self, game_id, pbp_id, event, team, side, opponent, player_number, player_name, penalty, pim, pp, time, period):
+        def __init__(self, game_id, pbp_id, event, team, side, opponent, team_manpower, opponent_manpower, player_number, player_name, penalty, pim, pp, time, period):
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
                 self.side = side
                 self.opponent = opponent
+                self.team_manpower = team_manpower
+                self.opponent_manpower = opponent_manpower
                 self.player_number = player_number
                 self.player_name = player_name
                 self.penalty = penalty
@@ -431,6 +441,8 @@ class Goal(Base):
         team = Column(String(length=35))
         side = Column(String(length=4))
         opponent = Column(String(length=35))
+        team_manpower = Column(Integer)
+        opponent_manpower = Column(Integer)
         player_number = Column(String(length=2))
         player_name = Column(String(length=50))
         season_total = Column(String(length=3))
@@ -449,13 +461,15 @@ class Goal(Base):
         insurance = Column(Boolean, unique=False, default=False)
         psg = Column(Boolean, unique=False, default=False)
 
-        def __init__(self, game_id, pbp_id, event, team, side, opponent, player_number, player_name, season_total, time, period, assist1_number=None, assist1_name=None, assist1_total=None, assist2_number=None, assist2_name=None, assist2_total=None, ppg=False, shg=False, eng=False, gwg=False, insurance=False, psg=False):
+        def __init__(self, game_id, pbp_id, event, team, side, opponent, team_manpower, opponent_manpower, player_number, player_name, season_total, time, period, assist1_number=None, assist1_name=None, assist1_total=None, assist2_number=None, assist2_name=None, assist2_total=None, ppg=False, shg=False, eng=False, gwg=False, insurance=False, psg=False):
                 self.game_id = game_id
                 self.pbp_id = pbp_id
                 self.event = event
                 self.team = team
                 self.side = side
                 self.opponent = opponent
+                self.team_manpower = team_manpower
+                self.opponent_manpower = opponent_manpower
                 self.player_number = player_number
                 self.player_name = player_name
                 self.season_total = season_total
@@ -632,6 +646,6 @@ atexit.register(lambda: engine.dispose())
 
 #run if module is main
 if __name__ == "__main__":
-        pass
-        # drop_all_tables()
+        # pass
+        drop_all_tables()
         # print("All tables in database have been dropped.")
