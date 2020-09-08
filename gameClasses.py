@@ -4,12 +4,20 @@ from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, 
 from dbfunctions import db_commit
 from time import sleep
 from datetime import datetime
+from state import GameState2
 
 # individual game class
+class Game2(object):
+    def __init__(self, game_id=0, data_queried = []):#, data=None):
+        self.data_queried = data_queried
+        self.game_id = game_id
+        self.state = GameState2()
+
 class Game(object):
     def __init__(self, game_id=0, data_queried = []):#, data=None):
         self.data_queried = data_queried
         self.game_id = game_id
+        self.state = GameState2()
 
     @property
     def game_id(self):
@@ -50,6 +58,10 @@ class Game(object):
                         
             #commit returned data to db
             db_commit(self)
+
+    @property
+    def state(self):
+        return self._state
 
     @property
     def report(self):
@@ -158,6 +170,9 @@ class Game(object):
 
     def pbp(self):
         self._goals, self._shots, self._goalie_changes, self._penalty_calls, self._onice_events, self._shootout_attempts, self._pins = pbp(self, self._report)
+
+    def states(self):
+        pass
 
     # @property
     def load_all(self):
