@@ -15,7 +15,7 @@ from state import GameState
 
 # individual game class
 class Game2(object):
-    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5}):#, data=None):
+    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5, "homeGoalie": True, "awayGoalie": True}):#, data=None):
         self.data_queried = data_queried
         self.game_id = game_id
         self._manpower = manpower
@@ -40,7 +40,7 @@ class Game2(object):
 
 
 class Game(object):
-    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5}):#, data=None):
+    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5, "homeGoalie": True, "awayGoalie": True}):#, data=None):
         self.data_queried = data_queried
         self.game_id = game_id
         self._manpower = manpower
