@@ -9870,3 +9870,20 @@ JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdL
 >>>>>>> parent of 99ecd43... add pulled goalie columns to db
 =======
 >>>>>>> parent of 99ecd43... add pulled goalie columns to db
+1602561847615	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilewl1hn3"
+*** You are running in headless mode.
+1602561848316	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1602561851252	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1602561851252	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1602561851252	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1602561851252	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1602561853095	Marionette	INFO	Listening on port 50471
+1602561853415	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 6138 > eval line 1 > eval, line 1: WebGL warning: <Create>: Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 6138 > eval line 1 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 5403 > eval, line 1: WebGL warning: <Create>: Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 5403 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1602561898195	Marionette	INFO	Stopped listening on port 50471
