@@ -60,6 +60,13 @@ class Game(object):
                 try:
                     self._report = raw_page(self._game_id)
                     self._games = game_data(self._game_id, self._report)
+                    self._game_type = self._games[0]["game_type"]
+                    print(self._game_type)
+                    # self._game_type = self._games["game_type"]
+
+                    # print(self._game_type)
+
+
                     self._teams = { "home": self._games[0]["home_team"], "away": self._games[0]["away_team"] }
 
                     # self._states = GameStates()
@@ -84,7 +91,7 @@ class Game(object):
                         self._missing_games = [{ "game_id": self._game_id,  "status": "did not load", "time_queried": datetime.now()}]
                         
             #commit returned data to db
-            db_commit(self)
+            # db_commit(self)
 
     @property
     def report(self):

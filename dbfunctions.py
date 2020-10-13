@@ -642,7 +642,7 @@ def db_commit(game):
                                         tbl_name = key[1:].replace("_"," ").title().replace(" ","_")[:-1] if key != "_coaches" else "Coach"
                                         session.add(getattr(thismodule, tbl_name)(**item))
         print(f'Game #{vars(game)["_game_id"]}: committing {len(session.new)} rows to database.')
-        session.commit()
+        # session.commit()
 
 def get_last_game_in_db():#session, meta):
         
