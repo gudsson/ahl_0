@@ -9438,6 +9438,7 @@ JavaScript error: resource://services-settings/RemoteSettingsClient.jsm, line 11
 [Parent 7976, Gecko_IOThread] WARNING: file Z:/task_1585933993/build/src/ipc/chromium/src/base/process_util_win.cc, line 166
 JavaScript error: resource://activity-stream/lib/DiscoveryStreamFeed.jsm, line 859: TypeError: items is undefined
 <<<<<<< HEAD
+<<<<<<< HEAD
 1600649997918	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofilecsjnBq"
 *** You are running in headless mode.
 1600650060157	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
@@ -9865,5 +9866,7 @@ JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdL
 1602560183218	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofileCHhWU0"
 *** You are running in headless mode.
 1602560184225	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+=======
+>>>>>>> parent of 99ecd43... add pulled goalie columns to db
 =======
 >>>>>>> parent of 99ecd43... add pulled goalie columns to db

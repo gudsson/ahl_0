@@ -36,7 +36,11 @@ class Game2(object):
 
 class Game(object):
 <<<<<<< HEAD
+<<<<<<< HEAD
     def __init__(self, game_id=0, data_queried = []): #manpower = {"home": 5, "away": 5, "homeGoalie": True, "awayGoalie": True}):
+=======
+    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5}):#, data=None):
+>>>>>>> parent of 99ecd43... add pulled goalie columns to db
 =======
     def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5}):#, data=None):
 >>>>>>> parent of 99ecd43... add pulled goalie columns to db
