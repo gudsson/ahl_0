@@ -1,5 +1,11 @@
 from datetime import datetime
 
+def test(game, manpower):
+    # game.manpower = {"home": 4, "away": 5}
+    game.manpower["home"] = 4
+    game.manpower["away"] = 5
+    return #manpower#game.manpower
+
 #get summary container
 def get_summary(driver):
     return driver.find_element_by_xpath("//div[@class='ht-summary-container']")
@@ -373,6 +379,8 @@ def pbp(game, driver):
     goals, shots, onice_events, penalties, goalie_changes, shootout_attempts = [], [], [], [], [], []
     pins = []
     pbp_id = 0
+    manpower = {"home": 5, "away": 5, "homeGoalie": True, "awayGoalie": True}
+    goalie_pulled = {"home": False, "away": False}
 
     #get elements
     pbp_periods = driver.find_elements_by_xpath("//div[@ng-repeat='gamePBP in PlayByPlayPeriodBreakdown track by $index']")

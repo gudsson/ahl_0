@@ -1,6 +1,6 @@
 import constants as C
 from scrape.report import raw_page
-from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, three_stars, coaches, player_scorelines, preview_stats, pbp
+from scrape.scrapers import game_data, referee_data, boxscore, penalty_summary, three_stars, coaches, player_scorelines, preview_stats, pbp, test
 from dbfunctions import db_commit
 from time import sleep
 from datetime import datetime
@@ -29,21 +29,16 @@ class Game2(object):
     @manpower.setter
     def manpower(self, value):
         self._manpower = value
-    # @state.setter
-    # def state(self, value):
-    #     self._state["home"] = value["home"]
-    #     self._state["away"] = value["away"]
 
-    # @property
-    # def state(self):
-    #     return self._state
+    def change_manpower(self):
+        test(self, self._manpower) #self._manpower = test(self)
 
 
 class Game(object):
-    def __init__(self, game_id=0, data_queried = [], manpower = {"home": 5, "away": 5, "homeGoalie": True, "awayGoalie": True}):#, data=None):
+    def __init__(self, game_id=0, data_queried = []): #manpower = {"home": 5, "away": 5, "homeGoalie": True, "awayGoalie": True}):
         self.data_queried = data_queried
         self.game_id = game_id
-        self._manpower = manpower
+        # self._manpower = manpower
         self._state_certainty = True
 
     @property
@@ -60,6 +55,14 @@ class Game(object):
                 try:
                     self._report = raw_page(self._game_id)
                     self._games = game_data(self._game_id, self._report)
+                    self._game_type = self._games["game_type"]
+
+
+                    print(self._game_type)
+
+
+
+
                     self._teams = { "home": self._games[0]["home_team"], "away": self._games[0]["away_team"] }
 
                     # self._states = GameStates()
@@ -84,7 +87,12 @@ class Game(object):
                         self._missing_games = [{ "game_id": self._game_id,  "status": "did not load", "time_queried": datetime.now()}]
                         
             #commit returned data to db
-            db_commit(self)
+            # db_commit(self)
+
+    #not sure I need these
+    @property
+    def game_type(self):
+        return self._game_type
 
     @property
     def report(self):

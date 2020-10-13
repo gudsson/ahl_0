@@ -12,8 +12,9 @@ logger = error_logging(__name__)
 ###
 
 if __name__ == "__main__":
-    game = scrape_game2(1020165)#scrape_all()
-    print(game.manpower)
-    game.manpower = {"home": 4, "away": 5}
-    # game.state["home"] = {"home": 4, "away": 5}
-    print(game.manpower["home"])
+    game = scrape_game(1020166)#scrape_all()
+    # print(game.manpower)
+    # # game.manpower = {"home": 4, "away": 5}
+    # game.change_manpower()
+    # # game.state["home"] = {"home": 4, "away": 5}
+    # print(game.manpower)
