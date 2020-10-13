@@ -9599,3 +9599,17 @@ JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdL
 JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 836 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
 * Can't use WebGL in headless mode (https://bugzil.la/1375585).
 1602563007100	Marionette	INFO	Stopped listening on port 51513
+1602563478608	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\Gudsson\\AppData\\Local\\Temp\\rust_mozprofileM2AxpN"
+*** You are running in headless mode.
+1602563479258	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1602563481747	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1602563481747	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1602563481748	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1602563481748	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1602563484743	Marionette	INFO	Listening on port 51828
+1602563484896	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 5590 > eval, line 1: WebGL warning: <Create>: Can't use WebGL in headless mode (https://bugzil.la/1375585).
+JavaScript warning: https://pagead2.googlesyndication.com/bg/CrE1yZ0XDC5ogwV0DdLcRYcLenmcbaA1q0bi-X3sD0w.js line 1 > eval line 5590 > eval, line 1: Failed to create WebGL context: WebGL creation failed: 
+* Can't use WebGL in headless mode (https://bugzil.la/1375585).
+1602563523685	Marionette	INFO	Stopped listening on port 51828
